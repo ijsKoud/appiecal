@@ -37,7 +37,7 @@ open class Store<Schema>(data: Schema?, private val path: String) {
     /**
      * Save the data to the storage file
      */
-    private fun save() {
+    fun save() {
         val jsonData = toJson(_data)
         File(path).writeText(jsonData, StandardCharsets.UTF_8)
     }
