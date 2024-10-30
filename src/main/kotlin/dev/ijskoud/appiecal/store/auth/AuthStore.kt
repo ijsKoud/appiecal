@@ -1,7 +1,7 @@
 package dev.ijskoud.appiecal.store.auth
 
 import com.google.gson.Gson
-import dev.ijskoud.appiecal.authentication.Token
+import dev.ijskoud.appiecal.ah.authentication.Token
 import dev.ijskoud.appiecal.store.Store
 import java.nio.file.Paths
 
