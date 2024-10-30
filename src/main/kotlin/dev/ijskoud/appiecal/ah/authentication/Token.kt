@@ -1,4 +1,4 @@
-package dev.ijskoud.appiecal.authentication
+package dev.ijskoud.appiecal.ah.authentication
 
 import java.util.*
 

@@ -1,7 +1,9 @@
-package dev.ijskoud.appiecal.authentication
+package dev.ijskoud.appiecal.ah.authentication
 
 import com.google.gson.Gson
-import dev.ijskoud.appiecal.authentication.interfaces.*
+import dev.ijskoud.appiecal.ah.authentication.interfaces.ApiError
+import dev.ijskoud.appiecal.ah.authentication.interfaces.ApiService
+import dev.ijskoud.appiecal.ah.authentication.interfaces.TokenResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import retrofit2.Retrofit

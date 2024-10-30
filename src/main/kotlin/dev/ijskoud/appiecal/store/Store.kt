@@ -27,7 +27,7 @@ open class Store<Schema>(data: Schema?, private val path: String) {
 
     /**
      * Update the storage with the provided data
-     * @param data The data to update the storage with
+     * @param data The data to sync the storage with
      */
     fun update(data: Schema) {
         _data = data
@@ -46,6 +46,8 @@ open class Store<Schema>(data: Schema?, private val path: String) {
      * Read the data from the storage file
      */
     private fun read(): Schema {
+        ensureFile();
+
         val data = Files.readString(Paths.get(path), StandardCharsets.UTF_8)
         return fromJson(data)
     }
@@ -76,5 +78,14 @@ open class Store<Schema>(data: Schema?, private val path: String) {
         return if (key.contains("date", ignoreCase = true)) {
             value?.let { java.sql.Date.valueOf(it.toString()) }  // Example of parsing a date field
         } else value
+    }
+
+    /**
+     * Ensures that a file is present
+     */
+    protected fun ensureFile() {
+        if (!File(path).exists()) {
+            File(path).writeText("[]");
+        }
     }
 }

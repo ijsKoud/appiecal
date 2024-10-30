@@ -1,4 +1,4 @@
-package dev.ijskoud.appiecal.rooster.interfaces
+package dev.ijskoud.appiecal.ah.rooster.interfaces
 
 import retrofit2.Response
 import retrofit2.http.Body

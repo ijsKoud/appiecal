@@ -1,4 +1,4 @@
-package dev.ijskoud.appiecal.authentication.interfaces
+package dev.ijskoud.appiecal.ah.authentication.interfaces
 
 data class TokenResponse(
     /** Authorization type (used for HTTP header) **/

@@ -1,4 +1,4 @@
-package dev.ijskoud.appiecal.rooster
+package dev.ijskoud.appiecal.ah.rooster
 
 import java.util.*
 

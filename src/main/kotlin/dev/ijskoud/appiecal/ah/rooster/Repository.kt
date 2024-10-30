@@ -1,10 +1,10 @@
-package dev.ijskoud.appiecal.rooster
+package dev.ijskoud.appiecal.ah.rooster
 
-import dev.ijskoud.appiecal.authentication.AuthenticationService
-import dev.ijskoud.appiecal.rooster.interfaces.AlbertHeijnVariables
-import dev.ijskoud.appiecal.rooster.interfaces.ApiService
-import dev.ijskoud.appiecal.rooster.interfaces.RoosterRequest
-import dev.ijskoud.appiecal.rooster.interfaces.RoosterResponse
+import dev.ijskoud.appiecal.ah.authentication.AuthenticationService
+import dev.ijskoud.appiecal.ah.rooster.interfaces.AlbertHeijnVariables
+import dev.ijskoud.appiecal.ah.rooster.interfaces.ApiService
+import dev.ijskoud.appiecal.ah.rooster.interfaces.RoosterRequest
+import dev.ijskoud.appiecal.ah.rooster.interfaces.RoosterResponse
 import dev.ijskoud.appiecal.store.auth.AuthStore
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
