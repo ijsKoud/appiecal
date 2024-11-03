@@ -1,15 +1,19 @@
 package dev.ijskoud.appiecal.calendar
 
-import dev.ijskoud.appiecal.ah.rooster.Event
+import dev.ijskoud.appiecal.ah.rooster.Shift
 import dev.ijskoud.appiecal.ah.rooster.RoosterService
 import dev.ijskoud.appiecal.ah.rooster.getDateRange
 import dev.ijskoud.appiecal.store.calendar.CalendarStore
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
 
+
 class Calendar {
     private val rooster: RoosterService = RoosterService.getInstance()
+    private val logger = LoggerFactory.getLogger(CalendarStore::class.java)
+
     val store: CalendarStore = CalendarStore.getInstance()
 
     companion object {
@@ -22,8 +26,6 @@ class Calendar {
 
             return instance!!
         }
-
-
     }
 
     suspend fun sync() {
@@ -39,29 +41,49 @@ class Calendar {
         update(dates.first(), mergedEvents.first, mergedEvents.second)
     }
 
-    private fun update(date: Date, events: List<Event>, unMatchedEvents: List<Event>) {
+    /**
+     * Updates the shifts on caldav
+     * @param date A date in the first week
+     * @param shifts The shifts that should be updated
+     * @param unMatchedShifts Shifts that should be deleted
+     */
+    private fun update(date: Date, shifts: List<Shift>, unMatchedShifts: List<Shift>) {
         val dates = getDateRange(date)
-        val deletableEvents = unMatchedEvents.filter { event -> !event.isOldEvent(dates.first) }
+        val caldav = CalDav()
 
-        // TODO: update calendar
-        println(deletableEvents.map { it.startDate.toString() })
+        // Delete shifts that are no longer available
+        val deletableEvents = unMatchedShifts.filter { event -> !event.isOldEvent(dates.first) }
+        deletableEvents.parallelStream().forEach { event -> caldav.deleteEvent(event.id.toString()) }
+
+
+        // Update event s only if event on caldav server is outdated
+        val caldavEvents = caldav.getEvents(shifts.map { it.id.toString() }.toTypedArray())
+        shifts.stream().forEach { shift ->
+            val caldavEvent = caldavEvents.find { ev -> ev.uid.value.equals(shift.id.toString()) }
+            if (caldavEvent != null && shift.isVEventEqual(caldavEvent)) {
+                logger.debug("Skipped update for following event because information are up-to-date:\n{}", shift)
+                return@forEach // breaks the loop
+            }
+
+            caldav.putEvent(shift)
+        }
     }
 
     /**
      * Merges the existing events with newly pulled events
-     * @param existingEvents The existing events
-     * @param pulledEvents The events that have been pulled from the API
+     * @param existingShifts The existing events
+     * @param pulledShifts The events that have been pulled from the API
      * @return A list of updated events and a list of deleted events
      */
-    private fun mergeEvents(existingEvents: List<Event>, pulledEvents: List<Event>): Pair<List<Event>, List<Event>> {
-        val matchedEvents = pulledEvents
+    private fun mergeEvents(existingShifts: List<Shift>, pulledShifts: List<Shift>): Pair<List<Shift>, List<Shift>> {
+        val matchedShifts = pulledShifts
             .map { event ->
-                existingEvents.find<Event> { existing -> existing.isEqual(event) }?.mergeEvent(event)
+                existingShifts.find<Shift> { existing -> existing.isEqual(event) }?.mergeEvent(event)
                 event
             }
 
-        val deletableEvents = existingEvents.filter { event -> matchedEvents.none { existing -> existing.isEqual(event) } }
-        return Pair(matchedEvents, deletableEvents)
+        val deletableEvents = existingShifts.filter { event -> matchedShifts.none { existing -> existing.isEqual(event) } }
+        return Pair(matchedShifts, deletableEvents)
     }
 
     private fun getDates(): Array<Date> {
