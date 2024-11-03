@@ -28,7 +28,7 @@ data class Token(
          * Converts the expireIn duration to a date
          * @param expireIn The expiration time that needs to be converted
          */
-        fun convertExpireIn(expireIn: Long): Date {
+        private fun convertExpireIn(expireIn: Long): Date {
             val expire = ((expireIn - (60 * 5)) * 1e3).toLong() // 5 mins for margin of error
             val expireDate = Date(System.currentTimeMillis() + expire)
 

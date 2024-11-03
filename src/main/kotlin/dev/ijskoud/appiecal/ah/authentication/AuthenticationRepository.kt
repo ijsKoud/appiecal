@@ -36,7 +36,7 @@ class AuthenticationRepository {
      * Returns the authorization url
      */
     fun getAuthorizationUrl(): String {
-        return "$BASE_URL$AUTHORIZE_URL?scope=openid+profile+offline_access+https%3A%2F%2Fdex.ahold.com%2F.default&client_id=4d469dcc-1140-449f-856e-7d2618ec9c36&redirect_uri=http%3A%2F%2Flocalhost&response_type=code";
+        return "$BASE_URL$AUTHORIZE_URL?scope=openid+profile+offline_access+https%3A%2F%2Fdex.ahold.com%2F.default&client_id=4d469dcc-1140-449f-856e-7d2618ec9c36&redirect_uri=http%3A%2F%2Flocalhost&response_type=code"
     }
 
     /**

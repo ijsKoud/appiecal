@@ -1,7 +1,13 @@
 package dev.ijskoud.appiecal.ah.authentication
 
+import dev.ijskoud.appiecal.store.auth.AuthStore
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 class AuthenticationService {
     private val repository = AuthenticationRepository()
+    private val store: AuthStore = AuthStore.getInstance()
+    private val logger: Logger = LoggerFactory.getLogger(AuthenticationService::class.java)
 
     companion object {
         private var instance: AuthenticationService? = null
@@ -16,6 +22,29 @@ class AuthenticationService {
 
             return instance!!
         }
+    }
+
+    /**
+     * Retrieves the access token from the store
+     * @return Access token
+     */
+    fun getAccessToken(): String {
+        val data = store.get()
+
+        if (!data.isExpired) {
+            logger.debug("Access token is still valid")
+            return data.accessToken
+        }
+
+        val newToken = getNewToken(data.refreshToken)
+        data.accessToken = newToken.accessToken
+        data.refreshToken = newToken.refreshToken
+        data.expireDate = newToken.expireDate
+
+        store.save()
+        logger.info("New access token acquired, valid until ${newToken.expireDate}")
+
+        return data.accessToken
     }
 
     /**
