@@ -1,7 +1,7 @@
 package dev.ijskoud.appiecal.store.calendar
 
 import com.google.gson.Gson
-import dev.ijskoud.appiecal.ah.rooster.Shift
+import dev.ijskoud.appiecal.ah.rooster.shift.Shift
 import dev.ijskoud.appiecal.store.Store
 import java.nio.file.Paths
 

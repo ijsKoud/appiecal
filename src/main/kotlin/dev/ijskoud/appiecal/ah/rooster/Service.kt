@@ -1,5 +1,8 @@
 package dev.ijskoud.appiecal.ah.rooster
 
+import dev.ijskoud.appiecal.ah.rooster.interfaces.Schedule
+import dev.ijskoud.appiecal.ah.rooster.shift.Shift
+import dev.ijskoud.appiecal.ah.rooster.shift.ShiftTeams
 import java.util.*
 
 class RoosterService {
@@ -23,27 +26,34 @@ class RoosterService {
      */
     suspend fun getRooster(startDate: Date? = null): List<Shift> {
         val rooster = repository.getRooster(startDate) ?: return emptyList()
-        val shifts = rooster.data.scheduleByWeek.map { schedule ->
-            val start = Date.from(convertToInstant(schedule.startTime))
-            val endDate = Date.from(convertToInstant(schedule.endTime))
-            val storeName = schedule.store.abbreviatedDisplayName.replace(schedule.store.location, "")
-            val teamNames = schedule.teamNames.map { teamName ->
-                Teams.entries.find { team -> team.team == teamName }!!
-            }
+        return rooster.data.scheduleByWeek.map { schedule -> convertToShift(schedule) }
+    }
 
-            Shift(
-                startDate = start,
-                endDate = endDate,
-                minutes = schedule.minutes,
-                paidMinutes = schedule.paidMinutes,
-                sickMinutes = schedule.sickMinutes,
-                leaveMinutes = schedule.leaveMinutes,
-                teamNames = teamNames,
-                storeName = storeName.trim(),
-                storeId = schedule.storeId.trim(),
-            )
+    /**
+     * Converts schedule date into a Shift
+     * @param schedule The schedule data to convert
+     * @return Shift
+     */
+    private fun convertToShift(schedule: Schedule): Shift {
+        val startDate = Date.from(Utils.convertToInstant(schedule.startTime))
+        val endDate = Date.from(Utils.convertToInstant(schedule.endTime))
+
+        // Remove the location name from the name (e.g. Hoofdkantoor ZAANDAM -> Hoofdkantoor)
+        val storeName = schedule.store.abbreviatedDisplayName.replace(schedule.store.location, "")
+        val teamNames = schedule.teamNames.map { teamName ->
+            ShiftTeams.entries.find { team -> team.team == teamName }!!
         }
 
-        return shifts
+        return Shift(
+            startDate = startDate,
+            endDate = endDate,
+            minutes = schedule.minutes,
+            paidMinutes = schedule.paidMinutes,
+            sickMinutes = schedule.sickMinutes,
+            leaveMinutes = schedule.leaveMinutes,
+            teamNames = teamNames,
+            storeName = storeName.trim(),
+            storeId = schedule.storeId.trim(),
+        )
     }
 }

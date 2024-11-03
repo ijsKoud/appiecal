@@ -2,7 +2,7 @@ package dev.ijskoud.appiecal.calendar
 
 import biweekly.Biweekly
 import biweekly.component.VEvent
-import dev.ijskoud.appiecal.ah.rooster.Shift
+import dev.ijskoud.appiecal.ah.rooster.shift.Shift
 import dev.ijskoud.appiecal.calendar.errors.EventDeleteError
 import dev.ijskoud.appiecal.calendar.errors.EventUpdateCreateError
 import dev.ijskoud.appiecal.calendar.methods.HttpReport

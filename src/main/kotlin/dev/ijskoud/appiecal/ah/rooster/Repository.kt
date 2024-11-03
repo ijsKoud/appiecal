@@ -14,38 +14,15 @@ import java.util.*
 
 class Repository(
     private val authenticator: AuthenticationService = AuthenticationService.getInstance(),
-    private val store: AuthStore = AuthStore.getInstance(),
     private val logger: Logger = LoggerFactory.getLogger(Repository::class.java)
 ) {
-    /**
-     * Retrieves the access token from the store
-     */
-    private fun getAccessToken(): String {
-        val data = store.get()
-
-        if (!data.isExpired) {
-            logger.debug("Access token is still valid")
-            return data.accessToken
-        }
-
-        val newToken = authenticator.getNewToken(data.refreshToken)
-        data.accessToken = newToken.accessToken
-        data.refreshToken = newToken.refreshToken
-        data.expireDate = newToken.expireDate
-
-        store.save()
-        logger.info("New access token acquired, valid until ${newToken.expireDate}")
-
-        return data.accessToken
-    }
-
     /**
      * Fetches the rooster
      * @param startDate The date the data should begin
      */
     suspend fun getRooster(startDate: Date? = null): RoosterResponse? {
         return try {
-            val accessToken = getAccessToken()
+            val accessToken = authenticator.getAccessToken()
             val dates = getDates(startDate)
 
             val retrofit = Retrofit.Builder()
@@ -96,7 +73,7 @@ class Repository(
     }
 
     private fun getDates(startDate: Date?): DateRange {
-        val (start, end) = getDateRange(startDate)
+        val (start, end) = Utils.getDateRange(startDate)
 
         return DateRange(
             start = "${start.toInstant().toString().split("T")[0]}T00:00:00Z",

@@ -1,8 +1,8 @@
 package dev.ijskoud.appiecal.calendar
 
-import dev.ijskoud.appiecal.ah.rooster.Shift
+import dev.ijskoud.appiecal.ah.rooster.shift.Shift
 import dev.ijskoud.appiecal.ah.rooster.RoosterService
-import dev.ijskoud.appiecal.ah.rooster.getDateRange
+import dev.ijskoud.appiecal.ah.rooster.Utils
 import dev.ijskoud.appiecal.store.calendar.CalendarStore
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -39,6 +39,8 @@ class Calendar {
         val mergedEvents = mergeEvents(existingEvents.toList(), pulledEvents)
         store.update((mergedEvents.first).toTypedArray())
         update(dates.first(), mergedEvents.first, mergedEvents.second)
+
+        logger.info("Syncing completed - checked=${mergedEvents.first.size}, deleted=${mergedEvents.second.size}")
     }
 
     /**
@@ -48,7 +50,7 @@ class Calendar {
      * @param unMatchedShifts Shifts that should be deleted
      */
     private fun update(date: Date, shifts: List<Shift>, unMatchedShifts: List<Shift>) {
-        val dates = getDateRange(date)
+        val dates = Utils.getDateRange(date)
         val caldav = CalDav()
 
         // Delete shifts that are no longer available

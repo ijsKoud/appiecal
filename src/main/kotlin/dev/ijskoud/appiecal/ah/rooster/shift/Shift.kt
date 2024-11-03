@@ -1,24 +1,11 @@
-package dev.ijskoud.appiecal.ah.rooster
+package dev.ijskoud.appiecal.ah.rooster.shift
 
 import biweekly.ICalendar
 import biweekly.component.VEvent
+import dev.ijskoud.appiecal.ah.rooster.Utils
 import java.time.Duration
 import java.time.Instant
 import java.util.*
-import java.util.concurrent.TimeUnit
-
-
-/**
- * All Albert Heijn supermarket teams (does not include AH To Go, DC or Online)
- */
-enum class Teams(val team: String) {
-    Management("MANAGEMENT"),
-    OperatieGekoeld("OPERATIE GEKOELD"),
-    Operatie("OPERATIE"),
-    Service("SERVICE"),
-    ServiceIndirect("SERVICE INDIRECT"),
-    Vers("VERS"),
-}
 
 /**
  * Class containing the Albert Heijn rooster information
@@ -30,7 +17,7 @@ class Shift(
     public val paidMinutes: Int,
     public val sickMinutes: Int,
     public val leaveMinutes: Int,
-    public val teamNames: List<Teams>,
+    public val teamNames: List<ShiftTeams>,
     public val storeName: String,
     public val storeId: String,
     var id: UUID = UUID.randomUUID(),
@@ -117,9 +104,9 @@ class Shift(
             Afdelingen: ${teamNames.joinToString(", ")}
             
             === Uren registratie ===
-            Betaald: ${getTimeString((paidMinutes * 60 * 1e3).toLong())}
-            Onbetaald: ${getTimeString(getUnpaidTime())}
-            Totaal: ${getTimeString(getShiftDuration())}
+            Betaald: ${Utils.getTimeString((paidMinutes * 60 * 1e3).toLong())}
+            Onbetaald: ${Utils.getTimeString(getUnpaidTime())}
+            Totaal: ${Utils.getTimeString(getShiftDuration())}
         """.trimIndent()
     }
 
@@ -182,37 +169,5 @@ class Shift(
             summary=${getSummary()}
             description=${getDescription()}
         """.trimIndent()
-    }
-
-    companion object {
-        fun getTimeString(time: Long): String {
-            var millis = time
-            val hours = TimeUnit.MILLISECONDS.toHours(millis)
-            millis -= TimeUnit.HOURS.toMillis(hours)
-            val minutes = TimeUnit.MILLISECONDS.toMinutes(millis)
-            millis -= TimeUnit.MINUTES.toMillis(minutes)
-            val seconds = TimeUnit.MILLISECONDS.toSeconds(millis)
-
-            val duration = StringBuilder()
-            if (hours > 0) {
-                duration.append(hours).append(" hour").append(if (hours > 1) "s" else "").append(", ")
-            }
-
-            if (minutes > 0) {
-                duration.append(minutes).append(" min").append(if (minutes > 1) "s" else "").append(", ")
-            }
-
-            if (seconds > 0 || duration.isEmpty()) { // Show seconds if no other unit exists
-                duration.append(seconds).append(" second").append(if (seconds > 1) "s" else "")
-            }
-
-            // Remove trailing comma and space if they exist
-            val length = duration.length
-            if (length > 2 && duration.substring(length - 2) == ", ") {
-                duration.setLength(length - 2)
-            }
-
-            return duration.toString()
-        }
     }
 }
