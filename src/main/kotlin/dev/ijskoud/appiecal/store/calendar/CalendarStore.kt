@@ -1,11 +1,11 @@
 package dev.ijskoud.appiecal.store.calendar
 
 import com.google.gson.Gson
-import dev.ijskoud.appiecal.ah.rooster.Event
+import dev.ijskoud.appiecal.ah.rooster.Shift
 import dev.ijskoud.appiecal.store.Store
 import java.nio.file.Paths
 
-class CalendarStore : Store<Array<Event>>(
+class CalendarStore : Store<Array<Shift>>(
     data = null,
     path = Paths.get(System.getProperty("user.dir"), "data", "calendar.json").toString()
 ) {
@@ -21,7 +21,7 @@ class CalendarStore : Store<Array<Event>>(
         }
     }
 
-    override fun fromJson(data: String): Array<Event> {
-        return Gson().fromJson(data, Array<Event>::class.java)
+    override fun fromJson(data: String): Array<Shift> {
+        return Gson().fromJson(data, Array<Shift>::class.java)
     }
 }

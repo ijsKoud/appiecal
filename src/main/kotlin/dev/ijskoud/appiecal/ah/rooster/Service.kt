@@ -21,9 +21,9 @@ class RoosterService {
      * Fetches the rooster
      * @param startDate The date the data should begin
      */
-    suspend fun getRooster(startDate: Date? = null): List<Event> {
+    suspend fun getRooster(startDate: Date? = null): List<Shift> {
         val rooster = repository.getRooster(startDate) ?: return emptyList()
-        val events = rooster.data.scheduleByWeek.map { schedule ->
+        val shifts = rooster.data.scheduleByWeek.map { schedule ->
             val start = Date.from(convertToInstant(schedule.startTime))
             val endDate = Date.from(convertToInstant(schedule.endTime))
             val storeName = schedule.store.abbreviatedDisplayName.replace(schedule.store.location, "")
@@ -31,7 +31,7 @@ class RoosterService {
                 Teams.entries.find { team -> team.team == teamName }!!
             }
 
-            Event(
+            Shift(
                 startDate = start,
                 endDate = endDate,
                 minutes = schedule.minutes,
@@ -39,10 +39,11 @@ class RoosterService {
                 sickMinutes = schedule.sickMinutes,
                 leaveMinutes = schedule.leaveMinutes,
                 teamNames = teamNames,
-                storeName = storeName.trim()
+                storeName = storeName.trim(),
+                storeId = schedule.storeId.trim(),
             )
         }
 
-        return events
+        return shifts
     }
 }
