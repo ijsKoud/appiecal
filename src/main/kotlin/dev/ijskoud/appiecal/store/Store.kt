@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken
  * Makes it possible to store data in a JSON file
  * While also being able to read the data instantly
  */
-open class Store<Schema>(data: Schema?, private val path: String) {
+open class Store<Schema>(data: Schema?, protected val path: String) {
     private var _data: Schema
 
     init {
@@ -46,7 +46,7 @@ open class Store<Schema>(data: Schema?, private val path: String) {
      * Read the data from the storage file
      */
     private fun read(): Schema {
-        ensureFile();
+        ensureFile()
 
         val data = Files.readString(Paths.get(path), StandardCharsets.UTF_8)
         return fromJson(data)
@@ -83,9 +83,9 @@ open class Store<Schema>(data: Schema?, private val path: String) {
     /**
      * Ensures that a file is present
      */
-    protected fun ensureFile() {
+    protected open fun ensureFile() {
         if (!File(path).exists()) {
-            File(path).writeText("[]");
+            File(path).writeText("{}")
         }
     }
 }

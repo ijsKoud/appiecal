@@ -5,7 +5,6 @@ import dev.ijskoud.appiecal.ah.rooster.interfaces.AlbertHeijnVariables
 import dev.ijskoud.appiecal.ah.rooster.interfaces.ApiService
 import dev.ijskoud.appiecal.ah.rooster.interfaces.RoosterRequest
 import dev.ijskoud.appiecal.ah.rooster.interfaces.RoosterResponse
-import dev.ijskoud.appiecal.store.auth.AuthStore
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import retrofit2.Retrofit
@@ -60,13 +59,13 @@ class Repository(
             val response = service.getRooster("Bearer $accessToken", request)
             if (!response.isSuccessful) {
                 val errorBody = response.errorBody()
-                println(errorBody?.string())
+                logger.error(errorBody?.string())
                 return null
             }
 
             return response.body()
         } catch (e: Exception) {
-            e.printStackTrace()
+            logger.error(e.stackTraceToString())
             null
         }
 

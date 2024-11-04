@@ -3,6 +3,7 @@ package dev.ijskoud.appiecal.store.calendar
 import com.google.gson.Gson
 import dev.ijskoud.appiecal.ah.rooster.shift.Shift
 import dev.ijskoud.appiecal.store.Store
+import java.io.File
 import java.nio.file.Paths
 
 class CalendarStore : Store<Array<Shift>>(
@@ -23,5 +24,11 @@ class CalendarStore : Store<Array<Shift>>(
 
     override fun fromJson(data: String): Array<Shift> {
         return Gson().fromJson(data, Array<Shift>::class.java)
+    }
+
+    override fun ensureFile() {
+        if (!File(path).exists()) {
+            File(path).writeText("[]")
+        }
     }
 }

@@ -63,7 +63,7 @@ class CalDav {
             val responseString = EntityUtils.toString(response.entity)
 
             val cal = Biweekly.parse(StringReader(responseString)).first()
-            return cal.events[0];
+            return cal.events[0]
         }
     }
 
@@ -106,7 +106,7 @@ class CalDav {
      */
     fun putEvent(shift: Shift) {
         // Skip leave and sick days
-        if (shift.isLeaveDay() || shift.isSickDay()) return;
+        if (shift.isLeaveDay() || shift.isSickDay()) return
 
         val credentials = store.get()
         createAuthenticatedClient(credentials.username, credentials.password).use { client ->
@@ -146,7 +146,7 @@ class CalDav {
             }
         }
 
-        return events;
+        return events
     }
 
     private fun createAuthenticatedClient(username: String?, password: String?): CloseableHttpClient {

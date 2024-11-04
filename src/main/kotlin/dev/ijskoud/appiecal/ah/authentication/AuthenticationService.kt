@@ -52,7 +52,7 @@ class AuthenticationService {
      * @param code The authorization code given after signing in
      */
     fun getAuthorization(code: String): Token {
-       val response = repository.getAuthorization(code) ?: throw Exception("Authorization error");
+       val response = repository.getAuthorization(code) ?: throw Exception("Authorization error")
         return Token.create(response.refresh_token, response.access_token, response.expires_in.toLong())
     }
 
@@ -61,7 +61,7 @@ class AuthenticationService {
      * @param refreshToken The refresh token for generating a new authentication token
      */
     fun getNewToken(refreshToken: String): Token {
-        val response = repository.getNewToken(refreshToken) ?: throw Exception("Authorization error");
+        val response = repository.getNewToken(refreshToken) ?: throw Exception("Authorization error")
         return Token.create(response.refresh_token, response.access_token, response.expires_in.toLong())
     }
 
@@ -69,6 +69,6 @@ class AuthenticationService {
      * Returns the authorization url
      */
     fun getAuthorizationUrl(): String {
-        return repository.getAuthorizationUrl();
+        return repository.getAuthorizationUrl()
     }
 }

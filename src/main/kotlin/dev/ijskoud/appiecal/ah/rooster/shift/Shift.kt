@@ -11,18 +11,18 @@ import java.util.*
  * Class containing the Albert Heijn rooster information
  */
 class Shift(
-    public val startDate: Date,
-    public val endDate: Date,
-    public val minutes: Int,
-    public val paidMinutes: Int,
-    public val sickMinutes: Int,
-    public val leaveMinutes: Int,
-    public val teamNames: List<ShiftTeams>,
-    public val storeName: String,
-    public val storeId: String,
+    val startDate: Date,
+    val endDate: Date,
+    val minutes: Int,
+    val paidMinutes: Int,
+    val sickMinutes: Int,
+    val leaveMinutes: Int,
+    val teamNames: List<ShiftTeams>,
+    val storeName: String,
+    val storeId: String,
     var id: UUID = UUID.randomUUID(),
-    var lastModifiedDate: Date = Date.from(Instant.now()),
-    var createdAtDate: Date = Date.from(Instant.now())
+    private var lastModifiedDate: Date = Date.from(Instant.now()),
+    private var createdAtDate: Date = Date.from(Instant.now())
 ) {
 
     /**
@@ -35,14 +35,14 @@ class Shift(
      * Checks whether the selected day is registered as a sick day
      */
     fun isSickDay(): Boolean {
-        return this.sickMinutes > 0;
+        return this.sickMinutes > 0
     }
 
     /**
      * Checks whether the selected day is registered as a leave day
      */
     fun isLeaveDay(): Boolean {
-        return this.leaveMinutes > 0;
+        return this.leaveMinutes > 0
     }
 
     /**
@@ -51,14 +51,14 @@ class Shift(
      */
     fun isEqual(other: Shift, strict: Boolean = false): Boolean {
         // If not strict, only the date should be the same, not the exact duration
-        val isDateEqual = this.startDate == other.startDate || this.endDate == other.endDate;
-        val isDateStrictEqual = this.startDate === other.startDate || this.endDate == other.endDate;
+        val isDateEqual = this.startDate == other.startDate || this.endDate == other.endDate
+        val isDateStrictEqual = this.startDate === other.startDate || this.endDate == other.endDate
 
-        val isStoreEqual = this.storeName == other.storeName;
-        val areTeamNamesEqual = teamNames == other.teamNames;
+        val isStoreEqual = this.storeName == other.storeName
+        val areTeamNamesEqual = teamNames == other.teamNames
 
         // strict ? isDateStrictEqual : isDateEqual
-        return (if (strict) isDateStrictEqual else isDateEqual) && isStoreEqual && areTeamNamesEqual;
+        return (if (strict) isDateStrictEqual else isDateEqual) && isStoreEqual && areTeamNamesEqual
     }
 
     /**
@@ -71,7 +71,7 @@ class Shift(
                 && other.dateStart.value.equals(startDate)
                 && other.dateEnd.value.equals(endDate)
                 && other.summary.value.equals(getSummary())
-                && other.description.value.equals(getDescription()));
+                && other.description.value.equals(getDescription()))
     }
 
     /**
@@ -79,11 +79,11 @@ class Shift(
      * @param shift The shift to merge
      */
     fun mergeEvent(shift: Shift): Shift {
-        shift.id = id;
-        shift.lastModifiedDate = Date.from(Instant.now());
+        shift.id = id
+        shift.lastModifiedDate = Date.from(Instant.now())
         shift.createdAtDate = createdAtDate
 
-        return shift;
+        return shift
     }
 
     /**
@@ -91,7 +91,7 @@ class Shift(
      * @param date The start of the check window
      */
     fun isOldEvent(date: Date): Boolean {
-        return this.startDate.before(date);
+        return this.startDate.before(date)
     }
 
     /**
