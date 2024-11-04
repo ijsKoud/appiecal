@@ -25,6 +25,14 @@ class AuthenticationService {
     }
 
     /**
+     * Updates the token credentials
+     * @param token The token credentials to save
+     */
+    fun updateToken(token: Token) {
+        store.update(token)
+    }
+
+    /**
      * Retrieves the access token from the store
      * @return Access token
      */

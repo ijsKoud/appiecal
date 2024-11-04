@@ -39,8 +39,6 @@ class Calendar {
         val mergedEvents = mergeEvents(existingEvents.toList(), pulledEvents)
         store.update((mergedEvents.first).toTypedArray())
         update(dates.first(), mergedEvents.first, mergedEvents.second)
-
-        logger.info("Syncing completed - checked=${mergedEvents.first.size}, deleted=${mergedEvents.second.size}")
     }
 
     /**
@@ -60,6 +58,8 @@ class Calendar {
 
         // Update event s only if event on caldav server is outdated
         val caldavEvents = caldav.getEvents(shifts.map { it.id.toString() }.toTypedArray())
+        var updated = 0;
+
         shifts.stream().forEach { shift ->
             val caldavEvent = caldavEvents.find { ev -> ev.uid.value.equals(shift.id.toString()) }
             if (caldavEvent != null && shift.isVEventEqual(caldavEvent)) {
@@ -67,8 +67,15 @@ class Calendar {
                 return@forEach // breaks the loop
             }
 
-            caldav.putEvent(shift)
+            try {
+                caldav.putEvent(shift)
+                updated++
+            } catch (e: Exception) {
+                logger.error(e.message, e)
+            }
         }
+
+        logger.info("Syncing completed - checked=${shifts.size + unMatchedShifts.size}, updated=$updated, deleted=${deletableEvents.size}")
     }
 
     /**
