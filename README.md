@@ -14,6 +14,8 @@ You can however use any server you like, as long as it supports **Basic Authenti
 This project is created for educational purposes, however it can be used to
 sync your own account. This project will only work if you work at **Albert Heijn** and have a pnl that works with the @AH app.
 
+The information saved on drive is not encrypted either, keep this in mind when running it.
+
 ## Installation (simple)
 
 Download and install the docker instance, make sure you have a folder called `data` linked to `data` and have given full permissions to the instance itself (this way it can read and write files in this folder).
