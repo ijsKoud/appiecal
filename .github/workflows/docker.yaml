@@ -33,7 +33,7 @@ jobs:
           # platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/ijskoud/appiecal:v4
+            ghcr.io/ijskoud/appiecal:v1
             ghcr.io/ijskoud/appiecal:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
