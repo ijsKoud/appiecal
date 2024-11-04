@@ -58,7 +58,7 @@ class Calendar {
 
         // Update event s only if event on caldav server is outdated
         val caldavEvents = caldav.getEvents(shifts.map { it.id.toString() }.toTypedArray())
-        var updated = 0;
+        var updated = 0
 
         shifts.stream().forEach { shift ->
             val caldavEvent = caldavEvents.find { ev -> ev.uid.value.equals(shift.id.toString()) }
