@@ -18,7 +18,7 @@ The information saved on drive is not encrypted either, keep this in mind when r
 
 ## Installation (simple)
 
-Download and install the docker instance, make sure you have a folder called `data` linked to `data` and have given full permissions to the instance itself (this way it can read and write files in this folder).
+Download and install the docker instance, make sure you have a folder called `data` linked to `/appiecal/data` and have given full permissions to the instance itself (this way it can read and write files in this folder).
 
 1. Start the server and visit the `/authenticate`
 2. Login with your pnl (it will ask for an email if you have not logged in with that before, they will all look like this: `pnlxxx@emea.royalahold.net`)

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
@@ -12,6 +14,11 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    val jarName = project.findProperty("jarName") as String? // Check for command-line property
+    archiveFileName.set(jarName?.let { "$it.jar" } ?: "AppieCal-$version.jar")
 }
 
 repositories {
@@ -34,6 +41,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("org.apache.httpcomponents:httpclient:4.5.13")
     implementation("net.sf.biweekly:biweekly:0.6.8")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.21")
 }
 
 kotlin {
