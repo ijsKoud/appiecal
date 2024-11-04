@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.ijskoud"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 
 java {
     toolchain {
@@ -34,6 +34,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("org.apache.httpcomponents:httpclient:4.5.13")
     implementation("net.sf.biweekly:biweekly:0.6.8")
+    implementation("io.github.cdimascio:dotenv-java:3.0.0")
 }
 
 kotlin {

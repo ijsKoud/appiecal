@@ -21,6 +21,11 @@ class Controller {
         ResponseEntity.ok()
     }
 
+    @GetMapping("/authenticate")
+    fun getAuthorizationUrl(): String {
+        return service.getAuthorizationUrl()
+    }
+
     @GetMapping(path = ["/calendar/cached"], produces = ["application/json"])
     @ResponseBody
     suspend fun getRawCalendar(): String {

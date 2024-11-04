@@ -38,4 +38,8 @@ class Service {
         val events = rooster.getRooster();
         return Gson().toJson(events)
     }
+
+    fun getAuthorizationUrl(): String {
+        return authenticationService.getAuthorizationUrl()
+    }
 }
