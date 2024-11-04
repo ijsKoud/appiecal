@@ -33,7 +33,7 @@ class Repository(
             val service = retrofit.create(ApiService::class.java)
             val request = RoosterRequest(
                 operationName = "scheduleByWeek",
-                variables = AlbertHeijnVariables(dates.start, dates.end),
+                variables = AlbertHeijnVariables(dates.first, dates.second),
                 query = """
                     query scheduleByWeek(${"$"}startDate: String!, ${"$"}endDate: String!) {
                         scheduleByWeek(startDate: ${"$"}startDate, endDate: ${"$"}endDate) {
@@ -72,12 +72,12 @@ class Repository(
 
     }
 
-    private fun getDates(startDate: Date?): DateRange {
+    private fun getDates(startDate: Date?): Pair<String, String> {
         val (start, end) = Utils.getDateRange(startDate)
 
-        return DateRange(
-            start = "${start.toInstant().toString().split("T")[0]}T00:00:00Z",
-            end = "${end.toInstant().toString().split("T")[0]}T00:00:00Z"
+        return Pair(
+            "${start.toInstant().toString().split("T")[0]}T00:00:00Z",
+            "${end.toInstant().toString().split("T")[0]}T00:00:00Z"
         )
     }
 
@@ -85,5 +85,3 @@ class Repository(
         private const val ALBERTHEIJN_GRAPHQL_URL = "https://api-gateway.ah.nl/external/ah/rtp/dex/graphql/"
     }
 }
-
-data class DateRange(val start: String, val end: String)

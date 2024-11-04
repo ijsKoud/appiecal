@@ -1,7 +1,7 @@
 package dev.ijskoud.appiecal.calendar
 
 import dev.ijskoud.appiecal.ah.rooster.shift.Shift
-import dev.ijskoud.appiecal.ah.rooster.RoosterService
+import dev.ijskoud.appiecal.ah.rooster.Service
 import dev.ijskoud.appiecal.ah.rooster.Utils
 import dev.ijskoud.appiecal.store.calendar.CalendarStore
 import org.slf4j.LoggerFactory
@@ -11,7 +11,7 @@ import java.util.*
 
 
 class Calendar {
-    private val rooster: RoosterService = RoosterService.getInstance()
+    private val rooster: Service = Service.getInstance()
     private val logger = LoggerFactory.getLogger(CalendarStore::class.java)
 
     val store: CalendarStore = CalendarStore.getInstance()

@@ -5,15 +5,15 @@ import dev.ijskoud.appiecal.ah.rooster.shift.Shift
 import dev.ijskoud.appiecal.ah.rooster.shift.ShiftTeams
 import java.util.*
 
-class RoosterService {
+class Service {
     private val repository: Repository = Repository()
 
     companion object {
-        private var instance: RoosterService? = null
+        private var instance: Service? = null
 
-        fun getInstance(): RoosterService {
+        fun getInstance(): Service {
             if (instance == null) {
-                instance = RoosterService()
+                instance = Service()
             }
 
             return instance!!
