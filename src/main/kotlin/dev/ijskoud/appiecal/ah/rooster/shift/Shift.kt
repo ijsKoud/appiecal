@@ -2,6 +2,7 @@ package dev.ijskoud.appiecal.ah.rooster.shift
 
 import biweekly.ICalendar
 import biweekly.component.VEvent
+import biweekly.io.TimezoneAssignment
 import dev.ijskoud.appiecal.ah.rooster.Utils
 import java.time.Duration
 import java.time.Instant
@@ -68,8 +69,8 @@ class Shift(
      */
     fun isVEventEqual(other: VEvent): Boolean {
         return (other.uid.value.equals(id.toString())
-                && other.dateStart.value.equals(startDate)
-                && other.dateEnd.value.equals(endDate)
+                && other.dateStart.value.toInstant().equals(startDate.toInstant())
+                && other.dateEnd.value.toInstant().equals(endDate.toInstant())
                 && other.summary.value.equals(getSummary())
                 && other.description.value.equals(getDescription()))
     }
@@ -140,12 +141,15 @@ class Shift(
      * Returns the Shift ical body
      */
     fun toIcal(): String {
+        val timezone = TimeZone.getTimeZone("Europe/Amsterdam")
         val ical = ICalendar()
+        ical.timezoneInfo.defaultTimezone = TimezoneAssignment.download(timezone, false)
+
         val event = VEvent()
         event.setSummary(getSummary())
         event.setDescription(getDescription())
         event.setUid(id.toString())
-        event.setDateStart(startDate)
+        event.setDateStart(startDate, true)
         event.setDateEnd(endDate)
         event.setCreated(createdAtDate)
         event.setLastModified(lastModifiedDate)
