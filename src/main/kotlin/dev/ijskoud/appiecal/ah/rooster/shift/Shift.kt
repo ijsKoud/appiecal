@@ -142,7 +142,7 @@ class Shift(
      * Returns the Shift ical body
      */
     fun toIcal(): String {
-        val timezone = TimeZone.getTimeZone(ZoneId.systemDefault())
+        val timezone = TimeZone.getTimeZone("Europe/Amsterdam")
         val ical = ICalendar()
         ical.timezoneInfo.defaultTimezone = TimezoneAssignment.download(timezone, false)
 
@@ -151,7 +151,7 @@ class Shift(
         event.setDescription(getDescription())
         event.setUid(id.toString())
         event.setDateStart(startDate, true)
-        event.setDateEnd(endDate)
+        event.setDateEnd(endDate, true)
         event.setCreated(createdAtDate)
         event.setLastModified(lastModifiedDate)
 
