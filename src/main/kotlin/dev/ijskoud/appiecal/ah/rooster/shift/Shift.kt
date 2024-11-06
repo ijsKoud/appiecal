@@ -6,6 +6,7 @@ import biweekly.io.TimezoneAssignment
 import dev.ijskoud.appiecal.ah.rooster.Utils
 import java.time.Duration
 import java.time.Instant
+import java.time.ZoneId
 import java.util.*
 
 /**
@@ -141,7 +142,7 @@ class Shift(
      * Returns the Shift ical body
      */
     fun toIcal(): String {
-        val timezone = TimeZone.getTimeZone("Europe/Amsterdam")
+        val timezone = TimeZone.getTimeZone(ZoneId.systemDefault())
         val ical = ICalendar()
         ical.timezoneInfo.defaultTimezone = TimezoneAssignment.download(timezone, false)
 
