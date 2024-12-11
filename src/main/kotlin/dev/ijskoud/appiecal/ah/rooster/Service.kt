@@ -24,8 +24,8 @@ class Service {
      * Fetches the rooster
      * @param startDate The date the data should begin
      */
-    suspend fun getRooster(startDate: Date? = null): List<Shift> {
-        val rooster = repository.getRooster(startDate) ?: return emptyList()
+    suspend fun getRooster(startDate: Date? = null): List<Shift>? {
+        val rooster = repository.getRooster(startDate) ?: return null
         return rooster.data.scheduleByWeek.map { schedule -> convertToShift(schedule) }
     }
 

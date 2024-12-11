@@ -29,16 +29,20 @@ class Calendar {
     }
 
     suspend fun sync() {
-        val dates = getDates()
-        val existingEvents = store.get()
-        val pulledEvents = dates
-            .map { date -> rooster.getRooster(date) }
-            .reduce { acc, events -> acc + events }
+        try {
+            val dates = getDates()
+            val existingEvents = store.get()
+            val pulledEvents = dates
+                .map { date -> rooster.getRooster(date) ?: throw Exception("No rooster found for date: $date") }
+                .reduce { acc, events -> acc + events }
 
 
-        val mergedEvents = mergeEvents(existingEvents.toList(), pulledEvents)
-        store.update((mergedEvents.first).toTypedArray())
-        update(dates.first(), mergedEvents.first, mergedEvents.second)
+            val mergedEvents = mergeEvents(existingEvents.toList(), pulledEvents)
+            store.update((mergedEvents.first).toTypedArray())
+            update(dates.first(), mergedEvents.first, mergedEvents.second)
+        } catch (e: Exception) {
+            logger.error("Failed to update the schedule - ${e.message}")
+        }
     }
 
     /**

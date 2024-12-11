@@ -34,7 +34,7 @@ class Controller {
 
     @GetMapping(path = ["/calendar/fetched"], produces = ["application/json"])
     @ResponseBody
-    suspend fun getFetchedCalendar(): String {
+    suspend fun getFetchedCalendar(): String? {
         return service.getFetchedCalendar()
     }
 

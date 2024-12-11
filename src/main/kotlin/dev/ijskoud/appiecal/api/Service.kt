@@ -34,8 +34,8 @@ class Service {
         return Gson().toJson(events)
     }
 
-    suspend fun getFetchedCalendar(): String {
-        val events = rooster.getRooster()
+    suspend fun getFetchedCalendar(): String? {
+        val events = rooster.getRooster() ?: return null
         return Gson().toJson(events)
     }
 
