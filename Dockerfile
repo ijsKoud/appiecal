@@ -6,7 +6,7 @@ RUN microdnf install findutils
 COPY --chown=gradle:gradle . .
 RUN ./gradlew bootJar --no-daemon -PjarName=AppieCal
 
-FROM sapmachine:21.0.6-jre-ubuntu-focal AS runner
+FROM sapmachine:21.0.7-jre-ubuntu-focal AS runner
 
 WORKDIR /appiecal
 COPY --from=build ./build/libs/AppieCal.jar ./AppieCal.jar
