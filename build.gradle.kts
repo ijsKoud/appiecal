@@ -39,7 +39,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("org.apache.httpcomponents:httpclient:4.5.14")
     implementation("net.sf.biweekly:biweekly:0.6.8")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.21")
 }
 
 kotlin {
