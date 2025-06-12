@@ -24,6 +24,7 @@
             <option value="$PROJECT_DIR$/src/build-logic" />
             <option value="$PROJECT_DIR$/src/packages" />
             <option value="$PROJECT_DIR$/src/packages/exceptions" />
+            <option value="$PROJECT_DIR$/src/packages/spring" />
           </set>
         </option>
       </GradleProjectSettings>
@@ -48,6 +49,7 @@
             <option value="$PROJECT_DIR$/src/build-logic" />
             <option value="$PROJECT_DIR$/src/packages" />
             <option value="$PROJECT_DIR$/src/packages/exceptions" />
+            <option value="$PROJECT_DIR$/src/packages/spring" />
           </set>
         </option>
       </GradleProjectSettings>

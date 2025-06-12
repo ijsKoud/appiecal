@@ -12,6 +12,9 @@
       <module name="appiecal.apps.schedule" options="-parameters" />
       <module name="appiecal.apps.schedule.main" options="-parameters" />
       <module name="appiecal.apps.schedule.test" options="-parameters" />
+      <module name="appiecal.packages.spring" options="-parameters" />
+      <module name="appiecal.packages.spring.main" options="-parameters" />
+      <module name="appiecal.packages.spring.test" options="-parameters" />
       <module name="schedule" options="-parameters" />
       <module name="schedule.main" options="-parameters" />
       <module name="schedule.test" options="-parameters" />
