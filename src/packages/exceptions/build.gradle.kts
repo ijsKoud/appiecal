@@ -14,15 +14,11 @@ repositories { mavenCentral() }
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("org.springframework:spring-web:6.2.7")
+    api("org.springframework:spring-web:6.2.7")
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
-    implementation("io.swagger.core.v3:swagger-annotations:2.2.31")
+    api("io.swagger.core.v3:swagger-annotations:2.2.31")
 }
 
 tasks.test { useJUnitPlatform() }
-tasks.register("prepareKotlinBuildScriptModel") {}
-tasks.register("wrapper") {
-    gradle.gradleVersion
-}
 
 kotlin { jvmToolchain(23) }
