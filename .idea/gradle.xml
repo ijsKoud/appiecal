@@ -20,6 +20,7 @@
           <set>
             <option value="$PROJECT_DIR$/src" />
             <option value="$PROJECT_DIR$/src/apps" />
+            <option value="$PROJECT_DIR$/src/apps/idp" />
             <option value="$PROJECT_DIR$/src/apps/schedule" />
             <option value="$PROJECT_DIR$/src/build-logic" />
             <option value="$PROJECT_DIR$/src/packages" />
@@ -45,6 +46,7 @@
           <set>
             <option value="$PROJECT_DIR$/src" />
             <option value="$PROJECT_DIR$/src/apps" />
+            <option value="$PROJECT_DIR$/src/apps/idp" />
             <option value="$PROJECT_DIR$/src/apps/schedule" />
             <option value="$PROJECT_DIR$/src/build-logic" />
             <option value="$PROJECT_DIR$/src/packages" />
