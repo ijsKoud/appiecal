@@ -4,10 +4,12 @@ import com.google.gson.Gson
 import nl.klrnbk.daan.appiecal.apps.idp.client.azure.models.AzureEntraErrorResponse
 import nl.klrnbk.daan.appiecal.apps.idp.client.azure.models.AzureEntraTokenResponse
 import nl.klrnbk.daan.appiecal.apps.idp.config.AzureEntraConfig
+import nl.klrnbk.daan.appiecal.packages.exceptions.models.ApiException
 import nl.klrnbk.daan.appiecal.packages.exceptions.models.DownstreamServiceErrorException
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -20,7 +22,7 @@ class AzureEntraClient(
 ) {
     private val apiClient = getRetrofitClient(config.azureEntraUrl)
 
-    fun authorizeWithCode(code: String): AzureEntraTokenResponse? {
+    fun authorizeWithCode(code: String): AzureEntraTokenResponse {
         val apiCall =
             apiClient.authorizeWithCode(
                 config.credentials.clientId,
@@ -33,7 +35,7 @@ class AzureEntraClient(
         return handleApiCall(apiCall)
     }
 
-    fun getAccessTokenFromRefreshToken(refreshToken: String): AzureEntraTokenResponse? {
+    fun getAccessTokenFromRefreshToken(refreshToken: String): AzureEntraTokenResponse {
         val apiCall =
             apiClient.getAccessTokenFromRefreshToken(
                 config.credentials.clientId,
@@ -44,7 +46,7 @@ class AzureEntraClient(
         return handleApiCall(apiCall)
     }
 
-    private fun <T> handleApiCall(call: Call<T>): T? {
+    private fun <T> handleApiCall(call: Call<T>): T {
         val response = call.execute()
         if (!response.isSuccessful) {
             val error =
@@ -57,7 +59,16 @@ class AzureEntraClient(
             throw DownstreamServiceErrorException(errorStatus, error.description)
         }
 
-        return response.body()
+        val body = response.body()
+        if (body == null) {
+            throw ApiException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Downstream service returned malformed response body",
+                "Empty or invalid response body returned",
+            )
+        }
+
+        return body
     }
 
     companion object {
