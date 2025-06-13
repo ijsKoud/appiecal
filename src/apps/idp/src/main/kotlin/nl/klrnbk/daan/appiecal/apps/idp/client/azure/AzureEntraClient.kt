@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component
 
 @Component
 @EnableConfigurationProperties(AzureEntraConfig::class)
-class AzureEntraConfigClient(
+class AzureEntraClient(
     val config: AzureEntraConfig,
 )
