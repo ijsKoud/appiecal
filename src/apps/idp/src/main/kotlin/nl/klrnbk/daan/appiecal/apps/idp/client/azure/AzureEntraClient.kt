@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -28,11 +29,31 @@ class AzureEntraClient(
                 "http://localhost",
                 code,
             )
-        val response = apiCall.execute()
-        if (!response.isSuccessful) {
-            val error = Gson().fromJson(response.errorBody()?.charStream(), AzureEntraErrorResponse::class.java)
-            val errorStatus = response.code()
 
+        return handleApiCall(apiCall)
+    }
+
+    fun getAccessTokenFromRefreshToken(refreshToken: String): AzureEntraTokenResponse? {
+        val apiCall =
+            apiClient.getAccessTokenFromRefreshToken(
+                config.credentials.clientId,
+                config.credentials.scopes,
+                refreshToken,
+            )
+
+        return handleApiCall(apiCall)
+    }
+
+    private fun <T> handleApiCall(call: Call<T>): T? {
+        val response = call.execute()
+        if (!response.isSuccessful) {
+            val error =
+                Gson().fromJson(
+                    response.errorBody()?.charStream(),
+                    AzureEntraErrorResponse::class.java,
+                )
+
+            val errorStatus = response.code()
             throw DownstreamServiceErrorException(errorStatus, error.description)
         }
 
