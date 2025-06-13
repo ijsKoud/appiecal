@@ -1,4 +1,4 @@
-package nl.klrnbk.daan.appiecal.apps.idp.client
+package nl.klrnbk.daan.appiecal.apps.idp.client.azure
 
 import nl.klrnbk.daan.appiecal.apps.idp.config.AzureEntraConfig
 import org.springframework.boot.context.properties.EnableConfigurationProperties
