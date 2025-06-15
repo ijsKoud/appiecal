@@ -25,6 +25,7 @@ class AzureEntraClient(
     fun authorizeWithCode(code: String): AzureEntraTokenResponse {
         val apiCall =
             apiClient.authorizeWithCode(
+                config.credentials.tenantId,
                 config.credentials.clientId,
                 config.credentials.scopes,
                 "authorization_code",
@@ -38,6 +39,7 @@ class AzureEntraClient(
     fun getAccessTokenFromRefreshToken(refreshToken: String): AzureEntraTokenResponse {
         val apiCall =
             apiClient.getAccessTokenFromRefreshToken(
+                config.credentials.tenantId,
                 config.credentials.clientId,
                 config.credentials.scopes,
                 refreshToken,

@@ -13,6 +13,7 @@ data class AzureEntraConfig(
 
 @ConfigurationProperties(prefix = "appiecal.azure.entra.credentials")
 data class AzureEntraCredentialsConfig(
+    val tenantId: String,
     val clientId: String,
     val scopes: String,
 )
