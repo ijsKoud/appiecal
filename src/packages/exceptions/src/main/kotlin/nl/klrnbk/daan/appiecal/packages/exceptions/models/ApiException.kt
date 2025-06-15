@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 
-class ApiException(
+open class ApiException(
     val status: HttpStatus,
     message: String,
     val detail: String,
