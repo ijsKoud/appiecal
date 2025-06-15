@@ -5,7 +5,12 @@ import org.springframework.stereotype.Service
 
 @Service
 class AzureEntraService(
-    private val azureEntraConfigClient: AzureEntraClient,
+    private val azureEntraClient: AzureEntraClient,
 ) {
-    fun getAzureEntraUrl(): String = azureEntraConfigClient.config.authenticationUrl
+    fun getAzureEntraUrl(): String = azureEntraClient.config.authenticationUrl
+
+    fun authorizeWithCode(code: String): String {
+        val token = azureEntraClient.authorizeWithCode(code)
+        return token.accessToken
+    }
 }

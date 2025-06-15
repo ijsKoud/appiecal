@@ -8,4 +8,9 @@ class AzureEntraFacade(
     private val azureEntraService: AzureEntraService,
 ) {
     fun getAzureEntraUrl(): String = azureEntraService.getAzureEntraUrl()
+
+    fun linkUserWithAzureEntra(authorizationCode: String): String {
+        val token = azureEntraService.authorizeWithCode(authorizationCode)
+        return token
+    }
 }
