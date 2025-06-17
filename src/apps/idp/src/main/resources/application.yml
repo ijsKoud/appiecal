@@ -33,3 +33,4 @@ spring:
       ddl-auto: update
   datasource:
     url: ${JDBC_URL}
+    driver-class-name: org.postgresql.Driver
