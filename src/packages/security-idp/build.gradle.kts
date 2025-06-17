@@ -18,6 +18,9 @@ dependencies {
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
     compileOnly("org.springframework:spring-web:6.2.7")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.19.0")
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
     api("org.springframework.boot:spring-boot-starter-security:3.5.0")
 }
 
