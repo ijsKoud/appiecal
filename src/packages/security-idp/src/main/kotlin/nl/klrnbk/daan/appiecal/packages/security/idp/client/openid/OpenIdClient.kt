@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class OpenIdClient(
     val properties: OpenIdClientProperties,
 ) {
-    private val apiClient = getRetrofitClient()
+    private val apiClient = getRetrofitClient(properties.jwks.uri)
 
     fun getFreshJwks(): OpenIdJwksResponse {
         val apiCall = apiClient.getJwks(properties.jwks.uri)
@@ -44,7 +44,7 @@ class OpenIdClient(
     }
 
     companion object {
-        fun getRetrofitClient(): OpenIdApiInterface {
+        fun getRetrofitClient(baseUrl: String): OpenIdApiInterface {
             val loggingInterceptor =
                 HttpLoggingInterceptor()
                     .setLevel(HttpLoggingInterceptor.Level.NONE)
@@ -58,6 +58,7 @@ class OpenIdClient(
             val retrofit =
                 Retrofit
                     .Builder()
+                    .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build()

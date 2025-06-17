@@ -1,1 +1,4 @@
 nl.klrnbk.daan.appiecal.packages.security.idp.config.SecurityConfiguration
+nl.klrnbk.daan.appiecal.packages.security.idp.filters.JwtAuthenticationFilter
+nl.klrnbk.daan.appiecal.packages.security.idp.service.OpenIdService
+nl.klrnbk.daan.appiecal.packages.security.idp.client.openid.OpenIdClient
