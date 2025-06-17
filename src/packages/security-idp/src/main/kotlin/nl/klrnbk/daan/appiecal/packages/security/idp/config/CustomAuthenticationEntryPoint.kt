@@ -6,8 +6,8 @@ import com.auth0.jwt.exceptions.TokenExpiredException
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import nl.klrnbk.daan.appiecal.packages.exceptions.models.ApiException
-import nl.klrnbk.daan.appiecal.packages.exceptions.responses.error.ErrorResponse
+import nl.klrnbk.daan.appiecal.packages.common.exceptions.ApiException
+import nl.klrnbk.daan.appiecal.packages.common.responses.error.ErrorResponse
 import nl.klrnbk.daan.appiecal.packages.security.idp.exceptions.InvalidJwtException
 import nl.klrnbk.daan.appiecal.packages.security.idp.exceptions.JwtVerifyException
 import org.slf4j.Logger

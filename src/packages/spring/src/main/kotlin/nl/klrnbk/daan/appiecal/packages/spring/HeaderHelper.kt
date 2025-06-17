@@ -1,6 +1,6 @@
 package nl.klrnbk.daan.appiecal.packages.spring
 
-import nl.klrnbk.daan.appiecal.packages.exceptions.models.ApiException
+import nl.klrnbk.daan.appiecal.packages.common.exceptions.ApiException
 import org.springframework.http.HttpStatus
 import org.springframework.util.StringUtils
 import org.springframework.web.context.request.RequestContextHolder

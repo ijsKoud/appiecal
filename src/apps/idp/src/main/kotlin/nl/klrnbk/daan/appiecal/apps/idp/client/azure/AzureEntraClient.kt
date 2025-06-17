@@ -4,8 +4,8 @@ import com.google.gson.Gson
 import nl.klrnbk.daan.appiecal.apps.idp.client.azure.models.AzureEntraErrorResponse
 import nl.klrnbk.daan.appiecal.apps.idp.client.azure.models.AzureEntraTokenResponse
 import nl.klrnbk.daan.appiecal.apps.idp.config.AzureEntraConfig
-import nl.klrnbk.daan.appiecal.packages.exceptions.models.ApiException
-import nl.klrnbk.daan.appiecal.packages.exceptions.models.DownstreamServiceErrorException
+import nl.klrnbk.daan.appiecal.packages.common.exceptions.ApiException
+import nl.klrnbk.daan.appiecal.packages.common.exceptions.DownstreamServiceErrorException
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.springframework.boot.context.properties.EnableConfigurationProperties

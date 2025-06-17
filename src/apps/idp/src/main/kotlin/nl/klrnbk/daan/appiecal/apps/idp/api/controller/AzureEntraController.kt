@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import nl.klrnbk.daan.appiecal.apps.idp.api.facade.AzureEntraFacade
-import nl.klrnbk.daan.appiecal.packages.exceptions.responses.error.BaseErrorResponses
+import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping

@@ -1,8 +1,8 @@
 package nl.klrnbk.daan.appiecal.packages.spring
 
 import io.swagger.v3.oas.annotations.Hidden
-import nl.klrnbk.daan.appiecal.packages.exceptions.models.ApiException
-import nl.klrnbk.daan.appiecal.packages.exceptions.responses.error.ErrorResponse
+import nl.klrnbk.daan.appiecal.packages.common.exceptions.ApiException
+import nl.klrnbk.daan.appiecal.packages.common.responses.error.ErrorResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
