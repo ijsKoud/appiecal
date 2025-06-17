@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableConfigurationProperties(SecurityConfigurationProperties::class)
 class SecurityConfiguration(
     val properties: SecurityConfigurationProperties,
+    val filter: JwtAuthenticationFilter,
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -26,9 +27,6 @@ class SecurityConfiguration(
             authorizeHttpRequests {
                 unauthenticatedRoutes.forEach { authorize(it, permitAll) }
                 authorize(anyRequest, authenticated)
-            }
-            httpBasic {
-                disable()
             }
             exceptionHandling {
                 authenticationEntryPoint = CustomAuthenticationEntryPoint()
@@ -45,7 +43,7 @@ class SecurityConfiguration(
             headers {
                 cacheControl { }
             }
-            addFilterBefore<BasicAuthenticationFilter>(JwtAuthenticationFilter())
+            addFilterBefore<BasicAuthenticationFilter>(filter)
         }
 
         return http.build()
