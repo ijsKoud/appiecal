@@ -1,4 +1,4 @@
-package nl.klrnbk.daan.appiecal.packages.exceptions.responses.error
+package nl.klrnbk.daan.appiecal.packages.common.responses.error
 
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject

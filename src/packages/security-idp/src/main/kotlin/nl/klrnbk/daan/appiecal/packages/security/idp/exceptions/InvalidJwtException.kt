@@ -1,6 +1,6 @@
 package nl.klrnbk.daan.appiecal.packages.security.idp.exceptions
 
-import nl.klrnbk.daan.appiecal.packages.exceptions.models.ApiException
+import nl.klrnbk.daan.appiecal.packages.common.exceptions.ApiException
 import org.springframework.http.HttpStatus
 
 class InvalidJwtException(

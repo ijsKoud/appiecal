@@ -14,7 +14,7 @@ repositories { mavenCentral() }
 
 dependencies {
     testImplementation(kotlin("test"))
-    api(project(":packages:exceptions"))
+    api(project(":packages:common"))
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
     compileOnly("org.springframework:spring-web:6.2.7")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.19.0")

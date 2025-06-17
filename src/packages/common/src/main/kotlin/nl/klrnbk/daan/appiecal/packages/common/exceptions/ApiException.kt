@@ -1,4 +1,4 @@
-package nl.klrnbk.daan.appiecal.packages.exceptions.models
+package nl.klrnbk.daan.appiecal.packages.common.exceptions
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.context.request.RequestContextHolder

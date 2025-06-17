@@ -1,4 +1,4 @@
-package nl.klrnbk.daan.appiecal.packages.exceptions.responses.error
+package nl.klrnbk.daan.appiecal.packages.common.responses.error
 
 class ErrorResponse(
     val status: Int,

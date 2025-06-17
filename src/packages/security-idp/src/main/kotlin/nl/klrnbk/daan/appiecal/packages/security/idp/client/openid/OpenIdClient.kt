@@ -1,7 +1,7 @@
 package nl.klrnbk.daan.appiecal.packages.security.idp.client.openid
 
-import nl.klrnbk.daan.appiecal.packages.exceptions.models.ApiException
-import nl.klrnbk.daan.appiecal.packages.exceptions.models.DownstreamServiceErrorException
+import nl.klrnbk.daan.appiecal.packages.common.exceptions.ApiException
+import nl.klrnbk.daan.appiecal.packages.common.exceptions.DownstreamServiceErrorException
 import nl.klrnbk.daan.appiecal.packages.security.idp.client.openid.models.OpenIdJwksResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
