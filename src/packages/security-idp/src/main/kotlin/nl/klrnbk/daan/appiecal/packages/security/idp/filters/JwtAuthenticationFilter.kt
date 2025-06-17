@@ -3,10 +3,12 @@ package nl.klrnbk.daan.appiecal.packages.security.idp.filters
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import nl.klrnbk.daan.appiecal.packages.security.idp.config.CustomAuthenticationEntryPoint
 import nl.klrnbk.daan.appiecal.packages.security.idp.exceptions.InvalidJwtException
 import nl.klrnbk.daan.appiecal.packages.security.idp.helpers.resolveJwtFromRequest
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import nl.klrnbk.daan.appiecal.packages.security.idp.service.OpenIdService
+import org.springframework.security.authentication.AuthenticationServiceException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository
 import org.springframework.stereotype.Component
@@ -15,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 @Component
 class JwtAuthenticationFilter(
     val openIdService: OpenIdService,
+    val authenticationEntryPoint: CustomAuthenticationEntryPoint,
 ) : OncePerRequestFilter() {
     private val securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy()
     private val securityContextRepository = RequestAttributeSecurityContextRepository()
@@ -27,8 +30,18 @@ class JwtAuthenticationFilter(
         val token = resolveJwtFromRequest(request)
         if (token.isNullOrBlank()) return filterChain.doFilter(request, response)
 
-        val decoded = openIdService.decodeAndVerifyJwt(token)
-        if (decoded == null) throw InvalidJwtException()
+        val decoded =
+            try {
+                val decoded = openIdService.decodeAndVerifyJwt(token)
+                if (decoded == null) throw InvalidJwtException()
+
+                decoded
+            } catch (exception: Exception) {
+                val authException = AuthenticationServiceException(exception.message, exception)
+                authenticationEntryPoint.commence(request, response, authException)
+
+                return
+            }
 
         val context = securityContextHolderStrategy.createEmptyContext()
         context.authentication = JwtAuthenticationToken(decoded, openIdService)
