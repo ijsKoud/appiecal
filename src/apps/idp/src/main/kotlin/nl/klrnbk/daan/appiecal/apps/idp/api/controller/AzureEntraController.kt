@@ -1,5 +1,6 @@
 package nl.klrnbk.daan.appiecal.apps.idp.api.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
@@ -22,6 +23,7 @@ class AzureEntraController(
     private val azureEntraFacade: AzureEntraFacade,
 ) {
     @GetMapping("/start", produces = ["text/plain"])
+    @Operation(summary = "Start the Azure Entra authentication flow (returns login-page url)")
     @ApiResponse(
         responseCode = "200",
         description = "Get the azure entra authentication url",
@@ -37,6 +39,10 @@ class AzureEntraController(
 
     @PostMapping("/end")
     @SecurityRequirement(name = "api-key")
+    @Operation(
+        summary = "Link IDP user to Azure Entra account credentials (access_token, refresh_token)",
+        description = "Note: Existing links will be overwritten!",
+    )
     @ApiResponse(
         responseCode = "204",
         description = "Link between Azure Entra and Idp has been made",
