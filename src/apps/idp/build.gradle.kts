@@ -15,6 +15,8 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation(project(":packages:spring"))
     implementation(project(":packages:security-idp"))
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.5.0")
+    implementation("org.postgresql:postgresql:42.7.7")
 }
 
 tasks.test { useJUnitPlatform() }

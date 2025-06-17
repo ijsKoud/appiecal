@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/appiecal?user=postgres&password=postgres
+
+appiecal:
+  spring:
+    security:
+      authorization:
+        jwks:
+          uri: https://auth.klrnbk.nl/application/o/local-test-application/jwks/
