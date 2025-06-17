@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Hidden
 import nl.klrnbk.daan.appiecal.packages.common.exceptions.ApiException
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.ErrorResponse
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -25,4 +26,22 @@ class GlobalControllerAdvice {
                     instance = ex.instance,
                 ),
             )
+
+    @ExceptionHandler(Exception::class)
+    fun handleExceptions(ex: Exception): ResponseEntity<ErrorResponse> {
+        val httpStatus = HttpStatus.INTERNAL_SERVER_ERROR
+
+        return ResponseEntity
+            .status(httpStatus)
+            .header(HttpHeaders.CONTENT_TYPE, "application/problem+json")
+            .body(
+                ErrorResponse(
+                    status = httpStatus.value(),
+                    type = httpStatus.name,
+                    message = "An unexpected error occurred.",
+                    detail = ex.message ?: "An unexpected error occurred.",
+                    instance = ApiException.getExceptionInstance(),
+                ),
+            )
+    }
 }

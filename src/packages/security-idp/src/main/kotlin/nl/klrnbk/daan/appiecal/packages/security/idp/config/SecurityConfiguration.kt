@@ -5,6 +5,8 @@ import nl.klrnbk.daan.appiecal.packages.security.idp.filters.JwtAuthenticationFi
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.invoke
@@ -20,6 +22,7 @@ class SecurityConfiguration(
     val filter: JwtAuthenticationFilter,
 ) {
     @Bean
+    @Order(Ordered.LOWEST_PRECEDENCE)
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         val unauthenticatedRoutes = DEFAULT_UNAUTHENTICATED_ROUTES + properties.unauthenticatedRoutes
 
