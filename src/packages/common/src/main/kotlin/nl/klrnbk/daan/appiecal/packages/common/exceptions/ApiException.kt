@@ -12,9 +12,11 @@ open class ApiException(
 ) : Exception(message) {
     val instance: String = instance ?: getExceptionInstance()
 
-    fun getExceptionInstance(): String {
-        val sra = (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes)
-        val request = sra.request
-        return request.requestURI
+    companion object {
+        fun getExceptionInstance(): String {
+            val sra = (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes)
+            val request = sra.request
+            return request.requestURI
+        }
     }
 }

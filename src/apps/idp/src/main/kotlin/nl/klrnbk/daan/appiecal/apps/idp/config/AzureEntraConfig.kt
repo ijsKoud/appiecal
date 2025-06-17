@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @ConfigurationProperties(prefix = "appiecal.azure.entra")
 @EnableConfigurationProperties(AzureEntraCredentialsConfig::class)
 data class AzureEntraConfig(
-    val authenticationUrl: String,
+    val baseAuthenticationUrl: String,
     val azureEntraUrl: String,
     val credentials: AzureEntraCredentialsConfig,
 )
@@ -16,4 +16,8 @@ data class AzureEntraCredentialsConfig(
     val tenantId: String,
     val clientId: String,
     val scopes: String,
+    val redirectUri: String,
+    val responseType: String,
+    val responseMode: String,
+    val prompt: String,
 )
