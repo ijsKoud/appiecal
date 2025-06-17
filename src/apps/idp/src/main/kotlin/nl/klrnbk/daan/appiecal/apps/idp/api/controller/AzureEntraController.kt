@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import nl.klrnbk.daan.appiecal.apps.idp.api.facade.AzureEntraFacade
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
+import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -35,7 +37,21 @@ class AzureEntraController(
 
     @PostMapping("/end")
     @SecurityRequirement(name = "api-key")
+    @ApiResponse(
+        responseCode = "204",
+        description = "Link between Azure Entra and Idp has been made",
+        content = [
+            Content(
+                mediaType = "*/*",
+                schema = Schema(implementation = Void::class),
+            ),
+        ],
+    )
     fun linkUserWithAzureEntra(
         @RequestParam("code") authorizationCode: String,
-    ): String = azureEntraFacade.linkUserWithAzureEntra(authorizationCode)
+        authentication: JwtAuthenticationToken,
+    ): ResponseEntity<Unit> {
+        azureEntraFacade.linkUserWithAzureEntra(authorizationCode, authentication.principal)
+        return ResponseEntity.noContent().build()
+    }
 }
