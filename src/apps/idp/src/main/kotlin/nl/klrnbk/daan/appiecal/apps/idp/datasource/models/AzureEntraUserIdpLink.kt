@@ -9,6 +9,6 @@ import java.time.LocalDateTime
 class AzureEntraUserIdpLink(
     @Id val id: String,
     @Column(name = "expiration_date") val expirationDate: LocalDateTime,
-    @Column("refresh_token") val refreshToken: String,
-    @Column("access_token") val accessToken: String,
+    @Column("refresh_token", length = 2048) val refreshToken: String,
+    @Column("access_token", length = 2048) val accessToken: String,
 )
