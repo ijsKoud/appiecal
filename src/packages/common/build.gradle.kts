@@ -14,9 +14,12 @@ repositories { mavenCentral() }
 
 dependencies {
     testImplementation(kotlin("test"))
-    api("org.springframework:spring-web:6.2.7")
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
+    api("org.springframework:spring-web:6.2.7")
     api("io.swagger.core.v3:swagger-annotations:2.2.31")
+    api("com.squareup.retrofit2:retrofit:3.0.0")
+    api("com.squareup.retrofit2:converter-gson:3.0.0")
+    api("com.squareup.okhttp3:logging-interceptor:4.9.0")
 }
 
 tasks.test { useJUnitPlatform() }
