@@ -14,6 +14,9 @@ appiecal:
         jwks:
           refresh-interval: 0 0 0 * * *
           uri: ${JWKS_URL}
+  idp:
+    encryption-key: ${IDP_ENCRYPTION_KEY}
+
   azure:
     entra:
       base-authentication-url: https://clp.ah.nl/central-login-page
