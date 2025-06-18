@@ -1,6 +1,6 @@
 package nl.klrnbk.daan.appiecal.apps.idp.api.service
 
-import nl.klrnbk.daan.appiecal.apps.idp.datasource.models.AzureEntraUserIdpLink
+import nl.klrnbk.daan.appiecal.apps.idp.datasource.models.AzureEntraUserIdpLinkModel
 import nl.klrnbk.daan.appiecal.apps.idp.datasource.repositories.AzureEntraUserIdpLinkRepository
 import nl.klrnbk.daan.appiecal.apps.idp.helpers.EncryptionHelper
 import nl.klrnbk.daan.appiecal.packages.common.exceptions.JpaException
@@ -22,7 +22,7 @@ class AzureEntraUserIdpLinkService(
         val encryptedRefreshToken = encryptionHelper.encryptStr(refreshToken)
 
         val linkEntity =
-            AzureEntraUserIdpLink(
+            AzureEntraUserIdpLinkModel(
                 id = userId,
                 accessToken = encryptedAccessToken,
                 refreshToken = encryptedRefreshToken,

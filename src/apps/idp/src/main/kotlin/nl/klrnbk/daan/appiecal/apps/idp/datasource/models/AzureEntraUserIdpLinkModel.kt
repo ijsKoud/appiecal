@@ -6,7 +6,7 @@ import jakarta.persistence.Id
 import java.time.LocalDateTime
 
 @Entity
-class AzureEntraUserIdpLink(
+class AzureEntraUserIdpLinkModel(
     @Id val id: String,
     @Column(name = "expiration_date") val expirationDate: LocalDateTime,
     @Column("refresh_token", length = 4096) val refreshToken: String,
