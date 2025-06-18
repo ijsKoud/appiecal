@@ -4,7 +4,7 @@ import nl.klrnbk.daan.appiecal.apps.idp.datasource.models.AzureEntraUserIdpLinkM
 import nl.klrnbk.daan.appiecal.apps.idp.helpers.EncryptionHelper
 import java.time.LocalDateTime
 
-class AzureEntraUserLinkDetails(
+class AzureEntraToken(
     val expirationDate: LocalDateTime,
     val refreshToken: String,
     val accessToken: String,
@@ -15,11 +15,11 @@ class AzureEntraUserLinkDetails(
         fun fromDatasource(
             model: AzureEntraUserIdpLinkModel,
             encryptionHelper: EncryptionHelper,
-        ): AzureEntraUserLinkDetails {
+        ): AzureEntraToken {
             val refreshToken = encryptionHelper.decryptStr(model.refreshToken)
             val accessToken = encryptionHelper.decryptStr(model.accessToken)
 
-            return AzureEntraUserLinkDetails(
+            return AzureEntraToken(
                 expirationDate = model.expirationDate,
                 refreshToken = refreshToken,
                 accessToken = accessToken,
