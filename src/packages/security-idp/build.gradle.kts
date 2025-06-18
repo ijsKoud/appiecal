@@ -17,6 +17,7 @@ dependencies {
     api(project(":packages:common"))
     api("org.springframework.boot:spring-boot-starter-security:3.5.0")
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
+    compileOnly("org.springdoc:springdoc-openapi-common:1.8.0")
     compileOnly("org.springframework:spring-web:6.2.7")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.19.0")
     implementation("com.auth0:java-jwt:4.4.0")
