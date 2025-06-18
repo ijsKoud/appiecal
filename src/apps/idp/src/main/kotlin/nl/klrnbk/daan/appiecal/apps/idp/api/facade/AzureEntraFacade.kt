@@ -3,7 +3,6 @@ package nl.klrnbk.daan.appiecal.apps.idp.api.facade
 import nl.klrnbk.daan.appiecal.apps.idp.api.service.AzureEntraService
 import nl.klrnbk.daan.appiecal.apps.idp.api.service.AzureEntraUserIdpLinkService
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class AzureEntraFacade(
@@ -19,9 +18,7 @@ class AzureEntraFacade(
         val token = azureEntraService.authorizeWithCode(authorizationCode)
         azureEntraUserIdpLinkService.createOrReplaceLink(
             userId,
-            token.accessToken,
-            token.refreshToken,
-            LocalDateTime.now(),
+            token,
         )
     }
 }

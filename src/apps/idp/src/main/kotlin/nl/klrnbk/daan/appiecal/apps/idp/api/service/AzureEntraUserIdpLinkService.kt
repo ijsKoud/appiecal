@@ -6,7 +6,6 @@ import nl.klrnbk.daan.appiecal.apps.idp.datasource.repositories.AzureEntraUserId
 import nl.klrnbk.daan.appiecal.apps.idp.helpers.EncryptionHelper
 import nl.klrnbk.daan.appiecal.packages.common.exceptions.JpaException
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 import kotlin.jvm.optionals.getOrNull
 
 @Service
@@ -16,19 +15,17 @@ class AzureEntraUserIdpLinkService(
 ) {
     fun createOrReplaceLink(
         userId: String,
-        accessToken: String,
-        refreshToken: String,
-        expirationDate: LocalDateTime,
+        token: AzureEntraToken,
     ) {
-        val encryptedAccessToken = encryptionHelper.encryptStr(accessToken)
-        val encryptedRefreshToken = encryptionHelper.encryptStr(refreshToken)
+        val encryptedAccessToken = encryptionHelper.encryptStr(token.accessToken)
+        val encryptedRefreshToken = encryptionHelper.encryptStr(token.refreshToken)
 
         val linkEntity =
             AzureEntraUserIdpLinkModel(
                 id = userId,
                 accessToken = encryptedAccessToken,
                 refreshToken = encryptedRefreshToken,
-                expirationDate = expirationDate,
+                expirationDate = token.expirationDate,
             )
 
         try {

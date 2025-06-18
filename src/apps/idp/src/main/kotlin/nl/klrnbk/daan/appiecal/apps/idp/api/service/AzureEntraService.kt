@@ -1,7 +1,7 @@
 package nl.klrnbk.daan.appiecal.apps.idp.api.service
 
+import nl.klrnbk.daan.appiecal.apps.idp.api.models.AzureEntraToken
 import nl.klrnbk.daan.appiecal.apps.idp.client.azure.AzureEntraClient
-import nl.klrnbk.daan.appiecal.apps.idp.client.azure.models.AzureEntraTokenResponse
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.springframework.stereotype.Service
 
@@ -31,8 +31,13 @@ class AzureEntraService(
         return url.toString()
     }
 
-    fun authorizeWithCode(code: String): AzureEntraTokenResponse {
+    fun authorizeWithCode(code: String): AzureEntraToken {
         val token = azureEntraClient.authorizeWithCode(code)
-        return token
+        return AzureEntraToken.fromAzureEntraTokenResponse(token)
+    }
+
+    fun getAccessTokenFromRefreshToken(refreshToken: String): AzureEntraToken {
+        val token = azureEntraClient.getAccessTokenFromRefreshToken(refreshToken)
+        return AzureEntraToken.fromAzureEntraTokenResponse(token)
     }
 }
