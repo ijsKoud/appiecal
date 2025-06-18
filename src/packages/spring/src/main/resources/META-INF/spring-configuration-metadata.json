@@ -1,0 +1,9 @@
+{
+  "groups": [
+    {
+      "name": "appiecal.spring.swagger",
+      "type": "nl.klrnbk.daan.appiecal.packages.spring.swagger.config.SwaggerConfigurationProperties",
+      "sourceType": "nl.klrnbk.daan.appiecal.packages.spring.swagger.config.SwaggerConfigurationProperties"
+    }
+  ]
+}

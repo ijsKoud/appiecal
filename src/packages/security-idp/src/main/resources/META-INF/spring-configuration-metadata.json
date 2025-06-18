@@ -1,0 +1,19 @@
+{
+  "groups": [
+    {
+      "name": "appiecal.spring.security",
+      "type": "nl.klrnbk.daan.appiecal.packages.security.idp.config.SecurityConfigurationProperties",
+      "sourceType": "nl.klrnbk.daan.appiecal.packages.security.idp.config.SecurityConfigurationProperties"
+    },
+    {
+      "name": "appiecal.spring.security.authorization",
+      "type": "nl.klrnbk.daan.appiecal.packages.security.idp.client.openid.OpenIdClientProperties",
+      "sourceType": "nl.klrnbk.daan.appiecal.packages.security.idp.client.openid.OpenIdClientProperties"
+    },
+    {
+      "name": "appiecal.spring.security.authorization.jwks",
+      "type": "nl.klrnbk.daan.appiecal.packages.security.idp.client.openid.OpenIdClientJwksProperties",
+      "sourceType": "nl.klrnbk.daan.appiecal.packages.security.idp.client.openid.OpenIdClientJwksProperties"
+    }
+  ]
+}
