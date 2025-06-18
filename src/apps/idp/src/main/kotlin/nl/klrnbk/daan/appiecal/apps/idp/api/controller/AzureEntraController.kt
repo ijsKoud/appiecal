@@ -10,6 +10,7 @@ import nl.klrnbk.daan.appiecal.apps.idp.api.facade.AzureEntraFacade
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -53,6 +54,7 @@ class AzureEntraController(
             ),
         ],
     )
+    @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
     fun linkUserWithAzureEntra(
         @RequestParam("code") authorizationCode: String,
         authentication: JwtAuthenticationToken,
