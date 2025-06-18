@@ -1,5 +1,6 @@
 package nl.klrnbk.daan.appiecal.apps.idp.api.facade
 
+import nl.klrnbk.daan.appiecal.apps.idp.api.models.AzureEntraTokenDetails
 import nl.klrnbk.daan.appiecal.apps.idp.api.service.AzureEntraService
 import nl.klrnbk.daan.appiecal.apps.idp.api.service.AzureEntraUserIdpLinkService
 import nl.klrnbk.daan.appiecal.apps.idp.exceptions.RefreshTokenException
@@ -14,24 +15,34 @@ class TokenFacade(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(TokenFacade::class.java)
 
-    fun getAccessToken(
-        userId: String,
-        forceRefresh: Boolean = false,
-    ): String? {
-        val linkDetails = azureEntraUserIdpLinkService.getLinkFromUserId(userId)
-        if (linkDetails == null) {
-            if (forceRefresh) throw RefreshTokenException("No refresh token available for user $userId")
-            return null
-        }
+    fun getAccessToken(userId: String): String? {
+        val tokenDetails = azureEntraUserIdpLinkService.getLinkFromUserId(userId)
+        if (tokenDetails == null) return null
+        if (!tokenDetails.isExpired()) return tokenDetails.accessToken
 
-        if (!linkDetails.isExpired() && !forceRefresh) return linkDetails.accessToken
+        val updatedTokenDetails = refreshAccessToken(userId, tokenDetails)
+        return updatedTokenDetails.accessToken
+    }
+
+    fun forceRefreshAccessToken(userId: String): String {
+        val tokenDetails = azureEntraUserIdpLinkService.getLinkFromUserId(userId)
+        if (tokenDetails == null) throw RefreshTokenException("No refresh token available for user $userId")
+
+        val refreshedTokenDetails = refreshAccessToken(userId, tokenDetails)
+        return refreshedTokenDetails.accessToken
+    }
+
+    private fun refreshAccessToken(
+        userId: String,
+        tokenDetails: AzureEntraTokenDetails,
+    ): AzureEntraTokenDetails {
         logger.info(
-            "Refreshing access-token for user=$userId; original-expiration-date=${linkDetails.expirationDate}; forced=$forceRefresh",
+            "Refreshing access-token for user=$userId; original-expiration-date=${tokenDetails.expirationDate};",
         )
 
-        val updatedToken = azureEntraService.getAccessTokenFromRefreshToken(linkDetails.refreshToken)
+        val updatedToken = azureEntraService.getAccessTokenFromRefreshToken(tokenDetails.refreshToken)
         azureEntraUserIdpLinkService.createOrReplaceLink(userId, updatedToken)
 
-        return updatedToken.accessToken
+        return updatedToken
     }
 }

@@ -73,5 +73,5 @@ class TokenController(
     )
     @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
     fun forceRefreshAccessToken(authentication: JwtAuthenticationToken): String? =
-        tokenFacade.getAccessToken(authentication.principal, true)
+        tokenFacade.forceRefreshAccessToken(authentication.principal)
 }
