@@ -32,6 +32,11 @@ class TokenFacade(
         return refreshedTokenDetails.accessToken
     }
 
+    fun revokeTokens(userId: String) {
+        logger.info("Revoking access+refresh-token for user=$userId")
+        azureEntraUserIdpLinkService.deleteLinkByUserId(userId)
+    }
+
     private fun refreshAccessToken(
         userId: String,
         tokenDetails: AzureEntraTokenDetails,
