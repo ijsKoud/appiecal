@@ -173,15 +173,11 @@ annotation class ServerErrorResponse
 )
 annotation class EngineOverloadedResponse
 
-@BadRequestResponse
 @UnauthorizedResponse
-@NotFoundResponse
 @InternalServerErrorResponse
 @BadGatewayResponse
 @MethodNotAllowedResponse
 @NotAcceptableResponse
-@ConflictResponse
-@UnsupportedMediaTypeResponse
 @RateLimitResponse
 @ServerErrorResponse
 @EngineOverloadedResponse
