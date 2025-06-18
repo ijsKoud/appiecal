@@ -15,16 +15,16 @@ import javax.crypto.spec.SecretKeySpec
 @Component
 @EnableConfigurationProperties(IdpEncryptionConfig::class)
 class EncryptionHelper(
-    private val properties: IdpEncryptionConfig,
+    private val config: IdpEncryptionConfig,
 ) {
-    val cipher: Cipher = Cipher.getInstance(properties.transformationType)
+    val cipher: Cipher = Cipher.getInstance(config.transformationType)
 
     fun encryptStr(content: String): String {
-        val salt = getRandomBytesArray(properties.saltSize)
-        val password = properties.encryptionKey.toCharArray()
+        val salt = getRandomBytesArray(config.saltSize)
+        val password = config.encryptionKey.toCharArray()
 
-        val pwSpec = PBEKeySpec(password, salt, properties.iterations, properties.keySize)
-        val keyFactory = SecretKeyFactory.getInstance(properties.algorithmName)
+        val pwSpec = PBEKeySpec(password, salt, config.iterations, config.keySize)
+        val keyFactory = SecretKeyFactory.getInstance(config.algorithmName)
         val key: ByteArray = keyFactory.generateSecret(pwSpec).encoded
 
         val contentByteArray = content.toByteArray(StandardCharsets.UTF_8)
@@ -40,13 +40,13 @@ class EncryptionHelper(
     fun decryptStr(encryptedContent: String): String {
         val ciphertextAndNonceAndSalt: ByteArray = Base64.getDecoder().decode(encryptedContent)
 
-        val salt = ByteArray(properties.saltSize)
-        val ciphertextAndNonce = ByteArray(ciphertextAndNonceAndSalt.size - properties.saltSize)
+        val salt = ByteArray(config.saltSize)
+        val ciphertextAndNonce = ByteArray(ciphertextAndNonceAndSalt.size - config.saltSize)
         System.arraycopy(ciphertextAndNonceAndSalt, 0, salt, 0, salt.size)
         System.arraycopy(ciphertextAndNonceAndSalt, salt.size, ciphertextAndNonce, 0, ciphertextAndNonce.size)
 
-        val pwSpec = PBEKeySpec(properties.encryptionKey.toCharArray(), salt, properties.iterations, properties.keySize)
-        val keyFactory: SecretKeyFactory = SecretKeyFactory.getInstance(properties.algorithmName)
+        val pwSpec = PBEKeySpec(config.encryptionKey.toCharArray(), salt, config.iterations, config.keySize)
+        val keyFactory: SecretKeyFactory = SecretKeyFactory.getInstance(config.algorithmName)
         val key: ByteArray = keyFactory.generateSecret(pwSpec).encoded
 
         return String(decrypt(ciphertextAndNonce, key))
@@ -56,9 +56,9 @@ class EncryptionHelper(
         plaintext: ByteArray,
         key: ByteArray,
     ): ByteArray {
-        val nonce = getRandomBytesArray(properties.nonceSize)
+        val nonce = getRandomBytesArray(config.nonceSize)
         val secretKey = SecretKeySpec(key, "AES")
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, GCMParameterSpec(properties.tagSize, nonce))
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, GCMParameterSpec(config.tagSize, nonce))
 
         val ciphertext: ByteArray = cipher.doFinal(plaintext)
         val ciphertextAndNonce = ByteArray(nonce.size + ciphertext.size)
@@ -72,13 +72,13 @@ class EncryptionHelper(
         ciphertextAndNonce: ByteArray,
         key: ByteArray,
     ): ByteArray {
-        val nonce = ByteArray(properties.nonceSize)
-        val ciphertext = ByteArray(ciphertextAndNonce.size - properties.nonceSize)
+        val nonce = ByteArray(config.nonceSize)
+        val ciphertext = ByteArray(ciphertextAndNonce.size - config.nonceSize)
         System.arraycopy(ciphertextAndNonce, 0, nonce, 0, nonce.size)
         System.arraycopy(ciphertextAndNonce, nonce.size, ciphertext, 0, ciphertext.size)
 
         val secretKey = SecretKeySpec(key, "AES")
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, GCMParameterSpec(properties.tagSize, nonce))
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, GCMParameterSpec(config.tagSize, nonce))
         return cipher.doFinal(ciphertext)
     }
 
