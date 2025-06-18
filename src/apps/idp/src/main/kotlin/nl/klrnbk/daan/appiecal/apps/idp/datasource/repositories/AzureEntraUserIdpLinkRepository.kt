@@ -1,6 +1,6 @@
 package nl.klrnbk.daan.appiecal.apps.idp.datasource.repositories
 
-import nl.klrnbk.daan.appiecal.apps.idp.datasource.models.AzureEntraUserIdpLink
+import nl.klrnbk.daan.appiecal.apps.idp.datasource.models.AzureEntraUserIdpLinkModel
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface AzureEntraUserIdpLinkRepository : JpaRepository<AzureEntraUserIdpLink, String>
+interface AzureEntraUserIdpLinkRepository : JpaRepository<AzureEntraUserIdpLinkModel, String>

@@ -14,7 +14,7 @@ open class RetrofitClient {
         val response = call.execute()
         if (!response.isSuccessful) {
             val errorStatus = response.code()
-            throw DownstreamServiceErrorException(errorStatus, "Downstream service error")
+            throw DownstreamServiceErrorException(errorStatus, response.message())
         }
 
         val body = response.body()

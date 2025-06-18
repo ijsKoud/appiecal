@@ -37,10 +37,7 @@ class EncryptionHelper(
         return Base64.getEncoder().encodeToString(ciphertextAndNonceAndSalt)
     }
 
-    fun decryptStr(
-        encryptedContent: String,
-        password: String,
-    ): String {
+    fun decryptStr(encryptedContent: String): String {
         val ciphertextAndNonceAndSalt: ByteArray = Base64.getDecoder().decode(encryptedContent)
 
         val salt = ByteArray(properties.saltSize)
@@ -48,7 +45,7 @@ class EncryptionHelper(
         System.arraycopy(ciphertextAndNonceAndSalt, 0, salt, 0, salt.size)
         System.arraycopy(ciphertextAndNonceAndSalt, salt.size, ciphertextAndNonce, 0, ciphertextAndNonce.size)
 
-        val pwSpec = PBEKeySpec(password.toCharArray(), salt, properties.iterations, properties.keySize)
+        val pwSpec = PBEKeySpec(properties.encryptionKey.toCharArray(), salt, properties.iterations, properties.keySize)
         val keyFactory: SecretKeyFactory = SecretKeyFactory.getInstance(properties.algorithmName)
         val key: ByteArray = keyFactory.generateSecret(pwSpec).encoded
 

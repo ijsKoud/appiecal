@@ -1,11 +1,12 @@
 package nl.klrnbk.daan.appiecal.apps.idp.api.service
 
-import nl.klrnbk.daan.appiecal.apps.idp.datasource.models.AzureEntraUserIdpLink
+import nl.klrnbk.daan.appiecal.apps.idp.api.models.AzureEntraTokenDetails
+import nl.klrnbk.daan.appiecal.apps.idp.datasource.models.AzureEntraUserIdpLinkModel
 import nl.klrnbk.daan.appiecal.apps.idp.datasource.repositories.AzureEntraUserIdpLinkRepository
 import nl.klrnbk.daan.appiecal.apps.idp.helpers.EncryptionHelper
 import nl.klrnbk.daan.appiecal.packages.common.exceptions.JpaException
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class AzureEntraUserIdpLinkService(
@@ -14,19 +15,17 @@ class AzureEntraUserIdpLinkService(
 ) {
     fun createOrReplaceLink(
         userId: String,
-        accessToken: String,
-        refreshToken: String,
-        expirationDate: LocalDateTime,
+        token: AzureEntraTokenDetails,
     ) {
-        val encryptedAccessToken = encryptionHelper.encryptStr(accessToken)
-        val encryptedRefreshToken = encryptionHelper.encryptStr(refreshToken)
+        val encryptedAccessToken = encryptionHelper.encryptStr(token.accessToken)
+        val encryptedRefreshToken = encryptionHelper.encryptStr(token.refreshToken)
 
         val linkEntity =
-            AzureEntraUserIdpLink(
+            AzureEntraUserIdpLinkModel(
                 id = userId,
                 accessToken = encryptedAccessToken,
                 refreshToken = encryptedRefreshToken,
-                expirationDate = expirationDate,
+                expirationDate = token.expirationDate,
             )
 
         try {
@@ -34,5 +33,13 @@ class AzureEntraUserIdpLinkService(
         } catch (e: Exception) {
             throw JpaException(e.message ?: "Unable to save 'AzureEntraUserIdpLink'")
         }
+    }
+
+    fun getLinkFromUserId(userId: String): AzureEntraTokenDetails? {
+        val response = repository.findById(userId)
+        val linkEntity = response.getOrNull()
+
+        if (linkEntity == null) return null
+        return AzureEntraTokenDetails.fromDatasource(linkEntity, encryptionHelper)
     }
 }
