@@ -1,11 +1,13 @@
 package nl.klrnbk.daan.appiecal.apps.idp.api.service
 
+import nl.klrnbk.daan.appiecal.apps.idp.api.models.AzureEntraUserLinkDetails
 import nl.klrnbk.daan.appiecal.apps.idp.datasource.models.AzureEntraUserIdpLinkModel
 import nl.klrnbk.daan.appiecal.apps.idp.datasource.repositories.AzureEntraUserIdpLinkRepository
 import nl.klrnbk.daan.appiecal.apps.idp.helpers.EncryptionHelper
 import nl.klrnbk.daan.appiecal.packages.common.exceptions.JpaException
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class AzureEntraUserIdpLinkService(
@@ -34,5 +36,13 @@ class AzureEntraUserIdpLinkService(
         } catch (e: Exception) {
             throw JpaException(e.message ?: "Unable to save 'AzureEntraUserIdpLink'")
         }
+    }
+
+    fun getLinkFromUserId(userId: String): AzureEntraUserLinkDetails? {
+        val response = repository.findById(userId)
+        val linkEntity = response.getOrNull()
+
+        if (linkEntity == null) return null
+        return AzureEntraUserLinkDetails.fromDatasource(linkEntity, encryptionHelper)
     }
 }
