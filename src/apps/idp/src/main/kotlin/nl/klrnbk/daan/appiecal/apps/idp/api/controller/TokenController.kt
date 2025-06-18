@@ -12,6 +12,7 @@ import nl.klrnbk.daan.appiecal.packages.common.responses.error.ErrorResponse
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -40,7 +41,7 @@ class TokenController(
     @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
     fun getAccessToken(authentication: JwtAuthenticationToken): String? = tokenFacade.getAccessToken(authentication.principal)
 
-    @GetMapping("/force-refresh-token")
+    @PostMapping("/force-refresh-token")
     @Operation(
         summary = "Retrieve a fresh access token to interact with the @AH APIs",
     )
