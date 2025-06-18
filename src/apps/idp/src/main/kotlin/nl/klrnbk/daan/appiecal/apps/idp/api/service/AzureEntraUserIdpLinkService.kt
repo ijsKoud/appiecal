@@ -1,6 +1,6 @@
 package nl.klrnbk.daan.appiecal.apps.idp.api.service
 
-import nl.klrnbk.daan.appiecal.apps.idp.api.models.AzureEntraToken
+import nl.klrnbk.daan.appiecal.apps.idp.api.models.AzureEntraTokenDetails
 import nl.klrnbk.daan.appiecal.apps.idp.datasource.models.AzureEntraUserIdpLinkModel
 import nl.klrnbk.daan.appiecal.apps.idp.datasource.repositories.AzureEntraUserIdpLinkRepository
 import nl.klrnbk.daan.appiecal.apps.idp.helpers.EncryptionHelper
@@ -15,7 +15,7 @@ class AzureEntraUserIdpLinkService(
 ) {
     fun createOrReplaceLink(
         userId: String,
-        token: AzureEntraToken,
+        token: AzureEntraTokenDetails,
     ) {
         val encryptedAccessToken = encryptionHelper.encryptStr(token.accessToken)
         val encryptedRefreshToken = encryptionHelper.encryptStr(token.refreshToken)
@@ -35,11 +35,11 @@ class AzureEntraUserIdpLinkService(
         }
     }
 
-    fun getLinkFromUserId(userId: String): AzureEntraToken? {
+    fun getLinkFromUserId(userId: String): AzureEntraTokenDetails? {
         val response = repository.findById(userId)
         val linkEntity = response.getOrNull()
 
         if (linkEntity == null) return null
-        return AzureEntraToken.fromDatasource(linkEntity, encryptionHelper)
+        return AzureEntraTokenDetails.fromDatasource(linkEntity, encryptionHelper)
     }
 }

@@ -6,7 +6,7 @@ import nl.klrnbk.daan.appiecal.apps.idp.helpers.EncryptionHelper
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
-class AzureEntraToken(
+class AzureEntraTokenDetails(
     val expirationDate: LocalDateTime,
     val refreshToken: String,
     val accessToken: String,
@@ -17,25 +17,25 @@ class AzureEntraToken(
         fun fromDatasource(
             model: AzureEntraUserIdpLinkModel,
             encryptionHelper: EncryptionHelper,
-        ): AzureEntraToken {
+        ): AzureEntraTokenDetails {
             val refreshToken = encryptionHelper.decryptStr(model.refreshToken)
             val accessToken = encryptionHelper.decryptStr(model.accessToken)
 
-            return AzureEntraToken(
+            return AzureEntraTokenDetails(
                 expirationDate = model.expirationDate,
                 refreshToken = refreshToken,
                 accessToken = accessToken,
             )
         }
 
-        fun fromAzureEntraTokenResponse(response: AzureEntraTokenResponse): AzureEntraToken {
+        fun fromAzureEntraTokenResponse(response: AzureEntraTokenResponse): AzureEntraTokenDetails {
             val accessToken = response.accessToken
             val refreshToken = response.refreshToken
 
             val expirationDate = LocalDateTime.now()
             expirationDate.plus(response.expiresIn.toLong(), ChronoUnit.MILLIS)
 
-            return AzureEntraToken(
+            return AzureEntraTokenDetails(
                 expirationDate = expirationDate,
                 accessToken = accessToken,
                 refreshToken = refreshToken,
