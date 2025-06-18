@@ -11,13 +11,16 @@ import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponse
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.ErrorResponse
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/v1/token/")
 @SecurityRequirement(name = "api-key")
+@PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
 @BaseErrorResponses
 class TokenController(
     private val tokenFacade: TokenFacade,
@@ -37,10 +40,9 @@ class TokenController(
             ),
         ],
     )
-    @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
     fun getAccessToken(authentication: JwtAuthenticationToken): String? = tokenFacade.getAccessToken(authentication.principal)
 
-    @GetMapping("/force-refresh-token")
+    @PostMapping("/force-refresh-token")
     @Operation(
         summary = "Retrieve a fresh access token to interact with the @AH APIs",
     )
@@ -70,7 +72,37 @@ class TokenController(
             ),
         ],
     )
-    @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
     fun forceRefreshAccessToken(authentication: JwtAuthenticationToken): String? =
-        tokenFacade.getAccessToken(authentication.principal, true)
+        tokenFacade.forceRefreshAccessToken(authentication.principal)
+
+    @DeleteMapping("/revoke-tokens")
+    @Operation(
+        summary = "Removes the access token and refresh token from the system and deletes the link with Azure Entra",
+    )
+    @ApiResponse(
+        responseCode = "204",
+        description = "Access and refresh token are removed and user is unlinked",
+        content = [
+            Content(
+                mediaType = "*/*",
+                schema = Schema(implementation = Void::class),
+            ),
+        ],
+    )
+    @ApiResponse(
+        responseCode = "409",
+        description = "Unable to remove access and refresh token due to missing Azure Entra credentials",
+        content = [
+            Content(
+                mediaType = "application/problem+json",
+                schema = Schema(implementation = ErrorResponse::class),
+                examples = [
+                    ExampleObject(
+                        value = ErrorResponse.CONFLICT,
+                    ),
+                ],
+            ),
+        ],
+    )
+    fun revokeTokens(authentication: JwtAuthenticationToken) = tokenFacade.revokeTokens(authentication.principal)
 }
