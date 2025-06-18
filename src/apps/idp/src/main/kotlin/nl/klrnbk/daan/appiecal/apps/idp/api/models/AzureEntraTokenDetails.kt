@@ -32,8 +32,10 @@ class AzureEntraTokenDetails(
             val accessToken = response.accessToken
             val refreshToken = response.refreshToken
 
-            val expirationDate = LocalDateTime.now()
-            expirationDate.plus(response.expiresIn.toLong(), ChronoUnit.MILLIS)
+            val expirationDate =
+                LocalDateTime
+                    .now()
+                    .plus(response.expiresIn.toLong(), ChronoUnit.SECONDS)
 
             return AzureEntraTokenDetails(
                 expirationDate = expirationDate,

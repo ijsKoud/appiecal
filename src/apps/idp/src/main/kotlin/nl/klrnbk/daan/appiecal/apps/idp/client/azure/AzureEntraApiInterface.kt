@@ -28,6 +28,6 @@ interface AzureEntraApiInterface {
         @Field("client_id") clientId: String,
         @Field("scope") scope: String,
         @Field("refresh_token") refreshToken: String,
-        @Field("grant_type") grantType: String = "access_token",
+        @Field("grant_type") grantType: String = "refresh_token",
     ): Call<AzureEntraTokenResponse>
 }
