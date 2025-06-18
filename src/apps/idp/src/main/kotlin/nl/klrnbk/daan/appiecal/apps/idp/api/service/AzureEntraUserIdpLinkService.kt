@@ -4,6 +4,7 @@ import nl.klrnbk.daan.appiecal.apps.idp.api.models.AzureEntraTokenDetails
 import nl.klrnbk.daan.appiecal.apps.idp.config.IdpEncryptionConfig
 import nl.klrnbk.daan.appiecal.apps.idp.datasource.models.AzureEntraUserIdpLinkModel
 import nl.klrnbk.daan.appiecal.apps.idp.datasource.repositories.AzureEntraUserIdpLinkRepository
+import nl.klrnbk.daan.appiecal.apps.idp.exceptions.RevokeTokenException
 import nl.klrnbk.daan.appiecal.apps.idp.helpers.EncryptionHelper
 import nl.klrnbk.daan.appiecal.packages.common.exceptions.JpaException
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -46,5 +47,10 @@ class AzureEntraUserIdpLinkService(
 
         if (linkEntity == null) return null
         return AzureEntraTokenDetails.fromDatasource(linkEntity, encryptionHelper)
+    }
+
+    fun deleteLinkByUserId(userId: String) {
+        if (!repository.existsById(userId)) throw RevokeTokenException("Link with user does not exist; user=$userId")
+        repository.deleteById(userId)
     }
 }
