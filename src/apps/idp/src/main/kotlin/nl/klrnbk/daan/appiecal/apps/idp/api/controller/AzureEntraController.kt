@@ -62,4 +62,21 @@ class AzureEntraController(
         azureEntraFacade.linkUserWithAzureEntra(authorizationCode, authentication.principal)
         return ResponseEntity.noContent().build()
     }
+
+    @GetMapping("/status", produces = ["text/plain"])
+    @Operation(summary = "The status on the Azure Entra link")
+    @ApiResponse(
+        responseCode = "200",
+        description = "The status of the Azure Entra link",
+        content = [
+            Content(
+                mediaType = "text/plain",
+                schema = Schema(implementation = String::class),
+                examples = [ExampleObject(value = "linked")],
+            ),
+        ],
+    )
+    @SecurityRequirement(name = "api-key")
+    @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
+    fun getLinkStatus(authentication: JwtAuthenticationToken): String = azureEntraFacade.getLinkStatus(authentication)
 }
