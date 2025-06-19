@@ -15,6 +15,7 @@ repositories { mavenCentral() }
 dependencies {
     testImplementation(kotlin("test"))
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
+    implementation("org.slf4j:slf4j-api:2.0.17")
     api("org.springframework:spring-web:6.2.7")
     api("io.swagger.core.v3:swagger-annotations:2.2.31")
     api("com.squareup.retrofit2:retrofit:3.0.0")
