@@ -4,16 +4,26 @@ import nl.klrnbk.daan.appiecal.packages.common.exceptions.ApiException
 import nl.klrnbk.daan.appiecal.packages.common.exceptions.DownstreamServiceErrorException
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 open class RetrofitClient {
+    protected val logger: Logger = LoggerFactory.getLogger(javaClass)
+
     protected fun <T> handleApiCall(call: Call<T>): T {
         val response = call.execute()
         if (!response.isSuccessful) {
             val errorStatus = response.code()
+            val errorBody = response.errorBody()
+            if (errorBody != null) {
+                val stringifiedBody = errorBody.string()
+                logger.error("Downstream service call was not successful; status=$errorStatus; error=$stringifiedBody")
+            }
+
             throw DownstreamServiceErrorException(errorStatus, response.message())
         }
 

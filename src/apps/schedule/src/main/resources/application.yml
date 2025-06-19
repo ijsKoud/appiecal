@@ -13,6 +13,9 @@ appiecal:
         jwks:
           refresh-interval: 0 0 0 * * *
           uri: ${JWKS_URL}
+  schedule:
+    gql:
+      url: https://api-gateway.ah.nl/
 
 spring:
   profiles:
