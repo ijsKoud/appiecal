@@ -50,7 +50,9 @@ class AzureEntraUserIdpLinkService(
     }
 
     fun deleteLinkByUserId(userId: String) {
-        if (!repository.existsById(userId)) throw RevokeTokenException("Link with user does not exist; user=$userId")
+        if (!doesLinkExistForUser(userId)) throw RevokeTokenException("Link with user does not exist; user=$userId")
         repository.deleteById(userId)
     }
+
+    fun doesLinkExistForUser(userId: String): Boolean = repository.existsById(userId)
 }
