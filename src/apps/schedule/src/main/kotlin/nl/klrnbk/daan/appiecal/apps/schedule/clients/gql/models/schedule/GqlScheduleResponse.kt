@@ -1,25 +1,25 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule
 
-class GqlScheduleResponse {
-    class DataObject(
-        val scheduleOverview: Overview,
-    )
+class GqlScheduleResponse(
+    val data: GqlScheduleResponseDataObject,
+)
 
-    class Overview(
-        val shifts: List<Schedule>,
-        val latestScheduleDate: String,
-    )
+class GqlScheduleResponseDataObject(
+    val scheduleOverview: GqlScheduleResponseOverview,
+)
 
-    data class Schedule(
-        val startTime: String,
-        val endTime: String,
-        val minutes: Int,
-        val storeId: String,
-        val leaveMinutes: Int,
-        val paidMinutes: Int,
-        val sickMinutes: Int,
-        val teamNames: List<String>,
-    )
+class GqlScheduleResponseOverview(
+    val shifts: List<GqlScheduleResponseSchedule>,
+    val latestScheduleDate: String,
+)
 
-    val data: DataObject? = null
-}
+data class GqlScheduleResponseSchedule(
+    val startTime: String,
+    val endTime: String,
+    val minutes: Int,
+    val storeId: String,
+    val leaveMinutes: Int,
+    val paidMinutes: Int,
+    val sickMinutes: Int,
+    val teamNames: List<String>,
+)
