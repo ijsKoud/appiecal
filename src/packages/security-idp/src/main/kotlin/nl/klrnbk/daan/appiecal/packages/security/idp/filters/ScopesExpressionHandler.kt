@@ -11,6 +11,11 @@ class ScopesExpressionHandler {
         return authentication.scopes.contains(scope)
     }
 
+    fun isServiceAccount(authentication: JwtAuthenticationToken?): Boolean {
+        if (authentication == null) return false
+        return authentication.isServiceAccount()
+    }
+
     fun hasAnyScope(
         authentication: JwtAuthenticationToken?,
         vararg scopes: String,

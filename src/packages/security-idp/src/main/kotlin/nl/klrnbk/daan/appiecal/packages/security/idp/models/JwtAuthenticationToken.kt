@@ -4,6 +4,7 @@ import com.auth0.jwt.interfaces.Claim
 import com.auth0.jwt.interfaces.DecodedJWT
 import nl.klrnbk.daan.appiecal.packages.security.idp.constants.AUTHORITY_GROUP_PREFIX
 import nl.klrnbk.daan.appiecal.packages.security.idp.constants.AUTHORITY_SCOPE_PREFIX
+import nl.klrnbk.daan.appiecal.packages.security.idp.constants.SERVICE_ACCOUNT_SCOPE
 import nl.klrnbk.daan.appiecal.packages.security.idp.service.OpenIdService
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
@@ -14,6 +15,7 @@ class JwtAuthenticationToken(
     val openIdService: OpenIdService,
 ) : AbstractAuthenticationToken(getAuthoritiesList(decodedJWT.claims)) {
     val scopes: List<String> = getScopes(decodedJWT.claims)
+    val groups: List<String> = getGroups(decodedJWT.claims)
 
     override fun getCredentials(): String = decodedJWT.token
 
@@ -21,15 +23,14 @@ class JwtAuthenticationToken(
 
     override fun isAuthenticated(): Boolean = openIdService.verifyJwt(credentials)
 
+    fun isServiceAccount(): Boolean = scopes.contains(SERVICE_ACCOUNT_SCOPE)
+
     companion object {
         private fun getAuthoritiesList(claims: Map<String, Claim>): MutableList<GrantedAuthority?> {
             val authorities: MutableList<GrantedAuthority?> = ArrayList()
 
-            val groupsClaims = claims.getOrElse("groups") { null }
-            if (groupsClaims !== null && !groupsClaims.isNull) {
-                val groups = groupsClaims.asList(String::class.java)
-                groups.forEach { authorities.add(SimpleGrantedAuthority("$AUTHORITY_GROUP_PREFIX$it")) }
-            }
+            val groups = getGroups(claims)
+            groups.forEach { authorities.add(SimpleGrantedAuthority("$AUTHORITY_GROUP_PREFIX$it")) }
 
             val scopes = getScopes(claims)
             scopes.forEach { authorities.add(SimpleGrantedAuthority("$AUTHORITY_SCOPE_PREFIX$it")) }
@@ -42,6 +43,11 @@ class JwtAuthenticationToken(
             val scopes = scopeClaims?.asString().orEmpty().split(" ")
 
             return scopes
+        }
+
+        private fun getGroups(claims: Map<String, Claim>): List<String> {
+            val groupsClaims = claims.getOrElse("groups") { null }
+            return groupsClaims?.asList(String::class.java).orEmpty()
         }
     }
 }
