@@ -14,6 +14,7 @@ repositories { mavenCentral() }
 dependencies {
     testImplementation(kotlin("test"))
     implementation(project(":packages:spring"))
+    implementation(project(":packages:security-idp"))
 }
 
 tasks.test { useJUnitPlatform() }
