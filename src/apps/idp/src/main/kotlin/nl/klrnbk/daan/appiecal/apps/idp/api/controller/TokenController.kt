@@ -135,7 +135,7 @@ class TokenController(
             ),
         ],
     )
-    @PreAuthorize("@scopes.isServiceAccount(authentication)")
+    @PreAuthorize("@scopes.isServiceAccount(authentication) && @scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
     fun getAccessTokenFromUserId(
         @PathVariable userId: String,
     ): String? = tokenFacade.getAccessToken(userId)
