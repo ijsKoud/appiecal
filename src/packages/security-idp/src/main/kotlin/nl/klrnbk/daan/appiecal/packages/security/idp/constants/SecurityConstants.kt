@@ -12,4 +12,7 @@ val DEFAULT_UNAUTHENTICATED_ROUTES =
         "/swagger-ui/**",
         "/webjars/**",
         "/swagger-ui.html",
+        "/favicon.ico",
+        "/apple-touch-icon-precomposed.png",
+        "/apple-touch-icon.png",
     )

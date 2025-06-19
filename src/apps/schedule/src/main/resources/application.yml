@@ -1,0 +1,26 @@
+appiecal:
+  spring:
+    swagger:
+      title: schedule-service
+      description: API for interacting with the AH Schedule API (via our systems)
+      header-api-keys:
+        - name: x-authorization
+          key-id: api-key
+          description: x-authorization header
+    security:
+      unauthenticated-routes:
+      authorization:
+        jwks:
+          refresh-interval: 0 0 0 * * *
+          uri: ${JWKS_URL}
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: schedule-service
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#  datasource:
+#    url: ${JDBC_URL}
