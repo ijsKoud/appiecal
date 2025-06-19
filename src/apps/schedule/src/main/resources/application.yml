@@ -9,6 +9,7 @@ appiecal:
           description: x-authorization header
     security:
       unauthenticated-routes:
+        - /v1/raw-request/*
       authorization:
         jwks:
           refresh-interval: 0 0 0 * * *
