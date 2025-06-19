@@ -13,6 +13,7 @@ import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationTok
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -37,6 +38,17 @@ class TokenController(
                 mediaType = "text/plain",
                 schema = Schema(implementation = String::class),
                 examples = [ExampleObject(value = "xxx.yyy.zzz")],
+            ),
+        ],
+    )
+    @ApiResponse(
+        responseCode = "200",
+        description = "No access token found",
+        content = [
+            Content(
+                mediaType = "text/plain",
+                schema = Schema(implementation = String::class),
+                examples = [ExampleObject(value = "")],
             ),
         ],
     )
@@ -105,4 +117,26 @@ class TokenController(
         ],
     )
     fun revokeTokens(authentication: JwtAuthenticationToken) = tokenFacade.revokeTokens(authentication.principal)
+
+    @GetMapping("/internal/access-token/{userId}")
+    @Operation(
+        summary = "Retrieve an access token from a specific user (SERVICE ACCOUNTS ONLY)",
+    )
+    @ApiResponse(
+        responseCode = "200",
+        description = "(Fresh) usable access token ready to use",
+        content = [
+            Content(
+                mediaType = "text/plain",
+                schema = Schema(implementation = String::class),
+                examples = [
+                    ExampleObject(value = "xxx.yyy.zzz"),
+                ],
+            ),
+        ],
+    )
+    @PreAuthorize("@scopes.isServiceAccount(authentication)")
+    fun getAccessTokenFromUserId(
+        @PathVariable userId: String,
+    ): String? = tokenFacade.getAccessToken(userId)
 }
