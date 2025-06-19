@@ -1,7 +1,9 @@
 package nl.klrnbk.daan.appiecal.apps.idp.api.facade
 
+import nl.klrnbk.daan.appiecal.apps.idp.api.models.AzureEntraLinkStatus
 import nl.klrnbk.daan.appiecal.apps.idp.api.service.AzureEntraService
 import nl.klrnbk.daan.appiecal.apps.idp.api.service.AzureEntraUserIdpLinkService
+import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -14,6 +16,13 @@ class AzureEntraFacade(
     private val logger: Logger = LoggerFactory.getLogger(AzureEntraFacade::class.java)
 
     fun getAzureEntraUrl(): String = azureEntraService.getAzureEntraUrl()
+
+    fun getLinkStatus(authentication: JwtAuthenticationToken): String {
+        val isLinked = azureEntraUserIdpLinkService.doesLinkExistForUser(authentication.principal)
+        val status = AzureEntraLinkStatus.fromBoolean(isLinked)
+
+        return status.status
+    }
 
     fun linkUserWithAzureEntra(
         authorizationCode: String,
