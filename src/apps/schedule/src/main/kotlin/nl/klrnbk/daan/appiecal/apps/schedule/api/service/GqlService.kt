@@ -1,7 +1,7 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.service
 
-import nl.klrnbk.daan.appiecal.apps.schedule.api.responses.schedule.ScheduleActivity
-import nl.klrnbk.daan.appiecal.apps.schedule.api.responses.schedule.ScheduleShift
+import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleActivity
+import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleShift
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.GqlClient
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
 import nl.klrnbk.daan.appiecal.apps.schedule.helpers.isActivityPartOfShift

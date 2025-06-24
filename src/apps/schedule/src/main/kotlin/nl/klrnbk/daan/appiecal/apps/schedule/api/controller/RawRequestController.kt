@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import nl.klrnbk.daan.appiecal.apps.schedule.api.facade.RawRequestFacade
-import nl.klrnbk.daan.appiecal.apps.schedule.api.responses.schedule.ScheduleResponse
+import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleResponse
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMAT
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
