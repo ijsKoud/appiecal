@@ -20,7 +20,7 @@ class ShiftModel(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    val id: String? = UUID.randomUUID().toString(),
+    val id: String?,
     @Column(name = "store_id") val storeId: String,
     @Column(name = "start_date") val startDate: LocalDateTime,
     @Column(name = "end_date") val endDate: LocalDateTime,
