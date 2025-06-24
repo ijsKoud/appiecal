@@ -17,57 +17,16 @@ import java.util.UUID
 @Entity
 @Table(name = "shift_activity")
 class ActivityModel(
-    /**
-     * The unique id of this activity.
-     *
-     * For example `xxx-xxx-xxx-xxx`.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     val id: String? = UUID.randomUUID().toString(),
-    /**
-     * If this activity is paid for.
-     *
-     * For example: `true`.
-     */
-    @Column(name = "paid")
-    val paid: Boolean,
-    /**
-     * The start date of this activity.
-     *
-     * For example: `2025-04-28T00:00:00Z`.
-     */
-    @Column(name = "start_date")
-    val startDate: LocalDateTime,
-    /**
-     * The end date of this activity.
-     *
-     * For example: `2025-04-28T00:00:00Z`.
-     */
-    @Column(name = "end_date")
-    val endDate: LocalDateTime,
-    /**
-     * The activity description.
-     *
-     * For example: `Werk`.
-     */
-    @Column(name = "description")
-    val description: String,
-    /**
-     * The time code of this activity.
-     *
-     * For example: `WRK`.
-     */
-    @Column(name = "time_code")
-    val timeCode: String,
-    /**
-     * The department related to this activity.
-     *
-     * For example: `Operatie`
-     */
-    @Enumerated(EnumType.STRING)
-    val department: ShiftDepartment,
+    @Column(name = "paid") val paid: Boolean,
+    @Column(name = "start_date") val startDate: LocalDateTime,
+    @Column(name = "end_date") val endDate: LocalDateTime,
+    @Column(name = "description") val description: String,
+    @Column(name = "time_code") val timeCode: String,
+    @Enumerated(EnumType.STRING) val department: ShiftDepartment,
     @ManyToOne
     @JoinColumn(name = "shift_id", nullable = true)
     val shift: ShiftModel?,
