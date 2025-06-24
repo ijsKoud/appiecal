@@ -4,13 +4,12 @@ import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleRespons
 import nl.klrnbk.daan.appiecal.apps.schedule.api.service.GqlService
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMATTER
-import nl.klrnbk.daan.appiecal.apps.schedule.helpers.getUniqueStoreIds
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
 class RawRequestFacade(
-    val gqlService: GqlService,
+    private val gqlService: GqlService,
 ) {
     fun getRawSchedule(
         token: String,
@@ -31,19 +30,7 @@ class RawRequestFacade(
         val startDateString = startDate.format(DATE_TIME_FORMATTER)
         val endDateString = endDate.format(DATE_TIME_FORMATTER)
 
-        val shifts = gqlService.getFetchedShifts(token, startDateString, endDateString)
-        val activities =
-            getUniqueStoreIds(shifts)
-                .map {
-                    gqlService.getFetchedActivities(
-                        token,
-                        it,
-                        startDateString,
-                        endDateString,
-                    )
-                }.flatten()
-
-        val mergedShifts = gqlService.mergeActivitiesWithShifts(shifts, activities)
+        val mergedShifts = gqlService.getFetchedShiftsWithActivities(token, startDateString, endDateString)
         return ScheduleResponse(mergedShifts)
     }
 }

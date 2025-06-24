@@ -4,6 +4,7 @@ import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleActivit
 import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleShift
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.GqlClient
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
+import nl.klrnbk.daan.appiecal.apps.schedule.helpers.getUniqueStoreIds
 import nl.klrnbk.daan.appiecal.apps.schedule.helpers.isActivityPartOfShift
 import org.springframework.stereotype.Service
 
@@ -39,6 +40,26 @@ class GqlService(
     ): List<ScheduleActivity> {
         val rawActivities = gqlClient.getScheduleActivities(token, storeId, startDate, endDate)
         return rawActivities.data.scheduleByFilter?.map(ScheduleActivity::fromGqlResponse) ?: emptyList()
+    }
+
+    fun getFetchedShiftsWithActivities(
+        token: String,
+        startDate: String,
+        endDate: String,
+    ): List<ScheduleShift> {
+        val shifts = getFetchedShifts(token, startDate, endDate)
+        val activities =
+            getUniqueStoreIds(shifts)
+                .map {
+                    getFetchedActivities(
+                        token,
+                        it,
+                        startDate,
+                        endDate,
+                    )
+                }.flatten()
+
+        return mergeActivitiesWithShifts(shifts, activities)
     }
 
     fun mergeActivitiesWithShifts(
