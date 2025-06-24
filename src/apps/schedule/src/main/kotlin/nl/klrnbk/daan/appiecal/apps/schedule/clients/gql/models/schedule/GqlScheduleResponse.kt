@@ -5,7 +5,7 @@ class GqlScheduleResponse(
 )
 
 class GqlScheduleResponseDataObject(
-    val scheduleOverview: GqlScheduleResponseOverview,
+    val scheduleOverview: GqlScheduleResponseOverview?,
 )
 
 class GqlScheduleResponseOverview(

@@ -23,8 +23,8 @@ spring:
     active: local
   application:
     name: schedule-service
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#  datasource:
-#    url: ${JDBC_URL}
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: ${JDBC_URL}
