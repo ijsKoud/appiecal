@@ -1,4 +1,4 @@
-package nl.klrnbk.daan.appiecal.apps.schedule.api.responses.schedule
+package nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule
 
 data class ScheduleResponse(
     val shifts: List<ScheduleShift>,

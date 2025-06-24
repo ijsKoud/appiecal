@@ -1,4 +1,4 @@
-package nl.klrnbk.daan.appiecal.apps.schedule.api.responses.schedule
+package nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule
 
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.activity.GqlActivityResponseActivity
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMATTER

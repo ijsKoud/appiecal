@@ -1,13 +1,12 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.facade
 
-import nl.klrnbk.daan.appiecal.apps.schedule.api.responses.schedule.ScheduleResponse
+import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleResponse
 import nl.klrnbk.daan.appiecal.apps.schedule.api.service.GqlService
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMATTER
 import nl.klrnbk.daan.appiecal.apps.schedule.helpers.getUniqueStoreIds
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
-import kotlin.text.format
 
 @Service
 class RawRequestFacade(
