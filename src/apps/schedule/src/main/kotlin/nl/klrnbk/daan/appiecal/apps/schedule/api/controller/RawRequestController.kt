@@ -1,5 +1,6 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
@@ -23,6 +24,7 @@ class RawRequestController(
     val rawRequestFacade: RawRequestFacade,
 ) {
     @PostMapping("/raw-schedule")
+    @Operation(summary = "Fetch the schedule and get raw data from the @AH API")
     @ApiResponse(responseCode = "200", description = "Returns the list of shifts of a user")
     fun getRawSchedule(
         @Parameter(
@@ -59,6 +61,7 @@ class RawRequestController(
     ): List<GqlScheduleResponseSchedule> = rawRequestFacade.getRawSchedule(token, startDate, endDate)
 
     @PostMapping("/formatted-schedule")
+    @Operation(summary = "Fetch the schedule and get formatted data (with activities) from the @AH API")
     @ApiResponse(
         responseCode = "200",
         description = "Returns the list of shifts (formatted with activities) of a user",
