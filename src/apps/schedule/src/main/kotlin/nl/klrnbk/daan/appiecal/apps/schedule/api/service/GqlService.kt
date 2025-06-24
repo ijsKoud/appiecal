@@ -1,10 +1,11 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.service
 
+import nl.klrnbk.daan.appiecal.apps.schedule.api.responses.schedule.ScheduleActivity
+import nl.klrnbk.daan.appiecal.apps.schedule.api.responses.schedule.ScheduleShift
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.GqlClient
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
-import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMATTER
+import nl.klrnbk.daan.appiecal.apps.schedule.helpers.isActivityPartOfShift
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class GqlService(
@@ -12,13 +13,45 @@ class GqlService(
 ) {
     fun getRawSchedule(
         token: String,
-        startDate: LocalDateTime,
-        endDate: LocalDateTime,
+        startDate: String,
+        endDate: String,
     ): List<GqlScheduleResponseSchedule> {
-        val startDateString = startDate.format(DATE_TIME_FORMATTER)
-        val endDateString = endDate.format(DATE_TIME_FORMATTER)
+        val response = gqlClient.getSchedule(token, startDate, endDate)
+        return response.data.scheduleOverview?.shifts ?: emptyList()
+    }
 
-        val response = gqlClient.getSchedule(token, startDateString, endDateString)
-        return response.data.scheduleOverview.shifts
+    fun getFetchedShifts(
+        token: String,
+        startDate: String,
+        endDate: String,
+    ): List<ScheduleShift> {
+        val rawShifts = gqlClient.getSchedule(token, startDate, endDate)
+        return rawShifts.data.scheduleOverview
+            ?.shifts
+            ?.map(ScheduleShift::fromGqlResponse) ?: emptyList()
+    }
+
+    fun getFetchedActivities(
+        token: String,
+        storeId: String,
+        startDate: String,
+        endDate: String,
+    ): List<ScheduleActivity> {
+        val rawActivities = gqlClient.getScheduleActivities(token, storeId, startDate, endDate)
+        return rawActivities.data.scheduleByFilter?.map(ScheduleActivity::fromGqlResponse) ?: emptyList()
+    }
+
+    fun mergeActivitiesWithShifts(
+        shifts: List<ScheduleShift>,
+        activities: List<ScheduleActivity>,
+    ): List<ScheduleShift> {
+        return shifts.map { shift ->
+            val shiftActivities =
+                activities
+                    .filter { activity -> isActivityPartOfShift(shift, activity) }
+
+            shift.activities.addAll(shiftActivities)
+            return@map shift
+        }
     }
 }

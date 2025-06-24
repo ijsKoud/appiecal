@@ -25,10 +25,11 @@ class GqlClient(
 
     fun getScheduleActivities(
         token: String,
+        storeId: String,
         startDate: String,
         endDate: String,
     ): GqlActivityResponse {
-        val call = apiClient.getActivities("Bearer $token", GqlActivityBody(startDate, endDate))
+        val call = apiClient.getActivities("Bearer $token", GqlActivityBody(storeId, startDate, endDate))
         return handleApiCall(call)
     }
 }
