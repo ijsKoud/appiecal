@@ -16,18 +16,42 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "shift_activity")
+@Suppress("ktlint:standard:no-blank-line-in-list")
 class ActivityModel(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     var id: String?,
-    @Column(name = "paid") val paid: Boolean,
-    @Column(name = "start_date") val startDate: LocalDateTime,
-    @Column(name = "end_date") val endDate: LocalDateTime,
-    @Column(name = "description") val description: String,
-    @Column(name = "time_code") val timeCode: String,
-    @Enumerated(EnumType.STRING) val department: ShiftDepartment,
-    @ManyToOne @JoinColumn(name = "shift_id", nullable = false)
+
+    @Column(name = "user_id")
+    val userId: String,
+
+    @Column(name = "paid")
+    val paid: Boolean,
+
+    @Column(name = "start_date")
+    val startDate: LocalDateTime,
+
+    @Column(name = "end_date")
+    val endDate: LocalDateTime,
+
+    @Column(name = "description")
+    val description: String,
+
+    @Column(name = "time_code")
+    val timeCode: String,
+
+    @Enumerated(EnumType.STRING)
+    val department: ShiftDepartment,
+
+    @Column(name = "created_at")
+    var createdAt: LocalDateTime,
+
+    @Column(name = "updated_at")
+    var updatedAt: LocalDateTime,
+
+    @ManyToOne
+    @JoinColumn(name = "shift_id", nullable = false)
     var shift: ShiftModel,
 ) {
     fun isDateTimeEqual(other: ActivityModel): Boolean = startDate == other.startDate && endDate == other.endDate
@@ -44,15 +68,19 @@ class ActivityModel(
         fun fromApiResponse(
             response: ScheduleActivity,
             shift: ShiftModel,
+            userId: String,
         ): ActivityModel =
             ActivityModel(
                 id = null,
+                userId = userId,
                 paid = response.paid,
                 startDate = response.startDate,
                 endDate = response.endDate,
                 description = response.description,
                 timeCode = response.timeCode,
                 department = response.department,
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now(),
                 shift = shift,
             )
     }

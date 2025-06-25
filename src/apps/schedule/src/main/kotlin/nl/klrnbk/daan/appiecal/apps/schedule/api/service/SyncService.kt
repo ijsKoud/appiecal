@@ -51,6 +51,7 @@ class SyncService {
                 if (dbShift == null) return@mapNotNull null
 
                 shift.id = dbShift.id
+                shift.createdAt = dbShift.createdAt
                 Pair(dbShift, shift)
             }
 
@@ -88,6 +89,7 @@ class SyncService {
                 if (dbActivity == null) return@filter false
 
                 activity.id = dbActivity.id
+                activity.createdAt = dbActivity.createdAt
                 dbActivity.equals(activity)
             }
 

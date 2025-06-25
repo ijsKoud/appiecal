@@ -49,7 +49,8 @@ class SyncController(
             description = "The id of the user registered at IDP",
             schema = Schema(type = "string"),
         )
-        @PathVariable userId: String,
+        @PathVariable
+        userId: String,
         @Parameter(
             name = "start-date",
             description = "The start date",
@@ -60,7 +61,8 @@ class SyncController(
                     example = "2025-04-28T00:00:00",
                 ),
         )
-        @RequestParam("start-date", required = true) startDate: LocalDateTime,
+        @RequestParam("start-date", required = true)
+        startDate: LocalDateTime,
         @Parameter(
             name = "end-date",
             description = "The end date",
@@ -71,7 +73,8 @@ class SyncController(
                     example = "2025-04-28T00:00:00",
                 ),
         )
-        @RequestParam("end-date", required = true) endDate: LocalDateTime,
+        @RequestParam("end-date", required = true)
+        endDate: LocalDateTime,
         authorization: JwtAuthenticationToken,
     ): SyncStatusResponse = syncFacade.syncSchedule(authorization, userId, startDate, endDate)
 }

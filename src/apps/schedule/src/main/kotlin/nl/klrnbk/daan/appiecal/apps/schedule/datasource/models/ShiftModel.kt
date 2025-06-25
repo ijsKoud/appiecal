@@ -17,16 +17,36 @@ import java.util.UUID
 
 @Entity
 @Table(name = "shift")
+@Suppress("ktlint:standard:no-blank-line-in-list")
 class ShiftModel(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     var id: String?,
-    @Column(name = "store_id") val storeId: String,
-    @Column(name = "start_date") val startDate: LocalDateTime,
-    @Column(name = "end_date") val endDate: LocalDateTime,
-    @Enumerated(EnumType.STRING) val departments: List<ShiftDepartment>,
-    @OneToMany(mappedBy = "shift", cascade = [CascadeType.ALL]) var activities: MutableList<ActivityModel>,
+
+    @Column(name = "store_id")
+    val storeId: String,
+
+    @Column(name = "user_id")
+    val userId: String,
+
+    @Column(name = "start_date")
+    val startDate: LocalDateTime,
+
+    @Column(name = "end_date")
+    val endDate: LocalDateTime,
+
+    @Enumerated(EnumType.STRING)
+    val departments: List<ShiftDepartment>,
+
+    @Column(name = "created_at")
+    var createdAt: LocalDateTime,
+
+    @Column(name = "updated_at")
+    var updatedAt: LocalDateTime,
+
+    @OneToMany(mappedBy = "shift", cascade = [CascadeType.ALL])
+    var activities: MutableList<ActivityModel>,
 ) {
     fun isDateEqual(other: ShiftModel): Boolean =
         startDate.toLocalDate() == other.startDate.toLocalDate() && endDate.toLocalDate() == other.endDate.toLocalDate()
@@ -38,18 +58,24 @@ class ShiftModel(
             departments != other.departments
 
     companion object {
-        fun fromApiResponse(response: ScheduleShift): ShiftModel {
+        fun fromApiResponse(
+            response: ScheduleShift,
+            userId: String,
+        ): ShiftModel {
             val shift =
                 ShiftModel(
                     id = null,
+                    userId = userId,
                     startDate = response.startDate,
                     endDate = response.endDate,
                     storeId = response.storeId,
                     departments = response.departments,
+                    createdAt = LocalDateTime.now(),
+                    updatedAt = LocalDateTime.now(),
                     activities = mutableListOf(),
                 )
 
-            val activities = response.activities.map { activity -> ActivityModel.fromApiResponse(activity, shift) }
+            val activities = response.activities.map { activity -> ActivityModel.fromApiResponse(activity, shift, userId) }
             shift.activities.addAll(activities)
             return shift
         }

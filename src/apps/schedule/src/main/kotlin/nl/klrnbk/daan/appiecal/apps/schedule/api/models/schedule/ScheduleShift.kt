@@ -12,6 +12,8 @@ data class ScheduleShift(
     val storeId: String,
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
     val departments: List<ShiftDepartment>,
     val activities: MutableList<ScheduleActivity>,
 ) {
@@ -22,6 +24,8 @@ data class ScheduleShift(
                 storeId = model.storeId,
                 startDate = model.startDate,
                 endDate = model.endDate,
+                createdAt = model.createdAt,
+                updatedAt = model.updatedAt,
                 departments = model.departments,
                 activities = model.activities.map(ScheduleActivity.Companion::fromModel).toMutableList(),
             )
@@ -32,6 +36,8 @@ data class ScheduleShift(
                 storeId = response.storeId,
                 startDate = LocalDateTime.parse(response.startTime, DATE_TIME_FORMATTER),
                 endDate = LocalDateTime.parse(response.endTime, DATE_TIME_FORMATTER),
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now(),
                 departments = response.teamNames.map(ShiftDepartment::getFromGqlResponse),
                 activities = mutableListOf(),
             )

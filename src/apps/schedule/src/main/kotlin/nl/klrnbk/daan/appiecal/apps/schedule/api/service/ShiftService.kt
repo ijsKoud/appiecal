@@ -12,9 +12,10 @@ class ShiftService(
     private val shiftRepository: ShiftRepository,
 ) {
     fun getShiftsBetweenDateRange(
+        userId: String,
         startDate: LocalDateTime,
         endDate: LocalDateTime,
-    ): List<ShiftModel> = shiftRepository.findAllByStartDateGreaterThanEqualAndEndDateLessThanEqual(startDate, endDate)
+    ): List<ShiftModel> = shiftRepository.findAllByUserIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(userId, startDate, endDate)
 
     fun saveOrUpdateShifts(shifts: List<ShiftModel>): List<ShiftModel> = shiftRepository.saveAll(shifts)
 
