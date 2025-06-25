@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController
 class TokenController(
     private val tokenFacade: TokenFacade,
 ) {
-    @GetMapping("/access-token")
+    @GetMapping("/access-token/me")
     @Operation(
         summary = "Retrieve an access token to interact with the @AH APIs",
     )
@@ -118,7 +118,7 @@ class TokenController(
     )
     fun revokeTokens(authentication: JwtAuthenticationToken) = tokenFacade.revokeTokens(authentication.principal)
 
-    @GetMapping("/internal/access-token/{userId}")
+    @GetMapping("/access-token/{userId}")
     @Operation(
         summary = "Retrieve an access token from a specific user (SERVICE ACCOUNTS ONLY)",
     )
