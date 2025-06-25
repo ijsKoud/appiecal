@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 open class RetrofitClient {
     protected val logger: Logger = LoggerFactory.getLogger(javaClass)
@@ -58,6 +59,7 @@ open class RetrofitClient {
                 Retrofit
                     .Builder()
                     .baseUrl(baseUrl)
+                    .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build()

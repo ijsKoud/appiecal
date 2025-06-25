@@ -11,3 +11,6 @@ appiecal:
       authorization:
         jwks:
           uri: https://auth.klrnbk.nl/application/o/local-test-application/jwks/
+  schedule:
+    idp:
+      url: http://localhost:8080
