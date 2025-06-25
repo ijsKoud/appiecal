@@ -32,6 +32,14 @@ class ActivityModel(
 ) {
     fun isDateTimeEqual(other: ActivityModel): Boolean = startDate == other.startDate && endDate == other.endDate
 
+    fun equals(other: ActivityModel): Boolean =
+        endDate != other.endDate ||
+            startDate != other.startDate ||
+            description != other.description ||
+            department != other.department ||
+            paid != other.paid ||
+            timeCode != other.timeCode
+
     companion object {
         fun fromApiResponse(
             response: ScheduleActivity,

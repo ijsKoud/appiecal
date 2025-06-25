@@ -31,6 +31,12 @@ class ShiftModel(
     fun isDateEqual(other: ShiftModel): Boolean =
         startDate.toLocalDate() == other.startDate.toLocalDate() && endDate.toLocalDate() == other.endDate.toLocalDate()
 
+    fun equals(other: ShiftModel): Boolean =
+        endDate != other.endDate ||
+            startDate != other.startDate ||
+            storeId != other.storeId ||
+            departments != other.departments
+
     companion object {
         fun fromApiResponse(response: ScheduleShift): ShiftModel {
             val shift =
