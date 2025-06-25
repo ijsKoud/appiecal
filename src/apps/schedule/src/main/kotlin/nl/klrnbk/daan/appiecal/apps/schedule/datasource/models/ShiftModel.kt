@@ -39,6 +39,12 @@ class ShiftModel(
     @Enumerated(EnumType.STRING)
     val departments: List<ShiftDepartment>,
 
+    @Column(name = "created_at")
+    var createdAt: LocalDateTime,
+
+    @Column(name = "updated_at")
+    var updatedAt: LocalDateTime,
+
     @OneToMany(mappedBy = "shift", cascade = [CascadeType.ALL])
     var activities: MutableList<ActivityModel>,
 ) {
@@ -64,6 +70,8 @@ class ShiftModel(
                     endDate = response.endDate,
                     storeId = response.storeId,
                     departments = response.departments,
+                    createdAt = LocalDateTime.now(),
+                    updatedAt = LocalDateTime.now(),
                     activities = mutableListOf(),
                 )
 

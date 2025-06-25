@@ -44,6 +44,12 @@ class ActivityModel(
     @Enumerated(EnumType.STRING)
     val department: ShiftDepartment,
 
+    @Column(name = "created_at")
+    var createdAt: LocalDateTime,
+
+    @Column(name = "updated_at")
+    var updatedAt: LocalDateTime,
+
     @ManyToOne
     @JoinColumn(name = "shift_id", nullable = false)
     var shift: ShiftModel,
@@ -73,6 +79,8 @@ class ActivityModel(
                 description = response.description,
                 timeCode = response.timeCode,
                 department = response.department,
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now(),
                 shift = shift,
             )
     }
