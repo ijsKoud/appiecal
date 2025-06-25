@@ -15,6 +15,8 @@ data class ScheduleResponse(
                   "storeId": "1148",
                   "startDate": "2025-05-18T20:00:00",
                   "endDate": "2025-05-18T23:00:00",
+                  "createdAt": "2025-05-18T20:00:00",
+                  "updatedAt": "2025-05-18T20:00:00",
                   "departments": [
                     "Operatie"
                   ],
@@ -24,6 +26,8 @@ data class ScheduleResponse(
                       "description": "Promotie",
                       "startDate": "2025-05-18T20:00:00",
                       "endDate": "2025-05-18T23:00:00",
+                      "createdAt": "2025-05-18T20:00:00",
+                      "updatedAt": "2025-05-18T20:00:00",
                       "department": "Operatie",
                       "timeCode": "WRK",
                       "paid": true
