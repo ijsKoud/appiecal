@@ -1,19 +1,19 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule
 
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.activity.GqlActivityResponseActivity
-import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMATTER
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.ShiftDepartment
 import nl.klrnbk.daan.appiecal.apps.schedule.datasource.models.ActivityModel
-import java.time.LocalDateTime
+import nl.klrnbk.daan.appiecal.apps.schedule.helpers.localDateTimeStringToZonedDateTime
+import java.time.ZonedDateTime
 import java.util.UUID
 
 data class ScheduleActivity(
     val id: UUID,
     val description: String,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime,
+    val startDate: ZonedDateTime,
+    val endDate: ZonedDateTime,
+    val createdAt: ZonedDateTime,
+    val updatedAt: ZonedDateTime,
     val department: ShiftDepartment,
     val timeCode: String,
     val paid: Boolean,
@@ -36,10 +36,10 @@ data class ScheduleActivity(
             ScheduleActivity(
                 id = UUID.randomUUID(),
                 description = response.description,
-                startDate = LocalDateTime.parse(response.startTime, DATE_TIME_FORMATTER),
-                endDate = LocalDateTime.parse(response.endTime, DATE_TIME_FORMATTER),
-                createdAt = LocalDateTime.now(),
-                updatedAt = LocalDateTime.now(),
+                startDate = localDateTimeStringToZonedDateTime(response.startTime),
+                endDate = localDateTimeStringToZonedDateTime(response.endTime),
+                createdAt = ZonedDateTime.now(),
+                updatedAt = ZonedDateTime.now(),
                 department = ShiftDepartment.getFromGqlResponse(response.teamName),
                 timeCode = response.timeCode,
                 paid = !response.unpaid,

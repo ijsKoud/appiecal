@@ -4,7 +4,7 @@ import nl.klrnbk.daan.appiecal.apps.schedule.datasource.models.ShiftModel
 import nl.klrnbk.daan.appiecal.apps.schedule.datasource.repositories.ShiftRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @Service
 @Transactional
@@ -13,8 +13,8 @@ class ShiftService(
 ) {
     fun getShiftsBetweenDateRange(
         userId: String,
-        startDate: LocalDateTime,
-        endDate: LocalDateTime,
+        startDate: ZonedDateTime,
+        endDate: ZonedDateTime,
     ): List<ShiftModel> = shiftRepository.findAllByUserIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(userId, startDate, endDate)
 
     fun saveOrUpdateShifts(shifts: List<ShiftModel>): List<ShiftModel> = shiftRepository.saveAll(shifts)

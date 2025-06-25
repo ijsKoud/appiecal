@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import nl.klrnbk.daan.appiecal.apps.schedule.api.facade.ScheduleFacade
 import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleResponse
-import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMAT
+import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_ZONE_FORMAT
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.springframework.security.access.prepost.PreAuthorize
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @RestController
 @SecurityRequirement(name = "api-key")
@@ -49,24 +49,24 @@ class ScheduleController(
             schema =
                 Schema(
                     type = "string",
-                    format = DATE_TIME_FORMAT,
-                    example = "2025-04-28T00:00:00",
+                    format = DATE_TIME_ZONE_FORMAT,
+                    example = "2025-04-28T00:00:00+02:00",
                 ),
         )
         @RequestParam("start-date", required = true)
-        startDate: LocalDateTime,
+        startDate: ZonedDateTime,
         @Parameter(
             name = "end-date",
             description = "The end date",
             schema =
                 Schema(
                     type = "string",
-                    format = DATE_TIME_FORMAT,
-                    example = "2025-04-28T00:00:00",
+                    format = DATE_TIME_ZONE_FORMAT,
+                    example = "2025-04-28T00:00:00+02:00",
                 ),
         )
         @RequestParam("end-date", required = true)
-        endDate: LocalDateTime,
+        endDate: ZonedDateTime,
     ): ScheduleResponse = scheduleFacade.getScheduleFromId(authentication.principal, startDate, endDate)
 
     @GetMapping("/{userId}")
@@ -96,23 +96,23 @@ class ScheduleController(
             schema =
                 Schema(
                     type = "string",
-                    format = DATE_TIME_FORMAT,
-                    example = "2025-04-28T00:00:00",
+                    format = DATE_TIME_ZONE_FORMAT,
+                    example = "2025-04-28T00:00:00+02:00",
                 ),
         )
         @RequestParam("start-date", required = true)
-        startDate: LocalDateTime,
+        startDate: ZonedDateTime,
         @Parameter(
             name = "end-date",
             description = "The end date",
             schema =
                 Schema(
                     type = "string",
-                    format = DATE_TIME_FORMAT,
-                    example = "2025-04-28T00:00:00",
+                    format = DATE_TIME_ZONE_FORMAT,
+                    example = "2025-04-28T00:00:00+02:00",
                 ),
         )
         @RequestParam("end-date", required = true)
-        endDate: LocalDateTime,
+        endDate: ZonedDateTime,
     ): ScheduleResponse = scheduleFacade.getScheduleFromId(userId, startDate, endDate)
 }
