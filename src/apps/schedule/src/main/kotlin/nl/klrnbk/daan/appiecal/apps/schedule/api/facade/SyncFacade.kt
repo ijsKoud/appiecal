@@ -11,7 +11,7 @@ import nl.klrnbk.daan.appiecal.apps.schedule.datasource.models.ShiftModel
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @Service
 class SyncFacade(
@@ -26,8 +26,8 @@ class SyncFacade(
     fun syncSchedule(
         authentication: JwtAuthenticationToken,
         userId: String,
-        startDate: LocalDateTime,
-        endDate: LocalDateTime,
+        startDate: ZonedDateTime,
+        endDate: ZonedDateTime,
     ): SyncStatusResponse {
         val startDateString = startDate.format(DATE_TIME_FORMATTER)
         val endDateString = endDate.format(DATE_TIME_FORMATTER)
@@ -43,8 +43,9 @@ class SyncFacade(
         logger.info("Syncing activities for user=$userId; ${results.activities}")
 
         shiftService.deleteShifts(results.shifts.delete)
-        shiftService.saveOrUpdateShifts(results.shifts.new + results.shifts.update)
         activityService.deleteActivities(results.activities.delete)
+        shiftService.saveOrUpdateShifts(results.shifts.new + results.shifts.update)
+
         return syncService.resultsToResponse(results)
     }
 }

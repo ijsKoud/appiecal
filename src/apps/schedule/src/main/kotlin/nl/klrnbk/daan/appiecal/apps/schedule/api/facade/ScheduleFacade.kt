@@ -4,7 +4,7 @@ import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleRespons
 import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleShift
 import nl.klrnbk.daan.appiecal.apps.schedule.api.service.ShiftService
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @Service
 class ScheduleFacade(
@@ -12,8 +12,8 @@ class ScheduleFacade(
 ) {
     fun getScheduleFromId(
         userId: String,
-        startDate: LocalDateTime,
-        endDate: LocalDateTime,
+        startDate: ZonedDateTime,
+        endDate: ZonedDateTime,
     ): ScheduleResponse {
         val shifts = shiftService.getShiftsBetweenDateRange(userId, startDate, endDate)
         val responseShifts = shifts.map(ScheduleShift::fromModel)

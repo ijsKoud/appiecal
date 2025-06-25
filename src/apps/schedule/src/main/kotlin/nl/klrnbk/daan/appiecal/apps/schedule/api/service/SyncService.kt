@@ -58,22 +58,23 @@ class SyncService {
         val updatableShifts =
             shiftPairs
                 .filter { (dbShift, apiShift) ->
-                    dbShift.equals(
+                    !dbShift.equals(
                         apiShift,
                     )
                 }.map(Pair<ShiftModel, ShiftModel>::second)
                 .toMutableList()
 
-        val crudResults =
+        val activityCrudResults =
             shiftPairs
                 .map { (dbShift, apiShift) ->
                     val (shouldUpdateShift, result) = splitActivitiesToCrud(dbShift.activities, apiShift.activities)
                     if (shouldUpdateShift) updatableShifts.add(apiShift)
+
                     result
                 }.reduceOrNull { acc, result -> acc.mergeFrom(result) }
                 ?: SplitCrudResult(mutableListOf(), mutableListOf(), mutableListOf())
 
-        return GetUpdatableShiftsResult(crudResults, updatableShifts)
+        return GetUpdatableShiftsResult(activityCrudResults, updatableShifts)
     }
 
     private fun splitActivitiesToCrud(
@@ -90,10 +91,10 @@ class SyncService {
 
                 activity.id = dbActivity.id
                 activity.createdAt = dbActivity.createdAt
-                dbActivity.equals(activity)
+                !dbActivity.equals(activity)
             }
 
-        val shouldUpdateShift = newActivities.isNotEmpty() || updatableActivities.isNotEmpty()
+        val shouldUpdateShift = newActivities.isNotEmpty() || updatableActivities.isNotEmpty() || deletableActivities.isNotEmpty()
         val result =
             SplitCrudResult(
                 deletableActivities.toMutableList(),
