@@ -5,7 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDateTime
 
 interface ShiftRepository : JpaRepository<ShiftModel, String> {
-    fun findAllByStartDateGreaterThanEqualAndEndDateLessThanEqual(
+    fun findAllByUserIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(
+        userId: String,
         fromDate: LocalDateTime,
         toDate: LocalDateTime,
     ): List<ShiftModel>

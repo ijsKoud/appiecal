@@ -35,8 +35,8 @@ class SyncFacade(
         val token = idpService.getAccessToken(authentication.credentials, userId)
         val shifts = gqlService.getFetchedShiftsWithActivities(token, startDateString, endDateString)
 
-        val mappedShifts = shifts.map(ShiftModel::fromApiResponse)
-        val existingShifts = shiftService.getShiftsBetweenDateRange(startDate, endDate)
+        val mappedShifts = shifts.map { ShiftModel.fromApiResponse(it, userId) }
+        val existingShifts = shiftService.getShiftsBetweenDateRange(userId, startDate, endDate)
 
         val results = syncService.splitShiftsToCrud(existingShifts, mappedShifts)
         logger.info("Syncing shifts for user=$userId; ${results.shifts}")
