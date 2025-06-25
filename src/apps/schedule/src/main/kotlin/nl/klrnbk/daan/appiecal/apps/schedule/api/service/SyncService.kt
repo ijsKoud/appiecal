@@ -1,5 +1,7 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.service
 
+import nl.klrnbk.daan.appiecal.apps.schedule.api.models.syncing.SyncStatusResponse
+import nl.klrnbk.daan.appiecal.apps.schedule.api.models.syncing.SyncStatusResponseEntries
 import nl.klrnbk.daan.appiecal.apps.schedule.datasource.models.ActivityModel
 import nl.klrnbk.daan.appiecal.apps.schedule.datasource.models.ShiftModel
 import nl.klrnbk.daan.appiecal.apps.schedule.helpers.models.GetUpdatableShiftsResult
@@ -9,6 +11,19 @@ import org.springframework.stereotype.Service
 
 @Service
 class SyncService {
+    fun resultsToResponse(results: SplitShiftsToCrudResult): SyncStatusResponse {
+        val shiftsResponse =
+            SyncStatusResponseEntries(
+                new = results.shifts.new.mapNotNull(ShiftModel::id),
+                update = results.shifts.update.mapNotNull(ShiftModel::id),
+                delete = results.shifts.delete.mapNotNull(ShiftModel::id),
+            )
+
+        return SyncStatusResponse(
+            shifts = shiftsResponse,
+        )
+    }
+
     fun splitShiftsToCrud(
         dbShifts: List<ShiftModel>,
         apiShifts: List<ShiftModel>,

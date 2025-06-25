@@ -46,6 +46,7 @@ class ActivityModel(
             shift: ShiftModel,
         ): ActivityModel =
             ActivityModel(
+                id = null,
                 paid = response.paid,
                 startDate = response.startDate,
                 endDate = response.endDate,
@@ -53,7 +54,6 @@ class ActivityModel(
                 timeCode = response.timeCode,
                 department = response.department,
                 shift = shift,
-                id = null,
             )
     }
 }

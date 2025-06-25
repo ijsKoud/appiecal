@@ -1,5 +1,6 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.facade
 
+import nl.klrnbk.daan.appiecal.apps.schedule.api.models.syncing.SyncStatusResponse
 import nl.klrnbk.daan.appiecal.apps.schedule.api.service.ActivityService
 import nl.klrnbk.daan.appiecal.apps.schedule.api.service.GqlService
 import nl.klrnbk.daan.appiecal.apps.schedule.api.service.IdpService
@@ -27,7 +28,7 @@ class SyncFacade(
         userId: String,
         startDate: LocalDateTime,
         endDate: LocalDateTime,
-    ) {
+    ): SyncStatusResponse {
         val startDateString = startDate.format(DATE_TIME_FORMATTER)
         val endDateString = endDate.format(DATE_TIME_FORMATTER)
 
@@ -37,12 +38,13 @@ class SyncFacade(
         val mappedShifts = shifts.map(ShiftModel::fromApiResponse)
         val existingShifts = shiftService.getShiftsBetweenDateRange(startDate, endDate)
 
-        val result = syncService.splitShiftsToCrud(existingShifts, mappedShifts)
-        logger.info("Syncing shifts for user=$userId; ${result.shifts}")
-        logger.info("Syncing activities for user=$userId; ${result.activities}")
+        val results = syncService.splitShiftsToCrud(existingShifts, mappedShifts)
+        logger.info("Syncing shifts for user=$userId; ${results.shifts}")
+        logger.info("Syncing activities for user=$userId; ${results.activities}")
 
-        shiftService.deleteShifts(result.shifts.delete)
-        shiftService.saveOrUpdateShifts(result.shifts.new + result.shifts.update)
-        activityService.deleteActivities(result.activities.delete)
+        shiftService.deleteShifts(results.shifts.delete)
+        shiftService.saveOrUpdateShifts(results.shifts.new + results.shifts.update)
+        activityService.deleteActivities(results.activities.delete)
+        return syncService.resultsToResponse(results)
     }
 }
