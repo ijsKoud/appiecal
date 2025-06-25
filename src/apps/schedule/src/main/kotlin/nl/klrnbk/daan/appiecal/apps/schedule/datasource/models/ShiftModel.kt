@@ -12,12 +12,11 @@ import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleShift
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.ShiftDepartment
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.util.UUID
 
 @Entity
 @Table(name = "shift")
-@Suppress("ktlint:standard:no-blank-line-in-list")
 class ShiftModel(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -30,32 +29,32 @@ class ShiftModel(
     @Column(name = "user_id")
     val userId: String,
 
-    @Column(name = "start_date")
-    val startDate: LocalDateTime,
+    @Column(name = "start_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    val startDate: ZonedDateTime,
 
-    @Column(name = "end_date")
-    val endDate: LocalDateTime,
+    @Column(name = "end_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    val endDate: ZonedDateTime,
 
     @Enumerated(EnumType.STRING)
     val departments: List<ShiftDepartment>,
 
-    @Column(name = "created_at")
-    var createdAt: LocalDateTime,
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    var createdAt: ZonedDateTime,
 
-    @Column(name = "updated_at")
-    var updatedAt: LocalDateTime,
+    @Column(name = "updated_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    var updatedAt: ZonedDateTime,
 
-    @OneToMany(mappedBy = "shift", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "shift", cascade = [CascadeType.ALL], orphanRemoval = true)
     var activities: MutableList<ActivityModel>,
 ) {
     fun isDateEqual(other: ShiftModel): Boolean =
         startDate.toLocalDate() == other.startDate.toLocalDate() && endDate.toLocalDate() == other.endDate.toLocalDate()
 
     fun equals(other: ShiftModel): Boolean =
-        endDate != other.endDate ||
-            startDate != other.startDate ||
-            storeId != other.storeId ||
-            departments != other.departments
+        endDate.toInstant() == other.endDate.toInstant() ||
+            startDate.toInstant() == other.startDate.toInstant() ||
+            storeId == other.storeId ||
+            departments == other.departments
 
     companion object {
         fun fromApiResponse(
@@ -70,8 +69,8 @@ class ShiftModel(
                     endDate = response.endDate,
                     storeId = response.storeId,
                     departments = response.departments,
-                    createdAt = LocalDateTime.now(),
-                    updatedAt = LocalDateTime.now(),
+                    createdAt = ZonedDateTime.now(),
+                    updatedAt = ZonedDateTime.now(),
                     activities = mutableListOf(),
                 )
 

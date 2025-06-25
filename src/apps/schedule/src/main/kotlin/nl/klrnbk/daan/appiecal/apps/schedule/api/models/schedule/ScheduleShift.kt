@@ -1,19 +1,19 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule
 
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
-import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMATTER
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.ShiftDepartment
 import nl.klrnbk.daan.appiecal.apps.schedule.datasource.models.ShiftModel
-import java.time.LocalDateTime
+import nl.klrnbk.daan.appiecal.apps.schedule.helpers.localDateTimeStringToZonedDateTime
+import java.time.ZonedDateTime
 import java.util.UUID
 
 data class ScheduleShift(
     val id: UUID,
     val storeId: String,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime,
+    val startDate: ZonedDateTime,
+    val endDate: ZonedDateTime,
+    val createdAt: ZonedDateTime,
+    val updatedAt: ZonedDateTime,
     val departments: List<ShiftDepartment>,
     val activities: MutableList<ScheduleActivity>,
 ) {
@@ -34,10 +34,10 @@ data class ScheduleShift(
             ScheduleShift(
                 id = UUID.randomUUID(),
                 storeId = response.storeId,
-                startDate = LocalDateTime.parse(response.startTime, DATE_TIME_FORMATTER),
-                endDate = LocalDateTime.parse(response.endTime, DATE_TIME_FORMATTER),
-                createdAt = LocalDateTime.now(),
-                updatedAt = LocalDateTime.now(),
+                startDate = localDateTimeStringToZonedDateTime(response.startTime),
+                endDate = localDateTimeStringToZonedDateTime(response.endTime),
+                createdAt = ZonedDateTime.now(),
+                updatedAt = ZonedDateTime.now(),
                 departments = response.teamNames.map(ShiftDepartment::getFromGqlResponse),
                 activities = mutableListOf(),
             )

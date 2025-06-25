@@ -12,11 +12,10 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleActivity
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.ShiftDepartment
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @Entity
 @Table(name = "shift_activity")
-@Suppress("ktlint:standard:no-blank-line-in-list")
 class ActivityModel(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,11 +28,11 @@ class ActivityModel(
     @Column(name = "paid")
     val paid: Boolean,
 
-    @Column(name = "start_date")
-    val startDate: LocalDateTime,
+    @Column(name = "start_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    val startDate: ZonedDateTime,
 
-    @Column(name = "end_date")
-    val endDate: LocalDateTime,
+    @Column(name = "end_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    val endDate: ZonedDateTime,
 
     @Column(name = "description")
     val description: String,
@@ -44,25 +43,26 @@ class ActivityModel(
     @Enumerated(EnumType.STRING)
     val department: ShiftDepartment,
 
-    @Column(name = "created_at")
-    var createdAt: LocalDateTime,
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    var createdAt: ZonedDateTime,
 
-    @Column(name = "updated_at")
-    var updatedAt: LocalDateTime,
+    @Column(name = "updated_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    var updatedAt: ZonedDateTime,
 
     @ManyToOne
     @JoinColumn(name = "shift_id", nullable = false)
     var shift: ShiftModel,
 ) {
-    fun isDateTimeEqual(other: ActivityModel): Boolean = startDate == other.startDate && endDate == other.endDate
+    fun isDateTimeEqual(other: ActivityModel): Boolean =
+        startDate.toInstant() == other.startDate.toInstant() && endDate.toInstant() == other.endDate.toInstant()
 
     fun equals(other: ActivityModel): Boolean =
-        endDate != other.endDate ||
-            startDate != other.startDate ||
-            description != other.description ||
-            department != other.department ||
-            paid != other.paid ||
-            timeCode != other.timeCode
+        endDate.toInstant() == other.endDate.toInstant() ||
+            startDate.toInstant() == other.startDate.toInstant() ||
+            description == other.description ||
+            department == other.department ||
+            paid == other.paid ||
+            timeCode == other.timeCode
 
     companion object {
         fun fromApiResponse(
@@ -79,8 +79,8 @@ class ActivityModel(
                 description = response.description,
                 timeCode = response.timeCode,
                 department = response.department,
-                createdAt = LocalDateTime.now(),
-                updatedAt = LocalDateTime.now(),
+                createdAt = ZonedDateTime.now(),
+                updatedAt = ZonedDateTime.now(),
                 shift = shift,
             )
     }
