@@ -20,32 +20,7 @@
           <set>
             <option value="$PROJECT_DIR$/src" />
             <option value="$PROJECT_DIR$/src/apps" />
-            <option value="$PROJECT_DIR$/src/apps/idp" />
-            <option value="$PROJECT_DIR$/src/apps/schedule" />
-            <option value="$PROJECT_DIR$/src/build-logic" />
-            <option value="$PROJECT_DIR$/src/packages" />
-            <option value="$PROJECT_DIR$/src/packages/common" />
-            <option value="$PROJECT_DIR$/src/packages/security-idp" />
-            <option value="$PROJECT_DIR$/src/packages/spring" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <compositeConfiguration>
-          <compositeBuild compositeDefinitionSource="SCRIPT">
-            <builds>
-              <build path="$PROJECT_DIR$/src/build-logic" name="build-logic">
-                <projects>
-                  <project path="$PROJECT_DIR$/src/build-logic" />
-                </projects>
-              </build>
-            </builds>
-          </compositeBuild>
-        </compositeConfiguration>
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/src" />
-            <option value="$PROJECT_DIR$/src/apps" />
+            <option value="$PROJECT_DIR$/src/apps/calendar" />
             <option value="$PROJECT_DIR$/src/apps/idp" />
             <option value="$PROJECT_DIR$/src/apps/schedule" />
             <option value="$PROJECT_DIR$/src/build-logic" />
