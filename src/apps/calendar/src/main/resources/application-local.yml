@@ -3,7 +3,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/appiecal?user=postgres&password=postgres
 
 server:
-  port: 8081
+  port: 8082
 
 appiecal:
   spring:
