@@ -9,7 +9,7 @@ import nl.klrnbk.daan.appiecal.apps.calendar.api.facade.CredentialsFacade
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 class CredentialsController(
     private val credentialsFacade: CredentialsFacade,
 ) {
-    @GetMapping("/link")
+    @PostMapping("/link")
     @Operation(
         summary = "Link IDP user to a calDAV server",
         description = "Note: Existing links will be overwritten!",
