@@ -4,3 +4,4 @@ nl.klrnbk.daan.appiecal.packages.security.idp.config.CustomAuthenticationEntryPo
 nl.klrnbk.daan.appiecal.packages.security.idp.config.SecurityGlobalAdviceController
 nl.klrnbk.daan.appiecal.packages.security.idp.service.OpenIdService
 nl.klrnbk.daan.appiecal.packages.security.idp.client.openid.OpenIdClient
+nl.klrnbk.daan.appiecal.packages.security.idp.helpers.EncryptionHelper

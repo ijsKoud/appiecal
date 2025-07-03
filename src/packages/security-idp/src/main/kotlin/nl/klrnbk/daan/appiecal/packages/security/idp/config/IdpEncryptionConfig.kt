@@ -1,4 +1,4 @@
-package nl.klrnbk.daan.appiecal.apps.idp.config
+package nl.klrnbk.daan.appiecal.packages.security.idp.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

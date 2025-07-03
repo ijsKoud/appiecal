@@ -3,7 +3,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/appiecal?user=postgres&password=postgres
 
 server:
-  port: 8081
+  port: 8082
 
 appiecal:
   spring:
@@ -11,3 +11,5 @@ appiecal:
       authorization:
         jwks:
           uri: https://auth.klrnbk.nl/application/o/local-test-application/jwks/
+  idp:
+    encryption-key: fTEVLTw54zGjSxxc4XVfcLtkkwp2at0f6y413LiYiXAHsdhKA6RSaMoGLCTu2c8g
