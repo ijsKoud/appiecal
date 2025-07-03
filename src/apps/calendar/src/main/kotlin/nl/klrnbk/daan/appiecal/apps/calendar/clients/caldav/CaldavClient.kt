@@ -68,6 +68,7 @@ class CaldavClient {
         val request =
             getRequestBuilder(url, username, password)
                 .method("PROPFIND", requestBody)
+                .header("Depth", "1")
                 .build()
 
         val result = handleApiCall(httpClient.newCall(request))
@@ -108,7 +109,6 @@ class CaldavClient {
             .url(url)
             .header("Authorization", Credentials.basic(username, password))
             .header("Content-Type", "application/xml")
-            .header("Depth", "1")
             .build()
             .newBuilder()
 }
