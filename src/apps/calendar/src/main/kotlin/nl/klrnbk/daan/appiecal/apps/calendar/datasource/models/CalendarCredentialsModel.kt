@@ -18,11 +18,11 @@ data class CalendarCredentialsModel(
     @Column(name = "user_id")
     val userId: String,
 
-    @Column(name = "username")
-    val username: String,
+    @Column(name = "auth_scope")
+    val scope: String,
 
-    @Column(name = "password")
-    val password: String,
+    @Column(name = "auth_token")
+    val token: String,
 
     @Column(name = "base_url")
     val baseUrl: String,
@@ -30,8 +30,8 @@ data class CalendarCredentialsModel(
     @Column(name = "principal_url")
     val principalUrl: String,
 
-    @Column(name = "calendar_home_url")
-    val calendarHomeUrl: String,
+    @Column(name = "calendar_home_set_url")
+    val calendarHomeSetUrl: String,
 
     @Column(name = "calendar_url")
     val calendarUrl: String?,

@@ -10,7 +10,6 @@ import nl.klrnbk.daan.appiecal.apps.calendar.helpers.hrefToValidUrl
 import nl.klrnbk.daan.appiecal.packages.common.exceptions.DownstreamServiceErrorException
 import nl.klrnbk.daan.appiecal.packages.common.exceptions.MalformedResponseBodyException
 import okhttp3.Call
-import okhttp3.Credentials
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -25,12 +24,12 @@ class CaldavClient {
 
     fun getPrincipal(
         baseUrl: String,
-        username: String,
-        password: String,
-    ): String? {
+        authScope: String,
+        authToken: String,
+    ): String {
         val requestBody = GET_PRINCIPAL_XML.toRequestBody("application/xml".toMediaType())
         val request =
-            getRequestBuilder(baseUrl, username, password)
+            getRequestBuilder(baseUrl, authScope, authToken)
                 .method("PROPFIND", requestBody)
                 .build()
 
@@ -43,12 +42,12 @@ class CaldavClient {
 
     fun getCalendarHomeSet(
         url: String,
-        username: String,
-        password: String,
+        authScope: String,
+        authToken: String,
     ): String {
         val requestBody = GET_CALENDAR_HOME_SET.toRequestBody("application/xml".toMediaType())
         val request =
-            getRequestBuilder(url, username, password)
+            getRequestBuilder(url, authScope, authToken)
                 .method("PROPFIND", requestBody)
                 .build()
 
@@ -101,13 +100,13 @@ class CaldavClient {
 
     private fun getRequestBuilder(
         url: String,
-        username: String,
-        password: String,
+        authScope: String,
+        authToken: String,
     ): Request.Builder =
         Request
             .Builder()
             .url(url)
-            .header("Authorization", Credentials.basic(username, password))
+            .header("Authorization", "$authScope $authToken")
             .header("Content-Type", "application/xml")
             .build()
             .newBuilder()
