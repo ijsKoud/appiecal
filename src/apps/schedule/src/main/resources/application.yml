@@ -17,6 +17,8 @@ appiecal:
   schedule:
     gql:
       url: https://api-gateway.ah.nl/
+  idp:
+    encryption-key:
 
 spring:
   profiles:

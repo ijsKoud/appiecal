@@ -9,11 +9,12 @@ appiecal:
           description: x-authorization header
     security:
       unauthenticated-routes:
-        - /v1/raw-request/*
       authorization:
         jwks:
           refresh-interval: 0 0 0 * * *
           uri: ${JWKS_URL}
+  idp:
+    encryption-key: ${IDP_ENCRYPTION_KEY}
 
 spring:
   profiles:

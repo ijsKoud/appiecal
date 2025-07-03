@@ -11,3 +11,5 @@ appiecal:
       authorization:
         jwks:
           uri: https://auth.klrnbk.nl/application/o/local-test-application/jwks/
+  idp:
+    encryption-key: fTEVLTw54zGjSxxc4XVfcLtkkwp2at0f6y413LiYiXAHsdhKA6RSaMoGLCTu2c8g
