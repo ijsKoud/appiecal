@@ -2,7 +2,7 @@ package nl.klrnbk.daan.appiecal.apps.idp.api.models
 
 import nl.klrnbk.daan.appiecal.apps.idp.client.azure.models.AzureEntraTokenResponse
 import nl.klrnbk.daan.appiecal.apps.idp.datasource.models.AzureEntraUserIdpLinkModel
-import nl.klrnbk.daan.appiecal.apps.idp.helpers.EncryptionHelper
+import nl.klrnbk.daan.appiecal.packages.security.idp.helpers.EncryptionHelper
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 

@@ -1,6 +1,6 @@
-package nl.klrnbk.daan.appiecal.apps.idp.helpers
+package nl.klrnbk.daan.appiecal.packages.security.idp.helpers
 
-import nl.klrnbk.daan.appiecal.apps.idp.config.IdpEncryptionConfig
+import nl.klrnbk.daan.appiecal.packages.security.idp.config.IdpEncryptionConfig
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
