@@ -27,4 +27,9 @@ class CredentialsFacade(
 
         return ResponseEntity.noContent().build()
     }
+
+    fun unlinkUser(userId: String): ResponseEntity<Unit> {
+        calendarCredentialsService.removeCredentials(userId)
+        return ResponseEntity.noContent().build()
+    }
 }
