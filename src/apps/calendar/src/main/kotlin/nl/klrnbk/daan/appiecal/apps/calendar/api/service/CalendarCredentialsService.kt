@@ -41,4 +41,6 @@ class CalendarCredentialsService(
 
         calendarCredentialsRepository.delete(entities.first())
     }
+
+    fun doesLinkExistForUser(userId: String): Boolean = calendarCredentialsRepository.existsByUserId(userId)
 }
