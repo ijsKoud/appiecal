@@ -9,6 +9,7 @@ import nl.klrnbk.daan.appiecal.apps.calendar.api.facade.CredentialsFacade
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -43,4 +44,21 @@ class CredentialsController(
         @RequestParam("auth-scope", required = true) authScope: String,
         @RequestParam("auth-token", required = true) authToken: String,
     ) = credentialsFacade.linkCaldavToUser(authentication.principal, baseUrl, authScope, authToken)
+
+    @DeleteMapping("/unlink")
+    @Operation(
+        summary = "Unlink IDP user from a calDAV server credentials",
+    )
+    @ApiResponse(
+        responseCode = "204",
+        description = "Credentials are removed and user is unlinked",
+        content = [
+            Content(
+                mediaType = "*/*",
+                schema = Schema(implementation = Void::class),
+            ),
+        ],
+    )
+    @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
+    fun unlinkUser(authentication: JwtAuthenticationToken) = credentialsFacade.unlinkUser(authentication.principal)
 }
