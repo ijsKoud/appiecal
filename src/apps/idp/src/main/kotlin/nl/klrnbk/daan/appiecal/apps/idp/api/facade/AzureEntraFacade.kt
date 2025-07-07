@@ -1,8 +1,8 @@
 package nl.klrnbk.daan.appiecal.apps.idp.api.facade
 
-import nl.klrnbk.daan.appiecal.apps.idp.api.models.AzureEntraLinkStatus
 import nl.klrnbk.daan.appiecal.apps.idp.api.service.AzureEntraService
 import nl.klrnbk.daan.appiecal.apps.idp.api.service.AzureEntraUserIdpLinkService
+import nl.klrnbk.daan.appiecal.packages.common.shared.LinkStatus
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -19,7 +19,7 @@ class AzureEntraFacade(
 
     fun getLinkStatus(authentication: JwtAuthenticationToken): String {
         val isLinked = azureEntraUserIdpLinkService.doesLinkExistForUser(authentication.principal)
-        val status = AzureEntraLinkStatus.fromBoolean(isLinked)
+        val status = LinkStatus.fromBoolean(isLinked)
 
         return status.status
     }

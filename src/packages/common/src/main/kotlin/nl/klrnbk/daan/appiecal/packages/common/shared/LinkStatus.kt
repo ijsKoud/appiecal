@@ -1,6 +1,6 @@
-package nl.klrnbk.daan.appiecal.apps.idp.api.models
+package nl.klrnbk.daan.appiecal.packages.common.shared
 
-enum class AzureEntraLinkStatus(
+enum class LinkStatus(
     val status: String,
 ) {
     LINKED("linked"),
