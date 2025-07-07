@@ -31,6 +31,8 @@ class CredentialsFacade(
 
     fun unlinkUser(userId: String): ResponseEntity<Unit> {
         calendarCredentialsService.removeCredentials(userId)
+        logger.info("Unlinking caldav server/credentials from user=$userId;")
+
         return ResponseEntity.noContent().build()
     }
 
