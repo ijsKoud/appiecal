@@ -2,6 +2,7 @@ package nl.klrnbk.daan.appiecal.apps.calendar.api.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -10,6 +11,7 @@ import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponse
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -61,4 +63,22 @@ class CredentialsController(
     )
     @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
     fun unlinkUser(authentication: JwtAuthenticationToken) = credentialsFacade.unlinkUser(authentication.principal)
+
+    @GetMapping("/status")
+    @Operation(
+        summary = "The calDAV link status of the user",
+    )
+    @ApiResponse(
+        responseCode = "200",
+        description = "Link status",
+        content = [
+            Content(
+                mediaType = "text/plain",
+                schema = Schema(implementation = String::class),
+                examples = [ExampleObject(value = "linked")],
+            ),
+        ],
+    )
+    @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
+    fun linkStatus(authentication: JwtAuthenticationToken) = credentialsFacade.getLinkStatus(authentication.principal)
 }

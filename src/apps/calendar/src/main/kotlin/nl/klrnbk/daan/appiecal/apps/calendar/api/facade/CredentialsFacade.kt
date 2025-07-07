@@ -2,6 +2,7 @@ package nl.klrnbk.daan.appiecal.apps.calendar.api.facade
 
 import nl.klrnbk.daan.appiecal.apps.calendar.api.service.CaldavService
 import nl.klrnbk.daan.appiecal.apps.calendar.api.service.CalendarCredentialsService
+import nl.klrnbk.daan.appiecal.packages.common.shared.LinkStatus
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -31,5 +32,10 @@ class CredentialsFacade(
     fun unlinkUser(userId: String): ResponseEntity<Unit> {
         calendarCredentialsService.removeCredentials(userId)
         return ResponseEntity.noContent().build()
+    }
+
+    fun getLinkStatus(userId: String): String {
+        val isLinked = calendarCredentialsService.doesLinkExistForUser(userId)
+        return LinkStatus.fromBoolean(isLinked).status
     }
 }
