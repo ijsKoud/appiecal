@@ -34,4 +34,11 @@ class CalendarCredentialsService(
 
         return calendarCredentialsRepository.save(model)
     }
+
+    fun removeCredentials(userId: String) {
+        val entities = calendarCredentialsRepository.findByUserId(userId)
+        if (entities.isEmpty()) return
+
+        calendarCredentialsRepository.delete(entities.first())
+    }
 }
