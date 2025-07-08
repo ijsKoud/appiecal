@@ -60,12 +60,12 @@ class CaldavClient {
 
     fun getCalendarList(
         url: String,
-        username: String,
-        password: String,
+        authScope: String,
+        authToken: String,
     ): List<Pair<String, String>> {
         val requestBody = GET_CALENDAR_LIST.toRequestBody("application/xml".toMediaType())
         val request =
-            getRequestBuilder(url, username, password)
+            getRequestBuilder(url, authScope, authToken)
                 .method("PROPFIND", requestBody)
                 .header("Depth", "1")
                 .build()
@@ -78,7 +78,7 @@ class CaldavClient {
         val response = call.execute()
         val errorStatus = response.code
         if (errorStatus < 500 && errorStatus >= 400) {
-            logger.error("Downstream service call was not successful; Requesting re-discovery of details; status=$errorStatus;")
+            logger.error("Downstream service call was not successful; Detail rediscovery may be required; status=$errorStatus;")
             throw InvalidDavCredentialsException()
         }
 
