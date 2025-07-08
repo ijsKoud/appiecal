@@ -42,5 +42,16 @@ class CalendarCredentialsService(
         calendarCredentialsRepository.delete(entities.first())
     }
 
+    fun getCredentials(userId: String): CalendarCredentialsModel? {
+        val entities = calendarCredentialsRepository.findByUserId(userId)
+        val entity = entities.firstOrNull()
+        if (entity == null) return null
+
+        val unencryptedAuthToken = encryptionHelper.decryptStr(entity.token)
+        entity.token = unencryptedAuthToken
+
+        return entity
+    }
+
     fun doesLinkExistForUser(userId: String): Boolean = calendarCredentialsRepository.existsByUserId(userId)
 }

@@ -22,7 +22,7 @@ data class CalendarCredentialsModel(
     val scope: String,
 
     @Column(name = "auth_token")
-    val token: String,
+    var token: String,
 
     @Column(name = "base_url")
     val baseUrl: String,
