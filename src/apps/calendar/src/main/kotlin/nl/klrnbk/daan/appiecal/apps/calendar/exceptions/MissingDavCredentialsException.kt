@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus
 
 class MissingDavCredentialsException :
     ApiException(
-        HttpStatus.UNAUTHORIZED,
+        HttpStatus.FORBIDDEN,
         "CalDAV credentials have not been linked yet.",
         "Missing calDAV credentials, probably not linked to user yet",
     )
