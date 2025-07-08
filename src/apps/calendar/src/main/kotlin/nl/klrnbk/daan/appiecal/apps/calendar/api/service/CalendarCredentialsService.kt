@@ -1,5 +1,6 @@
 package nl.klrnbk.daan.appiecal.apps.calendar.api.service
 
+import nl.klrnbk.daan.appiecal.apps.calendar.api.models.CalendarCredentialsDetails
 import nl.klrnbk.daan.appiecal.apps.calendar.datasource.models.CalendarCredentialsModel
 import nl.klrnbk.daan.appiecal.apps.calendar.datasource.repositories.CalendarCredentialsRepository
 import nl.klrnbk.daan.appiecal.packages.security.idp.helpers.EncryptionHelper
@@ -43,21 +44,19 @@ class CalendarCredentialsService(
         calendarCredentialsRepository.delete(entities.first())
     }
 
-    fun getCredentials(userId: String): CalendarCredentialsModel? {
+    fun getCredentials(userId: String): CalendarCredentialsDetails? {
         val entities = calendarCredentialsRepository.findByUserId(userId)
         val entity = entities.firstOrNull()
         if (entity == null) return null
 
-        val unencryptedAuthToken = encryptionHelper.decryptStr(entity.token)
-        entity.token = unencryptedAuthToken
-
-        return entity
+        val responseModel = CalendarCredentialsDetails.fromModel(entity, encryptionHelper)
+        return responseModel
     }
 
     fun setOrUpdateCalendarUrl(
         userId: String,
         href: String?,
-    ): CalendarCredentialsModel? {
+    ): CalendarCredentialsDetails? {
         val entities = calendarCredentialsRepository.findByUserId(userId)
         val entity = entities.firstOrNull()
         if (entity == null) return null
@@ -75,7 +74,8 @@ class CalendarCredentialsService(
         val updatedEntity = entity.copy(calendarUrl = url)
         calendarCredentialsRepository.save(updatedEntity)
 
-        return updatedEntity
+        val responseModel = CalendarCredentialsDetails.fromModel(entity, encryptionHelper)
+        return responseModel
     }
 
     fun doesLinkExistForUser(userId: String): Boolean = calendarCredentialsRepository.existsByUserId(userId)

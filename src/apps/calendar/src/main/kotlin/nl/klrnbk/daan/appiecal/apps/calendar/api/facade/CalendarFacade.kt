@@ -18,7 +18,11 @@ class CalendarFacade(
         val credentials = calendarCredentialsService.getCredentials(userId)
         if (credentials == null) throw MissingDavCredentialsException()
 
-        return caldavService.getCalendarList(credentials.calendarHomeSetUrl, credentials.scope, credentials.token)
+        return caldavService.getCalendarList(
+            credentials.urls.calendarHomeSet,
+            credentials.authentication.scope,
+            credentials.authentication.token,
+        )
     }
 
     fun setOrUpdateCalendarUrl(
