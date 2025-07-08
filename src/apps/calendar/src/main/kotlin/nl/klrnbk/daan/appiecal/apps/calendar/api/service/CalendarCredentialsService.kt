@@ -3,6 +3,7 @@ package nl.klrnbk.daan.appiecal.apps.calendar.api.service
 import nl.klrnbk.daan.appiecal.apps.calendar.datasource.models.CalendarCredentialsModel
 import nl.klrnbk.daan.appiecal.apps.calendar.datasource.repositories.CalendarCredentialsRepository
 import nl.klrnbk.daan.appiecal.packages.security.idp.helpers.EncryptionHelper
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.springframework.stereotype.Service
 
 @Service
@@ -51,6 +52,25 @@ class CalendarCredentialsService(
         entity.token = unencryptedAuthToken
 
         return entity
+    }
+
+    fun setOrUpdateCalendarUrl(
+        userId: String,
+        href: String,
+    ): CalendarCredentialsModel? {
+        val entities = calendarCredentialsRepository.findByUserId(userId)
+        val entity = entities.firstOrNull()
+        if (entity == null) return null
+
+        val url =
+            entity.calendarHomeSetUrl
+                .toHttpUrl()
+                .resolve(href)
+                .toString()
+        val updatedEntity = entity.copy(calendarUrl = url)
+
+        calendarCredentialsRepository.save(updatedEntity)
+        return updatedEntity
     }
 
     fun doesLinkExistForUser(userId: String): Boolean = calendarCredentialsRepository.existsByUserId(userId)
