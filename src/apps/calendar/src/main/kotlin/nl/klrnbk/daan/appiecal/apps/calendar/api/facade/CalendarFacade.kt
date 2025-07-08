@@ -5,6 +5,7 @@ import nl.klrnbk.daan.appiecal.apps.calendar.api.service.CaldavService
 import nl.klrnbk.daan.appiecal.apps.calendar.api.service.CalendarCredentialsService
 import nl.klrnbk.daan.appiecal.apps.calendar.exceptions.MissingDavCredentialsException
 import nl.klrnbk.daan.appiecal.packages.common.exceptions.ApiException
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -14,6 +15,8 @@ class CalendarFacade(
     private val caldavService: CaldavService,
     private val calendarCredentialsService: CalendarCredentialsService,
 ) {
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     fun getCalendarList(userId: String): List<CalendarListEntryResponse> {
         val credentials = calendarCredentialsService.getCredentials(userId)
         if (credentials == null) throw MissingDavCredentialsException()
@@ -49,6 +52,7 @@ class CalendarFacade(
         val result = calendarCredentialsService.setOrUpdateCalendarUrl(userId, href)
         if (result == null) throw MissingDavCredentialsException()
 
+        logger.info("Updated calendar URL for user=$userId")
         return ResponseEntity.accepted().build()
     }
 }
