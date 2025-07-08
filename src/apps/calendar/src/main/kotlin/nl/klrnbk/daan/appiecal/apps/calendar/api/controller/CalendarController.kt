@@ -13,7 +13,9 @@ import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponse
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -38,4 +40,22 @@ class CalendarController(
     )
     @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
     fun getListOfCalendars(authentication: JwtAuthenticationToken) = calendarFacade.getCalendarList(authentication.principal)
+
+    @PostMapping("/set")
+    @Operation(summary = "Sets the user's linked calendar ")
+    @ApiResponse(
+        responseCode = "202",
+        description = "Linked calendar has been updated",
+        content = [
+            Content(
+                mediaType = "*/*",
+                schema = Schema(implementation = Void::class),
+            ),
+        ],
+    )
+    @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
+    fun setOrUpdateCalendar(
+        authentication: JwtAuthenticationToken,
+        @RequestParam("href", required = true) href: String,
+    ) = calendarFacade.setOrUpdateCalendarUrl(authentication.principal, href)
 }
