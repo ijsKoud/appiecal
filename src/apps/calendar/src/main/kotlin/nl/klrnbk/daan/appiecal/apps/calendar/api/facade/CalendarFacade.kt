@@ -52,7 +52,7 @@ class CalendarFacade(
         val result = calendarCredentialsService.setOrUpdateCalendarUrl(userId, href)
         if (result == null) throw MissingDavCredentialsException()
 
-        logger.info("Updated calendar URL for user=$userId")
+        logger.info("Updated calendar URL for user=$userId;value-set=${href != null}")
         return ResponseEntity.accepted().build()
     }
 }
