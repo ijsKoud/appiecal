@@ -56,6 +56,6 @@ class CalendarController(
     @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
     fun setOrUpdateCalendar(
         authentication: JwtAuthenticationToken,
-        @RequestParam("href", required = true) href: String,
+        @RequestParam("href", required = false) href: String?,
     ) = calendarFacade.setOrUpdateCalendarUrl(authentication.principal, href)
 }

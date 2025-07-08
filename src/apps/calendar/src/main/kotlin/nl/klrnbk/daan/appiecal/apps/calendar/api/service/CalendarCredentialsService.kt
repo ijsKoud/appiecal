@@ -56,20 +56,25 @@ class CalendarCredentialsService(
 
     fun setOrUpdateCalendarUrl(
         userId: String,
-        href: String,
+        href: String?,
     ): CalendarCredentialsModel? {
         val entities = calendarCredentialsRepository.findByUserId(userId)
         val entity = entities.firstOrNull()
         if (entity == null) return null
 
+        val urlBuilder = entity.calendarHomeSetUrl.toHttpUrl()
         val url =
-            entity.calendarHomeSetUrl
-                .toHttpUrl()
-                .resolve(href)
-                .toString()
-        val updatedEntity = entity.copy(calendarUrl = url)
+            if (href == null) {
+                null
+            } else {
+                urlBuilder
+                    .resolve(href)
+                    .toString()
+            }
 
+        val updatedEntity = entity.copy(calendarUrl = url)
         calendarCredentialsRepository.save(updatedEntity)
+
         return updatedEntity
     }
 

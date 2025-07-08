@@ -23,7 +23,7 @@ class CalendarFacade(
 
     fun setOrUpdateCalendarUrl(
         userId: String,
-        href: String,
+        href: String?,
     ): ResponseEntity<Unit> {
         val calendarList = getCalendarList(userId)
         if (calendarList.isEmpty()) {
@@ -34,7 +34,7 @@ class CalendarFacade(
             )
         }
 
-        if (!calendarList.any { it.href == href }) {
+        if (href != null && !calendarList.any { it.href == href }) {
             throw ApiException(
                 HttpStatus.BAD_REQUEST,
                 "Unable to link the requested calendar",
