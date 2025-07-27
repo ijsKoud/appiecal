@@ -42,7 +42,7 @@ class CalendarController(
     fun getListOfCalendars(authentication: JwtAuthenticationToken) = calendarFacade.getCalendarList(authentication.principal)
 
     @PostMapping("/set")
-    @Operation(summary = "Sets the user's linked calendar ")
+    @Operation(summary = "Sets the user's linked calendar")
     @ApiResponse(
         responseCode = "202",
         description = "Linked calendar has been updated",

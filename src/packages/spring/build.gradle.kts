@@ -17,6 +17,7 @@ dependencies {
     testImplementation(kotlin("test"))
     api(project(":packages:common"))
     api("org.jetbrains.kotlin:kotlin-reflect:2.1.21")
+    api("org.jboss.logging:jboss-logging:3.6.1.Final")
     api("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
     api("org.springframework.boot:spring-boot-starter-web:3.5.0")
 }
