@@ -74,6 +74,19 @@ class CaldavClient {
         return extractVeventCalendars(result)
     }
 
+    fun deleteEvent(
+        url: String,
+        authScope: String,
+        authToken: String,
+    ) {
+        val request =
+            getRequestBuilder(url, authScope, authToken)
+                .method("DELETE", null)
+                .build()
+
+        handleApiCall(httpClient.newCall(request))
+    }
+
     private fun handleApiCall(call: Call): String {
         val response = call.execute()
         val errorStatus = response.code
