@@ -87,6 +87,21 @@ class CaldavClient {
         handleApiCall(httpClient.newCall(request))
     }
 
+    fun createOrUpdateEvent(
+        url: String,
+        authScope: String,
+        authToken: String,
+        body: String,
+    ) {
+        val requestBody = body.toRequestBody("text/calendar".toMediaType())
+        val request =
+            getRequestBuilder(url, authScope, authToken)
+                .method("PUT", requestBody)
+                .build()
+
+        handleApiCall(httpClient.newCall(request))
+    }
+
     private fun handleApiCall(call: Call): String {
         val response = call.execute()
         val errorStatus = response.code
