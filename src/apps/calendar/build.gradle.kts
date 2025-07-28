@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":packages:security-idp"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.5.0")
     implementation("org.postgresql:postgresql:42.7.7")
+    implementation("org.mnode.ical4j:ical4j:4.1.1")
 }
 
 tasks.test { useJUnitPlatform() }

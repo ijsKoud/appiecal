@@ -2,19 +2,24 @@ package nl.klrnbk.daan.appiecal.apps.calendar.api.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import nl.klrnbk.daan.appiecal.apps.calendar.api.facade.EventFacade
+import nl.klrnbk.daan.appiecal.apps.calendar.constants.CREATE_EVENT_BODY
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import io.swagger.v3.oas.annotations.parameters.RequestBody as SwaggerRequestBody
 
 @RestController
 @SecurityRequirement(name = "api-key")
@@ -41,7 +46,31 @@ class EventController(
         @RequestParam("event-id") eventId: String,
     ) = eventFacade.deleteEvent(userId, eventId)
 
-    fun createEvent(): ResponseEntity<Void> = ResponseEntity(HttpStatus.CREATED)
+    @PostMapping("/{userId}/create", consumes = ["text/plain"])
+    @Operation(summary = "Creates an event on the calendar (SERVICE ACCOUNT ONLY)")
+    @ApiResponse(
+        responseCode = "200",
+        description = "Event is created",
+        content = [
+            Content(
+                mediaType = "text/plain",
+                schema = Schema(implementation = String::class),
+                examples = [ExampleObject("d6db162a-86dc-43d6-ac66-9f3657dae0dd")],
+            ),
+        ],
+    )
+    fun createEvent(
+        @PathVariable
+        userId: String,
+        @RequestBody
+        @SwaggerRequestBody(
+            description = "Body containing VEVENT data",
+            content = [
+                Content(examples = [ExampleObject(CREATE_EVENT_BODY)]),
+            ],
+        )
+        content: String,
+    ): String = eventFacade.createEvent(userId, content)
 
     fun updateEvent(): ResponseEntity<Void> = ResponseEntity(HttpStatus.NO_CONTENT)
 }

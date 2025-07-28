@@ -1,5 +1,7 @@
 package nl.klrnbk.daan.appiecal.apps.calendar.api.service
 
+import net.fortuna.ical4j.model.Calendar
+import net.fortuna.ical4j.model.component.VEvent
 import nl.klrnbk.daan.appiecal.apps.calendar.api.models.CalendarListEntryResponse
 import nl.klrnbk.daan.appiecal.apps.calendar.clients.caldav.CaldavClient
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -43,7 +45,27 @@ class CaldavService(
                 .addPathSegment("$eventId.ics")
                 .build()
                 .toString()
-        println(deleteUrl)
+
         caldavClient.deleteEvent(deleteUrl, authScope, authToken)
+    }
+
+    fun createEvent(
+        url: String,
+        authScope: String,
+        authToken: String,
+        eventId: String,
+        calendar: Calendar,
+    ) {
+        val createUrl =
+            url
+                .toHttpUrl()
+                .newBuilder()
+                .addPathSegment("$eventId.ics")
+                .build()
+                .toString()
+
+        val body = calendar.toString()
+        caldavClient
+            .createOrUpdateEvent(createUrl, authScope, authToken, body)
     }
 }
