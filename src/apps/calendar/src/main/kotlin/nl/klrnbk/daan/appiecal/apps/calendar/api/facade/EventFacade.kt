@@ -31,7 +31,7 @@ class EventFacade(
         )
     }
 
-    fun createEvent(
+    fun putEvent(
         userId: String,
         content: String,
     ): String {
@@ -39,7 +39,7 @@ class EventFacade(
         if (credentials == null || credentials.urls.calendarUrl == null) throw MissingDavCredentialsException()
 
         val (calendar, eventId) = icalService.getCalendarWithEventIdFromIcal(content)
-        logger.info("Creating event for user=$userId;eventId=$eventId")
+        logger.info("Creating/updating event for user=$userId;eventId=$eventId")
 
         caldavService.createEvent(
             credentials.urls.calendarUrl,

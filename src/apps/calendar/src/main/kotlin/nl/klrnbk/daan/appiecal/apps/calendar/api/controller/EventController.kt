@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -46,11 +47,11 @@ class EventController(
         @RequestParam("event-id") eventId: String,
     ) = eventFacade.deleteEvent(userId, eventId)
 
-    @PostMapping("/{userId}/create", consumes = ["text/plain"])
-    @Operation(summary = "Creates an event on the calendar (SERVICE ACCOUNT ONLY)")
+    @PutMapping("/{userId}", consumes = ["text/plain"])
+    @Operation(summary = "Creates or updated an event on the calendar (SERVICE ACCOUNT ONLY)")
     @ApiResponse(
         responseCode = "200",
-        description = "Event is created",
+        description = "Event is created/updated",
         content = [
             Content(
                 mediaType = "text/plain",
@@ -59,7 +60,7 @@ class EventController(
             ),
         ],
     )
-    fun createEvent(
+    fun putEvent(
         @PathVariable
         userId: String,
         @RequestBody
@@ -70,7 +71,5 @@ class EventController(
             ],
         )
         content: String,
-    ): String = eventFacade.createEvent(userId, content)
-
-    fun updateEvent(): ResponseEntity<Void> = ResponseEntity(HttpStatus.NO_CONTENT)
+    ): String = eventFacade.putEvent(userId, content)
 }
