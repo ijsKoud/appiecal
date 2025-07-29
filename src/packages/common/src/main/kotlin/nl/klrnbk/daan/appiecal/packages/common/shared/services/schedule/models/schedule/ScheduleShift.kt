@@ -1,4 +1,4 @@
-package nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule
+package nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule
 
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.ShiftDepartment
@@ -6,6 +6,7 @@ import nl.klrnbk.daan.appiecal.apps.schedule.datasource.models.ShiftModel
 import nl.klrnbk.daan.appiecal.apps.schedule.helpers.localDateTimeStringToZonedDateTime
 import java.time.ZonedDateTime
 import java.util.UUID
+import kotlin.collections.map
 
 data class ScheduleShift(
     val id: UUID,

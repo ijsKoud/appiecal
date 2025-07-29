@@ -1,11 +1,11 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.service
 
-import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleActivity
-import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleShift
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.GqlClient
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
 import nl.klrnbk.daan.appiecal.apps.schedule.helpers.getUniqueStoreIds
 import nl.klrnbk.daan.appiecal.apps.schedule.helpers.isActivityPartOfShift
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule.ScheduleActivity
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule.ScheduleShift
 import org.springframework.stereotype.Service
 
 @Service

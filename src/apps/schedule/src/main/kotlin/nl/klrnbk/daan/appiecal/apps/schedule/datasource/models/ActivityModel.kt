@@ -10,8 +10,8 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleActivity
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.ShiftDepartment
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule.ScheduleActivity
 import java.time.ZonedDateTime
 
 @Entity

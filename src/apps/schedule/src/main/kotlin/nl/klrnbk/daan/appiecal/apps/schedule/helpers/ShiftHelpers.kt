@@ -1,7 +1,7 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.helpers
 
-import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleActivity
-import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleShift
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule.ScheduleActivity
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule.ScheduleShift
 
 fun getUniqueStoreIds(shifts: List<ScheduleShift>): Set<String> = shifts.map(ScheduleShift::storeId).toSet()
 

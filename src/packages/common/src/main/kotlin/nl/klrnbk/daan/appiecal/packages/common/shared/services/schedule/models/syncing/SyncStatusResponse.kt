@@ -1,4 +1,4 @@
-package nl.klrnbk.daan.appiecal.apps.schedule.api.models.syncing
+package nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.syncing
 
 data class SyncStatusResponse(
     val shifts: SyncStatusResponseEntries,

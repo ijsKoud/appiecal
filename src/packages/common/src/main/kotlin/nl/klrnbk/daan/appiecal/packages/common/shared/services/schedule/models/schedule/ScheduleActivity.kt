@@ -1,4 +1,4 @@
-package nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule
+package nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule
 
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.activity.GqlActivityResponseActivity
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.ShiftDepartment
