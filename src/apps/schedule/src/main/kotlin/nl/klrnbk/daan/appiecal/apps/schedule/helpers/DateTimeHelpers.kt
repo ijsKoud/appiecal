@@ -1,7 +1,7 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.helpers
 
-import nl.klrnbk.daan.appiecal.apps.schedule.constants.AH_TIME_ZONE
-import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMATTER
+import nl.klrnbk.daan.appiecal.packages.common.constants.AH_TIME_ZONE
+import nl.klrnbk.daan.appiecal.packages.common.constants.DATE_TIME_FORMATTER
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
