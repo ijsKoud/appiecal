@@ -1,5 +1,8 @@
 package nl.klrnbk.daan.appiecal.packages.common.retrofit
 
+import com.fatboyindustrial.gsonjavatime.Converters
+import com.google.gson.GsonBuilder
+import nl.klrnbk.daan.appiecal.packages.common.constants.DATE_TIME_FORMAT
 import nl.klrnbk.daan.appiecal.packages.common.exceptions.ApiException
 import nl.klrnbk.daan.appiecal.packages.common.exceptions.DownstreamServiceErrorException
 import okhttp3.OkHttpClient
@@ -55,12 +58,14 @@ open class RetrofitClient {
                     .addInterceptor(loggingInterceptor)
                     .build()
 
+            val gson = Converters.registerZonedDateTime(GsonBuilder()).create()
+
             val retrofit =
                 Retrofit
                     .Builder()
                     .baseUrl(baseUrl)
                     .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(client)
                     .build()
 
