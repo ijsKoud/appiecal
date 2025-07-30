@@ -1,7 +1,11 @@
 package nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule
 
-data class ScheduleResponse(
-    val shifts: List<ScheduleShift>,
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.ShiftDepartment
+import java.time.ZonedDateTime
+import java.util.UUID
+
+data class ScheduleResponse<T : ScheduleResponseShift<*>>(
+    val shifts: List<T>,
 ) {
     val amount: Int = shifts.size
 
@@ -39,3 +43,26 @@ data class ScheduleResponse(
         """
     }
 }
+
+open class ScheduleResponseShift<T : ScheduleResponseShiftActivity>(
+    val id: UUID,
+    val storeId: String,
+    val startDate: ZonedDateTime,
+    val endDate: ZonedDateTime,
+    val createdAt: ZonedDateTime,
+    val updatedAt: ZonedDateTime,
+    val departments: List<ShiftDepartment>,
+    val activities: MutableList<T>,
+)
+
+open class ScheduleResponseShiftActivity(
+    val id: UUID,
+    val description: String,
+    val startDate: ZonedDateTime,
+    val endDate: ZonedDateTime,
+    val createdAt: ZonedDateTime,
+    val updatedAt: ZonedDateTime,
+    val department: ShiftDepartment,
+    val timeCode: String,
+    val paid: Boolean,
+)
