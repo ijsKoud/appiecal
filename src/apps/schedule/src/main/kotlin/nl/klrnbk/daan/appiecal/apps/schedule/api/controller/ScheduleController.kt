@@ -8,8 +8,10 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import nl.klrnbk.daan.appiecal.apps.schedule.api.facade.ScheduleFacade
+import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleShift
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_ZONE_FORMAT
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule.ScheduleResponse
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
@@ -66,7 +68,7 @@ class ScheduleController(
         )
         @RequestParam("end-date", required = true)
         endDate: ZonedDateTime,
-    ): ScheduleResponse = scheduleFacade.getScheduleFromId(authentication.principal, startDate, endDate)
+    ): ScheduleResponse<ScheduleShift> = scheduleFacade.getScheduleFromId(authentication.principal, startDate, endDate)
 
     @GetMapping("/{userId}")
     @Operation(summary = "Returns the synced schedule (SERVICE ACCOUNT ONLY)")
@@ -113,5 +115,5 @@ class ScheduleController(
         )
         @RequestParam("end-date", required = true)
         endDate: ZonedDateTime,
-    ): ScheduleResponse = scheduleFacade.getScheduleFromId(userId, startDate, endDate)
+    ): ScheduleResponse<ScheduleShift> = scheduleFacade.getScheduleFromId(userId, startDate, endDate)
 }

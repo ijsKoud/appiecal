@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import nl.klrnbk.daan.appiecal.apps.schedule.api.facade.RawRequestFacade
+import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleShift
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
 import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMAT
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
@@ -105,5 +106,5 @@ class RawRequestController(
         )
         @RequestParam("end-date", required = true)
         endDate: LocalDateTime,
-    ): ScheduleResponse = rawRequestFacade.getFormattedSchedule(token, startDate, endDate)
+    ): ScheduleResponse<ScheduleShift> = rawRequestFacade.getFormattedSchedule(token, startDate, endDate)
 }
