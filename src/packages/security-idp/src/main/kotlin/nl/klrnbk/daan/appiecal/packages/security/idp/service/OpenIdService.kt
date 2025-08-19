@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import nl.klrnbk.daan.appiecal.packages.security.idp.client.openid.OpenIdClient
+import nl.klrnbk.daan.appiecal.packages.security.idp.client.openid.models.M2MTokenResponse
 import nl.klrnbk.daan.appiecal.packages.security.idp.client.openid.models.OpenIdJwksResponseKeys
 import nl.klrnbk.daan.appiecal.packages.security.idp.exceptions.JwtVerifyException
 import org.springframework.scheduling.annotation.Scheduled
@@ -22,6 +23,8 @@ class OpenIdService(
     private fun updateJwks() {
         jwks = getFreshJwks()
     }
+
+    fun getM2MToken(): M2MTokenResponse = client.getM2MToken()
 
     fun verifyJwt(token: String): Boolean {
         try {
@@ -43,6 +46,7 @@ class OpenIdService(
         val verifier =
             JWT
                 .require(algorithm)
+                .acceptIssuedAt(1L)
                 .build()
 
         return verifier.verify(token)
