@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import nl.klrnbk.daan.appiecal.apps.calendar.api.facade.EventFacade
 import nl.klrnbk.daan.appiecal.apps.calendar.constants.CREATE_EVENT_BODY
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.calendar.models.CreateEventRequestBody
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -47,11 +48,11 @@ class EventController(
         @RequestParam("event-id") eventId: String,
     ) = eventFacade.deleteEvent(userId, eventId)
 
-    @PutMapping("/{userId}", consumes = ["text/plain"])
-    @Operation(summary = "Creates or updated an event on the calendar (SERVICE ACCOUNT ONLY)")
+    @PostMapping("/{userId}", consumes = ["application/json"])
+    @Operation(summary = "Creates an event on the calendar (SERVICE ACCOUNT ONLY)")
     @ApiResponse(
         responseCode = "200",
-        description = "Event is created/updated",
+        description = "Event is created",
         content = [
             Content(
                 mediaType = "text/plain",
@@ -60,16 +61,16 @@ class EventController(
             ),
         ],
     )
-    fun putEvent(
+    fun createEvent(
         @PathVariable
         userId: String,
         @RequestBody
         @SwaggerRequestBody(
             description = "Body containing VEVENT data",
-            content = [
-                Content(examples = [ExampleObject(CREATE_EVENT_BODY)]),
-            ],
+//            content = [
+//                Content(examples = [ExampleObject(CREATE_EVENT_BODY)]),
+//            ],
         )
-        content: String,
-    ): String = eventFacade.putEvent(userId, content)
+        content: CreateEventRequestBody,
+    ): String = eventFacade.createEvent(userId, content.eventId, content.title, content.description, content.startDate, content.endDate)
 }
