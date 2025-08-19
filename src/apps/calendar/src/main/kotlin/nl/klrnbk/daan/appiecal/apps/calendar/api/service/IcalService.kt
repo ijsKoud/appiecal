@@ -7,6 +7,7 @@ import net.fortuna.ical4j.model.TimeZoneRegistryFactory
 import net.fortuna.ical4j.model.component.VEvent
 import net.fortuna.ical4j.model.property.CalScale
 import net.fortuna.ical4j.model.property.Description
+import net.fortuna.ical4j.model.property.Location
 import net.fortuna.ical4j.model.property.ProdId
 import net.fortuna.ical4j.model.property.Uid
 import net.fortuna.ical4j.model.property.Version
@@ -56,6 +57,7 @@ class IcalService {
         eventId: String,
         title: String,
         description: String,
+        location: String,
         start: ZonedDateTime,
         end: ZonedDateTime,
     ): Calendar {
@@ -66,6 +68,7 @@ class IcalService {
 
         val startDate = start.withZoneSameInstant(ZoneId.of("UTC")) as Temporal
         val endDate = end.withZoneSameInstant(ZoneId.of("UTC")) as Temporal
+        val location = Location(location)
 
         val timezoneRegistry = TimeZoneRegistryFactory.getInstance().createRegistry()
         val timezone = timezoneRegistry.getTimeZone("UTC")
@@ -74,6 +77,7 @@ class IcalService {
         val event = VEvent(startDate, endDate, title)
         event.add<VEvent>(Description(description))
         event.add<VEvent>(Uid(eventId))
+        event.add<VEvent>(location)
 
         calendar.add<Calendar>(vtimezone)
         calendar.add<Calendar>(event)

@@ -64,13 +64,15 @@ class EventController(
     fun createEvent(
         @PathVariable
         userId: String,
-        @RequestBody
-        @SwaggerRequestBody(
-            description = "Body containing VEVENT data",
-//            content = [
-//                Content(examples = [ExampleObject(CREATE_EVENT_BODY)]),
-//            ],
+        @RequestBody content: CreateEventRequestBody,
+    ): String =
+        eventFacade.createEvent(
+            userId,
+            content.eventId,
+            content.title,
+            content.description,
+            content.location,
+            content.startDate,
+            content.endDate,
         )
-        content: CreateEventRequestBody,
-    ): String = eventFacade.createEvent(userId, content.eventId, content.title, content.description, content.startDate, content.endDate)
 }

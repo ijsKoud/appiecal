@@ -37,35 +37,15 @@ class EventFacade(
         eventId: String,
         title: String,
         description: String,
+        location: String,
         startDate: ZonedDateTime,
         endDate: ZonedDateTime,
     ): String {
         val credentials = calendarCredentialsService.getCredentials(userId)
         if (credentials == null || credentials.urls.calendarUrl == null) throw MissingDavCredentialsException()
 
-        val calendar = icalService.createEvent(eventId, title, description, startDate, endDate)
+        val calendar = icalService.createEvent(eventId, title, description, location, startDate, endDate)
         logger.info("Creating event for user=$userId;eventId=$eventId")
-
-        caldavService.createEvent(
-            credentials.urls.calendarUrl,
-            credentials.authentication.scope,
-            credentials.authentication.token,
-            eventId,
-            calendar,
-        )
-
-        return eventId
-    }
-
-    fun putEvent(
-        userId: String,
-        content: String,
-    ): String {
-        val credentials = calendarCredentialsService.getCredentials(userId)
-        if (credentials == null || credentials.urls.calendarUrl == null) throw MissingDavCredentialsException()
-
-        val (calendar, eventId) = icalService.getCalendarWithEventIdFromIcal(content)
-        logger.info("Creating/updating event for user=$userId;eventId=$eventId")
 
         caldavService.createEvent(
             credentials.urls.calendarUrl,

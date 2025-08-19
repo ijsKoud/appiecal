@@ -6,6 +6,7 @@ data class CreateEventRequestBody(
     val eventId: String,
     val title: String,
     val description: String,
+    val location: String,
     val startDate: ZonedDateTime,
     val endDate: ZonedDateTime,
 )
