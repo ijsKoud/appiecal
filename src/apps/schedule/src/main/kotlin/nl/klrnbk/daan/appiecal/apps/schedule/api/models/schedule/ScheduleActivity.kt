@@ -1,23 +1,24 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule
 
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.activity.GqlActivityResponseActivity
-import nl.klrnbk.daan.appiecal.apps.schedule.constants.ShiftDepartment
 import nl.klrnbk.daan.appiecal.apps.schedule.datasource.models.ActivityModel
 import nl.klrnbk.daan.appiecal.apps.schedule.helpers.localDateTimeStringToZonedDateTime
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.ShiftDepartment
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule.ScheduleResponseShiftActivity
 import java.time.ZonedDateTime
 import java.util.UUID
 
-data class ScheduleActivity(
-    val id: UUID,
-    val description: String,
-    val startDate: ZonedDateTime,
-    val endDate: ZonedDateTime,
-    val createdAt: ZonedDateTime,
-    val updatedAt: ZonedDateTime,
-    val department: ShiftDepartment,
-    val timeCode: String,
-    val paid: Boolean,
-) {
+class ScheduleActivity(
+    id: UUID,
+    description: String,
+    startDate: ZonedDateTime,
+    endDate: ZonedDateTime,
+    createdAt: ZonedDateTime,
+    updatedAt: ZonedDateTime,
+    department: ShiftDepartment,
+    timeCode: String,
+    paid: Boolean,
+) : ScheduleResponseShiftActivity(id, description, startDate, endDate, createdAt, updatedAt, department, timeCode, paid) {
     companion object {
         fun fromModel(model: ActivityModel): ScheduleActivity =
             ScheduleActivity(

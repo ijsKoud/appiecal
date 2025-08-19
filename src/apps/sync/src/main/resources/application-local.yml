@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/appiecal?user=postgres&password=postgres
+
+server:
+  port: 8083
+
+appiecal:
+  spring:
+    security:
+      authorization:
+        jwks:
+          uri: https://auth.klrnbk.nl/application/o/local-test-application/jwks/
+        m2m:
+          url: https://auth.klrnbk.nl/application/o/token/
+          username: local-testing-application
+          password: ${M2M_APPLICATION_PASSWORD}
+          clientId: lV9teIh4yUyVMOtWc2Zk3PJ3zTnvTT36qK6k9jfQ
+          scope: profile openid email https://klrnbk.nl/projects/appiecal:use
+  sync:
+    service-urls:
+      schedule: http://localhost.proxyman.io:8081
+      calendar: http://localhost.proxyman.io:8082
+      store: https://www.ah.nl

@@ -22,6 +22,7 @@ dependencies {
     api("com.squareup.retrofit2:converter-gson:3.0.0")
     api("com.squareup.retrofit2:converter-scalars:3.0.0")
     api("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation("com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.2")
 }
 
 tasks.test { useJUnitPlatform() }

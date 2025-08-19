@@ -7,10 +7,11 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import nl.klrnbk.daan.appiecal.apps.schedule.api.facade.RawRequestFacade
-import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleResponse
+import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleShift
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
-import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMAT
+import nl.klrnbk.daan.appiecal.packages.common.constants.DATE_TIME_FORMAT
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule.ScheduleResponse
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -105,5 +106,5 @@ class RawRequestController(
         )
         @RequestParam("end-date", required = true)
         endDate: LocalDateTime,
-    ): ScheduleResponse = rawRequestFacade.getFormattedSchedule(token, startDate, endDate)
+    ): ScheduleResponse<ScheduleShift> = rawRequestFacade.getFormattedSchedule(token, startDate, endDate)
 }

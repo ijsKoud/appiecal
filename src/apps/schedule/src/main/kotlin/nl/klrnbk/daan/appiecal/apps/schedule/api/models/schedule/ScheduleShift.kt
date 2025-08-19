@@ -1,22 +1,33 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule
 
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
-import nl.klrnbk.daan.appiecal.apps.schedule.constants.ShiftDepartment
 import nl.klrnbk.daan.appiecal.apps.schedule.datasource.models.ShiftModel
 import nl.klrnbk.daan.appiecal.apps.schedule.helpers.localDateTimeStringToZonedDateTime
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.ShiftDepartment
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule.ScheduleResponseShift
 import java.time.ZonedDateTime
 import java.util.UUID
+import kotlin.collections.map
 
-data class ScheduleShift(
-    val id: UUID,
-    val storeId: String,
-    val startDate: ZonedDateTime,
-    val endDate: ZonedDateTime,
-    val createdAt: ZonedDateTime,
-    val updatedAt: ZonedDateTime,
-    val departments: List<ShiftDepartment>,
-    val activities: MutableList<ScheduleActivity>,
-) {
+class ScheduleShift(
+    id: UUID,
+    storeId: String,
+    startDate: ZonedDateTime,
+    endDate: ZonedDateTime,
+    createdAt: ZonedDateTime,
+    updatedAt: ZonedDateTime,
+    departments: List<ShiftDepartment>,
+    activities: MutableList<ScheduleActivity>,
+) : ScheduleResponseShift<ScheduleActivity>(
+        id,
+        storeId,
+        startDate,
+        endDate,
+        createdAt,
+        updatedAt,
+        departments,
+        activities,
+    ) {
     companion object {
         fun fromModel(model: ShiftModel): ScheduleShift =
             ScheduleShift(

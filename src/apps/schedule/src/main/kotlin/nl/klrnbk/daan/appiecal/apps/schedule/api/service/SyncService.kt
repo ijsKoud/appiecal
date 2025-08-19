@@ -1,12 +1,12 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.service
 
-import nl.klrnbk.daan.appiecal.apps.schedule.api.models.syncing.SyncStatusResponse
-import nl.klrnbk.daan.appiecal.apps.schedule.api.models.syncing.SyncStatusResponseEntries
 import nl.klrnbk.daan.appiecal.apps.schedule.datasource.models.ActivityModel
 import nl.klrnbk.daan.appiecal.apps.schedule.datasource.models.ShiftModel
 import nl.klrnbk.daan.appiecal.apps.schedule.helpers.models.GetUpdatableShiftsResult
 import nl.klrnbk.daan.appiecal.apps.schedule.helpers.models.SplitCrudResult
 import nl.klrnbk.daan.appiecal.apps.schedule.helpers.models.SplitShiftsToCrudResult
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.syncing.SyncStatusResponse
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.syncing.SyncStatusResponseEntries
 import org.springframework.stereotype.Service
 
 @Service

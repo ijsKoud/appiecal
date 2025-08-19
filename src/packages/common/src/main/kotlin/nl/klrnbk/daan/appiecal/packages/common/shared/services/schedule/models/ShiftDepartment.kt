@@ -1,4 +1,4 @@
-package nl.klrnbk.daan.appiecal.apps.schedule.constants
+package nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models
 
 enum class ShiftDepartment {
     Management,
@@ -13,6 +13,8 @@ enum class ShiftDepartment {
     VersFoodServices,
     Unknown,
     ;
+
+    override fun toString(): String = name.split("(?<=[a-z])(?=[A-Z])").joinToString(" ")
 
     companion object {
         fun getFromGqlResponse(type: String): ShiftDepartment =

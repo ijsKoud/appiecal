@@ -1,4 +1,4 @@
-package nl.klrnbk.daan.appiecal.apps.schedule.constants
+package nl.klrnbk.daan.appiecal.packages.common.constants
 
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

@@ -1,9 +1,10 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.facade
 
-import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleResponse
+import nl.klrnbk.daan.appiecal.apps.schedule.api.models.schedule.ScheduleShift
 import nl.klrnbk.daan.appiecal.apps.schedule.api.service.GqlService
 import nl.klrnbk.daan.appiecal.apps.schedule.clients.gql.models.schedule.GqlScheduleResponseSchedule
-import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMATTER
+import nl.klrnbk.daan.appiecal.packages.common.constants.DATE_TIME_FORMATTER
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule.ScheduleResponse
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -26,7 +27,7 @@ class RawRequestFacade(
         token: String,
         startDate: LocalDateTime,
         endDate: LocalDateTime,
-    ): ScheduleResponse {
+    ): ScheduleResponse<ScheduleShift> {
         val startDateString = startDate.format(DATE_TIME_FORMATTER)
         val endDateString = endDate.format(DATE_TIME_FORMATTER)
 

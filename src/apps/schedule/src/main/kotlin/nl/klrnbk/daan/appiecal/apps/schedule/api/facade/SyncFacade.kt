@@ -1,13 +1,13 @@
 package nl.klrnbk.daan.appiecal.apps.schedule.api.facade
 
-import nl.klrnbk.daan.appiecal.apps.schedule.api.models.syncing.SyncStatusResponse
 import nl.klrnbk.daan.appiecal.apps.schedule.api.service.ActivityService
 import nl.klrnbk.daan.appiecal.apps.schedule.api.service.GqlService
 import nl.klrnbk.daan.appiecal.apps.schedule.api.service.IdpService
 import nl.klrnbk.daan.appiecal.apps.schedule.api.service.ShiftService
 import nl.klrnbk.daan.appiecal.apps.schedule.api.service.SyncService
-import nl.klrnbk.daan.appiecal.apps.schedule.constants.DATE_TIME_FORMATTER
 import nl.klrnbk.daan.appiecal.apps.schedule.datasource.models.ShiftModel
+import nl.klrnbk.daan.appiecal.packages.common.constants.DATE_TIME_FORMATTER
+import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.syncing.SyncStatusResponse
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service

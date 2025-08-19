@@ -6,6 +6,7 @@ import nl.klrnbk.daan.appiecal.apps.calendar.api.service.IcalService
 import nl.klrnbk.daan.appiecal.apps.calendar.exceptions.MissingDavCredentialsException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.time.ZonedDateTime
 
 @Service
 class EventFacade(
@@ -31,15 +32,20 @@ class EventFacade(
         )
     }
 
-    fun putEvent(
+    fun createEvent(
         userId: String,
-        content: String,
+        eventId: String,
+        title: String,
+        description: String,
+        location: String,
+        startDate: ZonedDateTime,
+        endDate: ZonedDateTime,
     ): String {
         val credentials = calendarCredentialsService.getCredentials(userId)
         if (credentials == null || credentials.urls.calendarUrl == null) throw MissingDavCredentialsException()
 
-        val (calendar, eventId) = icalService.getCalendarWithEventIdFromIcal(content)
-        logger.info("Creating/updating event for user=$userId;eventId=$eventId")
+        val calendar = icalService.createEvent(eventId, title, description, location, startDate, endDate)
+        logger.info("Creating event for user=$userId;eventId=$eventId")
 
         caldavService.createEvent(
             credentials.urls.calendarUrl,
