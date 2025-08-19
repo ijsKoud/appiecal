@@ -53,7 +53,11 @@ open class ScheduleResponseShift<T : ScheduleResponseShiftActivity>(
     val updatedAt: ZonedDateTime,
     val departments: List<ShiftDepartment>,
     val activities: MutableList<T>,
-)
+) {
+    fun isFullSickDay(): Boolean = activities.size == 1 && activities.first().description === "Ziek"
+
+    fun isFullAbsentDay(): Boolean = activities.size == 1 && activities.first().timeCode == "ABSENCE AH"
+}
 
 open class ScheduleResponseShiftActivity(
     val id: UUID,

@@ -14,6 +14,8 @@ enum class ShiftDepartment {
     Unknown,
     ;
 
+    override fun toString(): String = name.split("(?<=[a-z])(?=[A-Z])").joinToString(" ")
+
     companion object {
         fun getFromGqlResponse(type: String): ShiftDepartment =
             when (type) {
