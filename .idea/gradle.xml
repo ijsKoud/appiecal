@@ -23,6 +23,7 @@
             <option value="$PROJECT_DIR$/src/apps/calendar" />
             <option value="$PROJECT_DIR$/src/apps/idp" />
             <option value="$PROJECT_DIR$/src/apps/schedule" />
+            <option value="$PROJECT_DIR$/src/apps/sync" />
             <option value="$PROJECT_DIR$/src/build-logic" />
             <option value="$PROJECT_DIR$/src/packages" />
             <option value="$PROJECT_DIR$/src/packages/common" />

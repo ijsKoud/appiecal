@@ -18,6 +18,9 @@
       <module name="appiecal.apps.schedule" options="-parameters" />
       <module name="appiecal.apps.schedule.main" options="-parameters" />
       <module name="appiecal.apps.schedule.test" options="-parameters" />
+      <module name="appiecal.apps.sync" options="-parameters" />
+      <module name="appiecal.apps.sync.main" options="-parameters" />
+      <module name="appiecal.apps.sync.test" options="-parameters" />
       <module name="appiecal.packages.spring" options="-parameters" />
       <module name="appiecal.packages.spring.main" options="-parameters" />
       <module name="appiecal.packages.spring.test" options="-parameters" />

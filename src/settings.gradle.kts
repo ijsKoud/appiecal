@@ -18,4 +18,4 @@ plugins {
 
 rootProject.name = "appiecal"
 
-include(":packages:common", ":packages:spring", ":packages:security-idp", ":apps:schedule", ":apps:idp", ":apps:calendar")
+include(":packages:common", ":packages:spring", ":packages:security-idp", ":apps:schedule", ":apps:idp", ":apps:calendar", ":apps:sync")

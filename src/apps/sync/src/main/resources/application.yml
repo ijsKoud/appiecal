@@ -1,0 +1,33 @@
+appiecal:
+  spring:
+    swagger:
+      title: sync-service
+      description: Service for syncing the @AH calendar with a CALDAV server
+      header-api-keys:
+        - name: x-authorization
+          key-id: api-key
+          description: x-authorization header
+    security:
+      unauthenticated-routes:
+        - /test
+      authorization:
+        jwks:
+          refresh-interval: 0 0 0 * * *
+          uri: ${JWKS_URL}
+  idp:
+    encryption-key: ${IDP_ENCRYPTION_KEY}
+  sync:
+    service-urls:
+      schedule: http://schedule.appiecal.local
+
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: sync-service
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: ${JDBC_URL}
