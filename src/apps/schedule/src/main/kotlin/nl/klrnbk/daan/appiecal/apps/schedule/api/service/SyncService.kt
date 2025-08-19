@@ -28,8 +28,8 @@ class SyncService {
         dbShifts: List<ShiftModel>,
         apiShifts: List<ShiftModel>,
     ): SplitShiftsToCrudResult {
-        val deletableShifts = dbShifts.filter { !apiShifts.any(it::isDateEqual) }
-        val (restApiShifts, newShifts) = apiShifts.partition { dbShifts.any(it::isDateEqual) }
+        val deletableShifts = dbShifts.filter { !apiShifts.any(it::isDateTimeEqual) }
+        val (restApiShifts, newShifts) = apiShifts.partition { dbShifts.any(it::isDateTimeEqual) }
         val updatableShifts = getUpdatableShifts(dbShifts, restApiShifts)
         val shiftCrudResult =
             SplitCrudResult(
@@ -47,7 +47,7 @@ class SyncService {
     ): GetUpdatableShiftsResult {
         val shiftPairs =
             apiShifts.mapNotNull { shift ->
-                val dbShift = dbShifts.find(shift::isDateEqual)
+                val dbShift = dbShifts.find(shift::isDateTimeEqual)
                 if (dbShift == null) return@mapNotNull null
 
                 shift.id = dbShift.id

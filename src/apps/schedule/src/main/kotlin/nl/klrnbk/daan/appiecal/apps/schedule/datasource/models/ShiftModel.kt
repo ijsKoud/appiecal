@@ -46,8 +46,9 @@ class ShiftModel(
     @OneToMany(mappedBy = "shift", cascade = [CascadeType.ALL], orphanRemoval = true)
     var activities: MutableList<ActivityModel>,
 ) {
-    fun isDateEqual(other: ShiftModel): Boolean =
-        startDate.toLocalDate() == other.startDate.toLocalDate() && endDate.toLocalDate() == other.endDate.toLocalDate()
+    fun isDateTimeEqual(other: ShiftModel): Boolean =
+        startDate.isEqual(other.startDate) &&
+            endDate.isEqual(other.endDate)
 
     fun equals(other: ShiftModel): Boolean =
         endDate.toInstant() == other.endDate.toInstant() ||
