@@ -24,4 +24,8 @@ dependencies {
 
 tasks.test { useJUnitPlatform() }
 
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    enabled = false
+}
+
 kotlin { jvmToolchain(23) }
