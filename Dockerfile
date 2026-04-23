@@ -6,7 +6,7 @@ ARG APP
 RUN ./gradlew :apps:$APP:bootJar --no-daemon
 
 # Runtime stage
-FROM openjdk:23-jre-slim
+FROM sapmachine:21.0.5-jre-ubuntu-focal AS runner
 
 LABEL org.opencontainers.image.source = "https://github.com/ijsKoud/appiecal"
 
