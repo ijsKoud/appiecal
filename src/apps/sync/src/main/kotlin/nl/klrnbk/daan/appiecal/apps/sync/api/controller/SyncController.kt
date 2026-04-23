@@ -2,25 +2,18 @@ package nl.klrnbk.daan.appiecal.apps.sync.api.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.media.Content
-import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import nl.klrnbk.daan.appiecal.apps.sync.api.facade.SyncFacade
-import nl.klrnbk.daan.appiecal.apps.sync.clients.schedule.ScheduleClient
-import nl.klrnbk.daan.appiecal.packages.common.constants.DATE_TIME_FORMAT
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
 import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.syncing.SyncStatusResponse
-import nl.klrnbk.daan.appiecal.packages.security.idp.client.openid.OpenIdClient
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.time.LocalTime
 import java.time.ZonedDateTime
 
 @RestController
