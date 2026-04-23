@@ -3,6 +3,12 @@ name: Build and Deploy Apps
 on:
   repository_dispatch:
     types: [version-bumped]
+  workflow_dispatch:
+    inputs:
+      apps:
+        description: 'Comma-separated list of app names to build and deploy'
+        type: string
+        required: true
 
 jobs:
   check-bump:
@@ -16,7 +22,11 @@ jobs:
       - name: Extract bumped apps
         id: extract-apps
         run: |
-          APPS="${{ github.event.client_payload.apps }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            APPS="${{ github.event.inputs.apps }}"
+          else
+            APPS="${{ github.event.client_payload.apps }}"
+          fi
           APPS_JSON=$(echo "$APPS" | tr ',' '\n' | awk '{$1=$1};1' | sed '/^$/d' | jq -R . | jq -s . | tr -d '\n')
           echo "apps=$APPS_JSON" >> $GITHUB_OUTPUT
 
