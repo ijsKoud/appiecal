@@ -1,0 +1,22 @@
+Index: src/.github/project-config.yaml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/.github/project-config.yaml b/src/.github/project-config.yaml
+new file mode 100644
+--- /dev/null	(date 1756555460876)
++++ b/src/.github/project-config.yaml	(date 1756555460876)
+@@ -0,0 +1,12 @@
++name: appiecal-service
++version: 2.0.0
++
++language: kotlin
++monorepo: true
++
++targets:
++  - apps/*
++  - packages/*
++
++tests:
++  enabled: true
