@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . .
 
 ARG APP
-RUN ./src/gradlew :apps:$APP:bootJar --no-daemon
+RUN cd ./src/ && ./gradlew :apps:$APP:bootJar --no-daemon
 
 # Runtime stage
 FROM sapmachine:21.0.5-jre-ubuntu-focal AS runner
