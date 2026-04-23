@@ -1,4 +1,5 @@
-LABEL authors="daan"
+LABEL authors = "ijsKoud"
+LABEL org.opencontainers.image.source = "https://github.com/ijsKoud/appiecal"
 
 # Build stage
 FROM gradle:8.10-jdk23 AS build
