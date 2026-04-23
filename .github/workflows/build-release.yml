@@ -106,46 +106,37 @@ jobs:
           cd gitops
           DEPLOYMENT_DIR="apps/${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}"
           DEPLOYMENT_FILE="$DEPLOYMENT_DIR/deployment.yaml"
-          
-          # Create directory if it doesn't exist
           mkdir -p "$DEPLOYMENT_DIR"
-          
-          # Check if deployment file exists
           if [ ! -f "$DEPLOYMENT_FILE" ]; then
             echo "Creating new deployment file: $DEPLOYMENT_FILE"
-            cat > "$DEPLOYMENT_FILE" << 'EOF'
-              apiVersion: apps/v1
-              kind: Deployment
+            cat > "$DEPLOYMENT_FILE" << EOF
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: ${{ matrix.app }}
+            namespace: default
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: ${{ matrix.app }}
+            template:
               metadata:
-                name: {{ APP_NAME }}
-                namespace: default
+                labels:
+                  app: ${{ matrix.app }}
               spec:
-                replicas: 1
-                selector:
-                  matchLabels:
-                    app: {{ APP_NAME }}
-                template:
-                  metadata:
-                    labels:
-                      app: {{ APP_NAME }}
-                  spec:
-                    containers:
-                      - name: {{ APP_NAME }}
-                        image: ghcr.io/{{ REPO }}-{{ APP_NAME }}:{{ VERSION }}
-                        ports:
-                          - containerPort: 8080
-            EOF
-          
-            # Replace placeholders with actual values
-            sed -i "s|{{ APP_NAME }}|${{ matrix.app }}|g" "$DEPLOYMENT_FILE"
-            sed -i "s|{{ REPO }}|${{ needs.check-bump.outputs.repo }}|g" "$DEPLOYMENT_FILE"
-            sed -i "s|{{ VERSION }}|${{ steps.version.outputs.version }}|g" "$DEPLOYMENT_FILE"
+                containers:
+                - name: ${{ matrix.app }}
+                  image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:${{ steps.version.outputs.version }}
+                  ports:
+                  - containerPort: 8080
+          EOF
             echo "Deployment file created successfully"
-            else
-          echo "Updating existing deployment file: $DEPLOYMENT_FILE"
-          sed -i "s|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:.*|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:${{ steps.version.outputs.version }}|" "$DEPLOYMENT_FILE"
+          else
+            echo "Updating existing deployment file: $DEPLOYMENT_FILE"
+            sed -i "s|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:.*|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:${{ steps.version.outputs.version }}|" "$DEPLOYMENT_FILE"
             echo "Deployment file updated successfully"
-            fi
+          fi
 
       - name: Commit and push changes for ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}
         run: |
