@@ -22,7 +22,7 @@ class CalendarClient(
         eventId: String,
     ) {
         val call = apiClient.deleteEvent(token, userId, eventId)
-        handleApiCall(call, true)
+        handleApiCall(call)
     }
 
     fun createEvent(
