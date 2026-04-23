@@ -1,9 +1,13 @@
 # Build stage
 FROM gradle:8.10-jdk23 AS build
 WORKDIR /app
-COPY . .
+
+RUN microdnf install findutils
+
+COPY --chown=gradle:gradle . .
+
 ARG APP
-RUN ./gradlew :apps:$APP:bootJar --no-daemon
+RUN ./src/gradlew :apps:$APP:bootJar --no-daemon
 
 # Runtime stage
 FROM sapmachine:21.0.5-jre-ubuntu-focal AS runner
