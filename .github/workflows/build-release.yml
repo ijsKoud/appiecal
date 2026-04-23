@@ -71,7 +71,7 @@ jobs:
             APP=${{ matrix.app }}
             VERSION=${{ steps.version.outputs.version }}
           push: true
-          tags: ghcr.io/ijskoud/${{ matrix.app }}:${{ steps.version.outputs.version }}
+          tags: ghcr.io/${{ github.repository }}-${{ matrix.app }}:${{ steps.version.outputs.version }}
 
   deploy:
     needs: [check-bump, build-and-push]
@@ -95,17 +95,17 @@ jobs:
         run: |
           cd gitops
           VERSION=$(grep 'version = ' "../src/apps/${{ matrix.app }}/build.gradle.kts" | sed 's/version = "\(.*\)"/\1/')
-          sed -i "s|image: ghcr.io/ijskoud/${{ matrix.app }}:.*|image: ghcr.io/ijskoud/${{ matrix.app }}:$VERSION|" "apps/${{ matrix.app }}/deployment.yaml"
+          sed -i "s|image: ghcr.io/${{ github.repository }}-${{ matrix.app }}:.*|image: ghcr.io/${{ github.repository }}-${{ matrix.app }}:$VERSION|" "apps/${{ github.event.repository.name }}-${{ matrix.app }}/deployment.yaml"
 
-      - name: Commit and push changes for ${{ matrix.app }}
+      - name: Commit and push changes for ${{ github.event.repository.name }}-${{ matrix.app }}
         run: |
           cd gitops
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
           if ! git diff --staged --quiet; then
-            git commit -m "chore: update image tag for app: ${{ matrix.app }} to $VERSION"
+            git commit -m "chore: update image tag for app: ${{ github.event.repository.name }}-${{ matrix.app }} to $VERSION"
             git push
           else
-            echo "No changes to commit for ${{ matrix.app }}"
+            echo "No changes to commit for ${{ github.event.repository.name }}-${{ matrix.app }}"
           fi
