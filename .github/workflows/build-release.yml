@@ -10,6 +10,8 @@ jobs:
     outputs:
       bumped_apps: ${{ steps.extract-apps.outputs.apps }}
       should_build: true  # Always build since dispatch indicates a bump
+      repo: ${{ steps.set-repo.outputs.repo }}
+      event_repo: ${{ steps.set-repo.outputs.event_repo }}
     steps:
       - name: Extract bumped apps
         id: extract-apps
@@ -17,6 +19,12 @@ jobs:
           APPS="${{ github.event.client_payload.apps }}"
           APPS_JSON=$(echo "$APPS" | tr ',' '\n' | awk '{$1=$1};1' | sed '/^$/d' | jq -R . | jq -s . | tr -d '\n')
           echo "apps=$APPS_JSON" >> $GITHUB_OUTPUT
+
+      - name: Set lowercase repository names
+        id: set-repo
+        run: |
+          echo "repo=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+          echo "event_repo=$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
 
   build-and-push:
     needs: check-bump
@@ -53,7 +61,7 @@ jobs:
             APP=${{ matrix.app }}
             VERSION=${{ steps.version.outputs.version }}
           push: true
-          tags: ghcr.io/${{ github.repository }}-${{ matrix.app }}:${{ steps.version.outputs.version }}
+          tags: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:${{ steps.version.outputs.version }}
 
   deploy:
     needs: [check-bump, build-and-push]
@@ -76,17 +84,17 @@ jobs:
         run: |
           cd gitops
           VERSION=$(grep 'version = ' "../src/apps/${{ matrix.app }}/build.gradle.kts" | sed 's/version = "\(.*\)"/\1/')
-          sed -i "s|image: ghcr.io/${{ github.repository }}-${{ matrix.app }}:.*|image: ghcr.io/${{ github.repository }}-${{ matrix.app }}:$VERSION|" "apps/${{ github.event.repository.name }}-${{ matrix.app }}/deployment.yaml"
+          sed -i "s|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:.*|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:$VERSION|" "apps/${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}/deployment.yaml"
 
-      - name: Commit and push changes for ${{ github.event.repository.name }}-${{ matrix.app }}
+      - name: Commit and push changes for ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}
         run: |
           cd gitops
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
           if ! git diff --staged --quiet; then
-            git commit -m "chore: update image tag for app: ${{ github.event.repository.name }}-${{ matrix.app }} to $VERSION"
+            git commit -m "chore: update image tag for app: ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }} to $VERSION"
             git push
           else
-            echo "No changes to commit for ${{ github.event.repository.name }}-${{ matrix.app }}"
+            echo "No changes to commit for ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}"
           fi
