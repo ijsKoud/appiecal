@@ -17,7 +17,7 @@ interface StoreApiInterface {
         "x-client-name: ah-store",
         "x-client-version: 1.16.16",
         "x-client-platform-type: web",
-        "user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+        "user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:147.0) Gecko/20100101 Firefox/147.0",
     )
     fun getStoreInformation(
         @Body body: StoreInformationRequestBody,
