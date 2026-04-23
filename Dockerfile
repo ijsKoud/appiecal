@@ -2,9 +2,7 @@
 FROM gradle:8.10-jdk23 AS build
 WORKDIR /app
 
-RUN microdnf install findutils
-
-COPY --chown=gradle:gradle . .
+COPY . .
 
 ARG APP
 RUN ./src/gradlew :apps:$APP:bootJar --no-daemon
@@ -12,7 +10,7 @@ RUN ./src/gradlew :apps:$APP:bootJar --no-daemon
 # Runtime stage
 FROM sapmachine:21.0.5-jre-ubuntu-focal AS runner
 
-LABEL org.opencontainers.image.source = "https://github.com/ijsKoud/appiecal"
+LABEL org.opencontainers.image.source="https://github.com/ijsKoud/appiecal"
 
 ARG APP
 ARG VERSION
