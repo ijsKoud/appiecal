@@ -83,6 +83,17 @@ jobs:
       name: production-${{ matrix.app }}
       url: https://github.com/ijskoud/homelab-gitops
     steps:
+      - name: Checkout main repository code
+        uses: actions/checkout@v4
+        with:
+          path: main-repo
+
+      - name: Get app version from main repository
+        id: version
+        run: |
+          VERSION=$(grep 'version = ' "main-repo/src/apps/${{ matrix.app }}/build.gradle.kts" | sed 's/version = "\(.*\)"/\1/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
       - name: Checkout GitOps repo
         uses: actions/checkout@v4
         with:
@@ -90,11 +101,51 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: gitops
 
-      - name: Update image tag for ${{ matrix.app }}
+      - name: Create or update deployment file for ${{ matrix.app }}
         run: |
           cd gitops
-          VERSION=$(grep 'version = ' "../src/apps/${{ matrix.app }}/build.gradle.kts" | sed 's/version = "\(.*\)"/\1/')
-          sed -i "s|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:.*|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:$VERSION|" "apps/${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}/deployment.yaml"
+          DEPLOYMENT_DIR="apps/${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}"
+          DEPLOYMENT_FILE="$DEPLOYMENT_DIR/deployment.yaml"
+          
+          # Create directory if it doesn't exist
+          mkdir -p "$DEPLOYMENT_DIR"
+          
+          # Check if deployment file exists
+          if [ ! -f "$DEPLOYMENT_FILE" ]; then
+            echo "Creating new deployment file: $DEPLOYMENT_FILE"
+            cat > "$DEPLOYMENT_FILE" << 'EOF'
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: {{ APP_NAME }}
+                namespace: default
+              spec:
+                replicas: 1
+                selector:
+                  matchLabels:
+                    app: {{ APP_NAME }}
+                template:
+                  metadata:
+                    labels:
+                      app: {{ APP_NAME }}
+                  spec:
+                    containers:
+                      - name: {{ APP_NAME }}
+                        image: ghcr.io/{{ REPO }}-{{ APP_NAME }}:{{ VERSION }}
+                        ports:
+                          - containerPort: 8080
+            EOF
+          
+            # Replace placeholders with actual values
+            sed -i "s|{{ APP_NAME }}|${{ matrix.app }}|g" "$DEPLOYMENT_FILE"
+            sed -i "s|{{ REPO }}|${{ needs.check-bump.outputs.repo }}|g" "$DEPLOYMENT_FILE"
+            sed -i "s|{{ VERSION }}|${{ steps.version.outputs.version }}|g" "$DEPLOYMENT_FILE"
+            echo "Deployment file created successfully"
+            else
+          echo "Updating existing deployment file: $DEPLOYMENT_FILE"
+          sed -i "s|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:.*|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:${{ steps.version.outputs.version }}|" "$DEPLOYMENT_FILE"
+            echo "Deployment file updated successfully"
+            fi
 
       - name: Commit and push changes for ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}
         run: |
@@ -103,7 +154,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git add .
           if ! git diff --staged --quiet; then
-            git commit -m "chore: update image tag for app: ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }} to $VERSION"
+            git commit -m "chore: update image tag for app: ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }} to ${{ steps.version.outputs.version }}"
             git push
           else
             echo "No changes to commit for ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}"
