@@ -15,8 +15,7 @@ jobs:
         id: extract-apps
         run: |
           APPS="${{ github.event.client_payload.apps }}"
-          # Convert comma-separated string to JSON array for matrix
-          APPS_JSON=$(echo "$APPS" | tr ',' '\n' | sed '/^$/d' | jq -R . | jq -s .)
+          APPS_JSON=$(echo "$APPS" | tr ',' '\n' | awk '{$1=$1};1' | sed '/^$/d' | jq -R . | jq -s . | tr -d '\n')
           echo "apps=$APPS_JSON" >> $GITHUB_OUTPUT
 
   build-and-push:
