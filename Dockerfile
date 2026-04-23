@@ -1,6 +1,3 @@
-LABEL authors = "ijsKoud"
-LABEL org.opencontainers.image.source = "https://github.com/ijsKoud/appiecal"
-
 # Build stage
 FROM gradle:8.10-jdk23 AS build
 WORKDIR /app
@@ -10,6 +7,8 @@ RUN ./gradlew :apps:$APP:bootJar --no-daemon
 
 # Runtime stage
 FROM openjdk:23-jre-slim
+
+LABEL org.opencontainers.image.source = "https://github.com/ijsKoud/appiecal"
 
 ARG APP
 ARG VERSION
