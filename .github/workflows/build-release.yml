@@ -1,43 +1,26 @@
 name: Build and Deploy Apps
 
 on:
-  push:
-    branches:
-      - main
+  repository_dispatch:
+    types: [version-bumped]
 
 jobs:
   check-bump:
     runs-on: ubuntu-latest
     outputs:
       bumped_apps: ${{ steps.extract-apps.outputs.apps }}
-      should_build: ${{ steps.check.outputs.should_build }}
+      should_build: true  # Always build since dispatch indicates a bump
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - name: Check for version bump
-        id: check
-        run: |
-          COMMIT_MSG=$(git log -1 --pretty=%B)
-          if echo "$COMMIT_MSG" | grep -q "chore: bump versions for apps:"; then
-            echo "should_build=true" >> $GITHUB_OUTPUT
-          else
-            echo "should_build=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Extract bumped apps
         id: extract-apps
-        if: steps.check.outputs.should_build == 'true'
         run: |
-          COMMIT_MSG=$(git log -1 --pretty=%B)
-          APPS=$(echo "$COMMIT_MSG" | sed -n 's/.*chore: bump versions for apps: \([^ ]*\).*/\1/p' | tr ',' '\n' | xargs)
-          echo "apps=$APPS" >> $GITHUB_OUTPUT
+          APPS="${{ github.event.client_payload.apps }}"
+          # Convert comma-separated string to JSON array for matrix
+          APPS_JSON=$(echo "$APPS" | tr ',' '\n' | sed '/^$/d' | jq -R . | jq -s .)
+          echo "apps=$APPS_JSON" >> $GITHUB_OUTPUT
 
   build-and-push:
     needs: check-bump
-    if: needs.check-bump.outputs.should_build == 'true'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -75,7 +58,6 @@ jobs:
 
   deploy:
     needs: [check-bump, build-and-push]
-    if: needs.check-bump.outputs.should_build == 'true'
     runs-on: ubuntu-latest
     strategy:
       matrix:
