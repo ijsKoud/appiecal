@@ -18,7 +18,10 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 open class RetrofitClient {
     protected val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    protected fun <T> handleApiCall(call: Call<T>): T {
+    protected fun <T> handleApiCall(
+        call: Call<T>,
+        emptyResponse: Boolean = false,
+    ): T {
         val response = call.execute()
         if (!response.isSuccessful) {
             val errorStatus = response.code()
@@ -31,16 +34,20 @@ open class RetrofitClient {
             throw DownstreamServiceErrorException(errorStatus, response.message())
         }
 
-        val body = response.body()
-        if (body == null) {
-            throw ApiException(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "Downstream service returned malformed response body",
-                "Empty or invalid response body returned",
-            )
+        if (!emptyResponse) {
+            val body = response.body()
+            if (body == null) {
+                throw ApiException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Downstream service returned malformed response body",
+                    "Empty or invalid response body returned",
+                )
+            }
+
+            return body
         }
 
-        return body
+        return Unit as T
     }
 
     companion object {
