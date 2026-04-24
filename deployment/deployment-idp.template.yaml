@@ -24,15 +24,15 @@ spec:
             - name: IDP_ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: appiecal
+                  name: appiecal-secrets
                   key: IDP_ENCRYPTION_KEY
             - name: JDBC_URL
               valueFrom:
                 secretKeyRef:
-                  name: appiecal
+                  name: appiecal-secrets
                   key: JDB_URL
             - name: JWKS_URL
               valueFrom:
                 secretKeyRef:
-                  name: appiecal
+                  name: appiecal-secrets
                   key: JWKS_URL
