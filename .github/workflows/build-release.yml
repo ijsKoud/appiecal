@@ -163,11 +163,57 @@ jobs:
           oauth-secret: ${{ secrets.TAILSCALE_CLIENT_SECRET }}
           tags: tag:ci
 
-      - name: Trigger ArgoCD sync and verify deployment for ${{ matrix.app }}
+      - name: Create ArgoCD application if needed and trigger sync for ${{ matrix.app }}
         run: |
           APP_NAME="${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}"
           ARGOCD_URL="${{ secrets.ARGOCD_SERVER_URL }}"
           TOKEN="${{ secrets.ARGOCD_TOKEN }}"
+          
+          echo "Checking if ArgoCD application $APP_NAME exists..."
+          APP_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" "$ARGOCD_URL/api/v1/applications/$APP_NAME" \
+            -H "Authorization: Bearer $TOKEN")
+          
+          if [ "$APP_EXISTS" = "404" ]; then
+            echo "Application $APP_NAME does not exist. Creating it..."
+            CREATE_PAYLOAD=$(cat << 'EOF'
+          {
+            "metadata": {
+              "name": "APP_NAME_PLACEHOLDER"
+            },
+            "spec": {
+              "project": "default",
+              "source": {
+                "repoURL": "https://github.com/ijskoud/homelab-gitops",
+                "path": "apps/APP_NAME_PLACEHOLDER",
+                "targetRevision": "HEAD"
+              },
+              "destination": {
+                "server": "https://kubernetes.default.svc",
+                "namespace": "default"
+              },
+              "syncPolicy": {
+                "automated": {
+                  "prune": true,
+                  "selfHeal": true
+                }
+              }
+            }
+          }
+          EOF
+            )
+            CREATE_PAYLOAD=$(echo "$CREATE_PAYLOAD" | sed "s|APP_NAME_PLACEHOLDER|$APP_NAME|g")
+          
+            curl -X POST "$ARGOCD_URL/api/v1/applications" \
+              -H "Authorization: Bearer $TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "$CREATE_PAYLOAD" \
+              --fail \
+              --silent \
+              --show-error
+            echo "ArgoCD application $APP_NAME created successfully."
+          else
+            echo "ArgoCD application $APP_NAME already exists."
+          fi
           
           echo "Triggering ArgoCD sync for application: $APP_NAME"
           curl -X POST "$ARGOCD_URL/api/v1/applications/$APP_NAME/sync" \
