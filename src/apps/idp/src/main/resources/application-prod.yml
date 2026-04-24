@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: ${JDBC_URL}
+
+appiecal:
+  spring:
+    security:
+      authorization:
+        jwks:
+          uri: ${JWKS_URL}
+  idp:
+    encryption-key: ${IDP_ENCRYPTION_KEY}

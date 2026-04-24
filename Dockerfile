@@ -29,4 +29,5 @@ ARG VERSION
 COPY --from=build /app/src/apps/$APP/build/libs/$APP-$VERSION.jar /app/app.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+
+ENTRYPOINT ["export", "SPRING_PROFILES_ACTIVE=prd", "java","-jar","/app/app.jar"]
