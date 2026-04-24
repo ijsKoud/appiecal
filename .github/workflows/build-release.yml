@@ -72,6 +72,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
+        id: build
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -83,6 +84,17 @@ jobs:
           push: true
           tags: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:${{ steps.version.outputs.version }}
 
+      - name: Save image digest
+        run: |
+          mkdir -p digests
+          echo "${{ steps.build.outputs.digest }}" > digests/${{ matrix.app }}
+
+      - name: Upload image digests
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-digests
+          path: digests/
+
   deploy:
     needs: [check-bump, build-and-push]
     runs-on: ubuntu-latest
@@ -93,6 +105,12 @@ jobs:
       name: production-${{ matrix.app }}
       url: https://github.com/ijskoud/homelab-gitops
     steps:
+      - name: Download image digests
+        uses: actions/download-artifact@v4
+        with:
+          name: image-digests
+          path: digests/
+
       - name: Checkout main repository code
         uses: actions/checkout@v4
         with:
@@ -114,6 +132,7 @@ jobs:
       - name: Create or update deployment file for ${{ matrix.app }}
         run: |
           cd gitops
+          DIGEST=$(cat ../digests/${{ matrix.app }})
           DEPLOYMENT_DIR="apps/${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}"
           DEPLOYMENT_FILE="$DEPLOYMENT_DIR/deployment.yaml"
           mkdir -p "$DEPLOYMENT_DIR"
@@ -137,25 +156,26 @@ jobs:
               spec:
                 containers:
                 - name: ${{ matrix.app }}
-                  image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:${{ steps.version.outputs.version }}
+                  image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}@$DIGEST
                   ports:
                   - containerPort: 8080
           EOF
             echo "Deployment file created successfully"
           else
             echo "Updating existing deployment file: $DEPLOYMENT_FILE"
-            sed -i "s|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:.*|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:${{ steps.version.outputs.version }}|" "$DEPLOYMENT_FILE"
+            sed -i "s|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:.*|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}@$DIGEST|" "$DEPLOYMENT_FILE"
             echo "Deployment file updated successfully"
           fi
 
       - name: Commit and push changes for ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}
         run: |
           cd gitops
+          DIGEST=$(cat ../digests/${{ matrix.app }})
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
           if ! git diff --staged --quiet; then
-            git commit -m "chore: update image tag for app: ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }} to ${{ steps.version.outputs.version }}"
+            git commit -m "chore: update image for app: ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }} to $DIGEST"
             git push
           else
             echo "No changes to commit for ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}"
