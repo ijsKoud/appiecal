@@ -30,7 +30,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: appiecal-secrets
-                  key: JDB_URL
+                  key: JDBC_URL
             - name: JWKS_URL
               valueFrom:
                 secretKeyRef:
