@@ -1,3 +1,6 @@
+ARG APP
+ARG VERSION
+
 ############################
 # Build stage
 ############################
@@ -7,9 +10,7 @@ WORKDIR /app
 COPY . .
 
 RUN --mount=type=cache,target=/home/gradle/.gradle \
-    cd src && ./gradlew dependencies --no-daemon || true \
-
-ARG APP
+    cd src && ./gradlew dependencies --no-daemon || true
 
 RUN --mount=type=cache,target=/home/gradle/.gradle \
     cd src && ./gradlew :apps:$APP:bootJar --no-daemon
@@ -18,9 +19,6 @@ RUN --mount=type=cache,target=/home/gradle/.gradle \
 # Runtime stage
 ############################
 FROM sapmachine:21.0.5-jre-ubuntu-focal AS runner
-
-ARG APP
-ARG VERSION
 
 WORKDIR /app
 COPY --from=build /app/src/apps/$APP/build/libs/$APP-$VERSION.jar /app/app.jar
