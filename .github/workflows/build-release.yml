@@ -173,7 +173,7 @@ jobs:
           APP_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" "$ARGOCD_URL/api/v1/applications/$APP_NAME" \
             -H "Authorization: Bearer $TOKEN")
           
-          if [ "$APP_EXISTS" = "404" ]; then
+          if [ "$APP_EXISTS" = "403" ]; then
             echo "Application $APP_NAME does not exist. Creating it..."
             CREATE_PAYLOAD=$(cat << 'EOF'
           {
