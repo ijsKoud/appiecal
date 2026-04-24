@@ -2,6 +2,8 @@ name: Build and Deploy Apps
 
 permissions:
   id-token: write
+  contents: read
+  packages: write
 
 on:
   repository_dispatch:
