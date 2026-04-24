@@ -5,6 +5,10 @@ permissions:
   contents: read
   packages: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   repository_dispatch:
     types: [version-bumped]
@@ -72,7 +76,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64
+          platforms: linux/arm64
           build-args: |
             APP=${{ matrix.app }}
             VERSION=${{ steps.version.outputs.version }}
