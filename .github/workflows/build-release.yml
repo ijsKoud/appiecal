@@ -111,17 +111,6 @@ jobs:
           name: image-digests
           path: digests/
 
-      - name: Checkout main repository code
-        uses: actions/checkout@v4
-        with:
-          path: main-repo
-
-      - name: Get app version from main repository
-        id: version
-        run: |
-          VERSION=$(grep 'version = ' "main-repo/src/apps/${{ matrix.app }}/build.gradle.kts" | sed 's/version = "\(.*\)"/\1/')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
       - name: Checkout GitOps repo
         uses: actions/checkout@v4
         with:
@@ -135,6 +124,8 @@ jobs:
           DIGEST=$(cat ../digests/${{ matrix.app }})
           DEPLOYMENT_DIR="apps/${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}"
           DEPLOYMENT_FILE="$DEPLOYMENT_DIR/deployment.yaml"
+          APP_NAME="${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}"
+          
           mkdir -p "$DEPLOYMENT_DIR"
           if [ ! -f "$DEPLOYMENT_FILE" ]; then
             echo "Creating new deployment file: $DEPLOYMENT_FILE"
@@ -142,20 +133,20 @@ jobs:
           apiVersion: apps/v1
           kind: Deployment
           metadata:
-            name: ${{ matrix.app }}
+            name: $APP_NAME
             namespace: default
           spec:
             replicas: 1
             selector:
               matchLabels:
-                app: ${{ matrix.app }}
+                app: $APP_NAME
             template:
               metadata:
                 labels:
-                  app: ${{ matrix.app }}
+                  app: $APP_NAME
               spec:
                 containers:
-                - name: ${{ matrix.app }}
+                - name: $APP_NAME
                   image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}@$DIGEST
                   ports:
                   - containerPort: 8080
