@@ -9,6 +9,8 @@ WORKDIR /app
 
 COPY . .
 
+RUN echo "APP: $APP, VERSION: $VERSION"
+
 RUN --mount=type=cache,target=/home/gradle/.gradle \
     cd src && ./gradlew dependencies --no-daemon || true
 
