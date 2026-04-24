@@ -20,7 +20,7 @@ RUN --mount=type=cache,target=/home/gradle/.gradle \
 ############################
 # Runtime stage
 ############################
-FROM sapmachine:21.0.5-jre-ubuntu-focal AS runner
+FROM sapmachine:23-jre-ubuntu-focal AS runner
 WORKDIR /app
 
 ARG APP
