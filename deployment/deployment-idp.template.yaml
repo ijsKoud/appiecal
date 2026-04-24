@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appiecal-idp
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: appiecal-idp
+  template:
+    metadata:
+      labels:
+        app: appiecal-idp
+    spec:
+      containers:
+        - name: appiecal-idp
+          image: DOCKER_IMAGE_SOURCE
+          ports:
+            - containerPort: 8080
+          env:
+            - name: IDP_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: appiecal
+                  key: IDP_ENCRYPTION_KEY
+            - name: JDBC_URL
+              valueFrom:
+                secretKeyRef:
+                  name: appiecal
+                  key: JDB_URL
+            - name: JWKS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: appiecal
+                  key: JWKS_URL
