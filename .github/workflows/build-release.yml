@@ -154,7 +154,7 @@ jobs:
             echo "Deployment file created successfully"
           else
             echo "Updating existing deployment file: $DEPLOYMENT_FILE"
-            sed -i "s|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:.*|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}@$DIGEST|" "$DEPLOYMENT_FILE"
+            sed -i "s|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}@.*|image: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}@$DIGEST|" "$DEPLOYMENT_FILE"
             echo "Deployment file updated successfully"
           fi
 
