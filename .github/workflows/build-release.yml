@@ -134,7 +134,7 @@ jobs:
           DIGEST=$(cat ../digests/${{ matrix.app }})
           APP_NAME="${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}"
           
-          IMAGE="ghcr.io/$APP_NAME@$DIGEST"
+          IMAGE="ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}@$DIGEST"
           TEMPLATE_FILE="../local/deployment/deployment-${{ matrix.app }}.template.yaml"
           
           if [ ! -f "$TEMPLATE_FILE" ]; then
