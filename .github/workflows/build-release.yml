@@ -77,9 +77,9 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/arm64
-          build-args:
-            APP: ${{ matrix.app }}
-            VERSION: ${{ steps.version.outputs.version }}
+          build-args: |
+            APP=${{ matrix.app }}
+            VERSION=${{ steps.version.outputs.version }}
           push: true
           tags: ghcr.io/${{ needs.check-bump.outputs.repo }}-${{ matrix.app }}:${{ steps.version.outputs.version }}
 
