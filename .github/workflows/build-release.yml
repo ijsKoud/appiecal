@@ -1,5 +1,8 @@
 name: Build and Deploy Apps
 
+permissions:
+  id-token: write
+
 on:
   repository_dispatch:
     types: [version-bumped]
@@ -150,3 +153,54 @@ jobs:
           else
             echo "No changes to commit for ${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}"
           fi
+
+      - name: Setup Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_CLIENT_SECRET }}
+          tags: tag:ci
+
+      - name: Trigger ArgoCD sync and verify deployment for ${{ matrix.app }}
+        run: |
+          APP_NAME="${{ needs.check-bump.outputs.event_repo }}-${{ matrix.app }}"
+          ARGOCD_URL="${{ secrets.ARGOCD_SERVER_URL }}"
+          TOKEN="${{ secrets.ARGOCD_TOKEN }}"
+          
+          echo "Triggering ArgoCD sync for application: $APP_NAME"
+          curl -X POST "$ARGOCD_URL/api/v1/applications/$APP_NAME/sync" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            --fail \
+            --silent \
+            --show-error
+          
+          echo "ArgoCD sync triggered. Waiting for deployment to complete..."
+          
+          # Poll for sync completion
+          TIMEOUT=600  # 10 minutes
+          INTERVAL=30  # Check every 30 seconds
+          ELAPSED=0
+          
+          while [ $ELAPSED -lt $TIMEOUT ]; do
+            RESPONSE=$(curl -s "$ARGOCD_URL/api/v1/applications/$APP_NAME" \
+              -H "Authorization: Bearer $TOKEN")
+          
+            SYNC_STATUS=$(echo "$RESPONSE" | jq -r '.status.sync.status')
+            HEALTH_STATUS=$(echo "$RESPONSE" | jq -r '.status.health.status')
+          
+            echo "Sync status: $SYNC_STATUS, Health status: $HEALTH_STATUS (elapsed: ${ELAPSED}s)"
+          
+            if [ "$SYNC_STATUS" = "Synced" ] && [ "$HEALTH_STATUS" = "Healthy" ]; then
+              echo "✅ Deployment successful! Application $APP_NAME is synced and healthy."
+              exit 0
+            fi
+          
+            sleep $INTERVAL
+            ELAPSED=$((ELAPSED + INTERVAL))
+          done
+          
+          echo "❌ Timeout: Deployment did not complete within $TIMEOUT seconds."
+          echo "Final status - Sync: $SYNC_STATUS, Health: $HEALTH_STATUS"
+          exit 1
