@@ -8,7 +8,7 @@ plugins {
 
 group = "nl.klrnbk.daan.appiecal.apps"
 
-version = "1.0.4"
+version = "1.0.5"
 
 repositories { mavenCentral() }
 
