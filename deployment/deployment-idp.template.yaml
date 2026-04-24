@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: appiecal-idp
   namespace: default
+  annotations:
+    secrets.phase.dev/redeploy: 'true'
 spec:
   replicas: 1
   selector:
