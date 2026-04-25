@@ -38,7 +38,6 @@ on:
 
 jobs:
   bump-versions:
-    needs: authenticate-app
     uses: ijsKoud/actions/.github/workflows/generic-kotlin-monorepo-bump-versions.yaml@main
     with:
       apps_dir: ${{ inputs.apps_dir }}
