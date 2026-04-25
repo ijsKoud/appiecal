@@ -48,6 +48,7 @@ jobs:
         with:
           client-id: ${{ secrets.APP_CLIENT_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          skip-token-revoke: true
   bump-versions:
     needs: authenticate-app
     uses: ijsKoud/actions/.github/workflows/generic-kotlin-monorepo-bump-versions.yaml@main
