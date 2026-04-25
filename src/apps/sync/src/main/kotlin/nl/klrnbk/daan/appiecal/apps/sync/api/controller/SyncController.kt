@@ -9,9 +9,11 @@ import nl.klrnbk.daan.appiecal.apps.sync.api.facade.SyncFacade
 import nl.klrnbk.daan.appiecal.packages.common.responses.error.BaseErrorResponses
 import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.syncing.SyncStatusResponse
 import nl.klrnbk.daan.appiecal.packages.security.idp.models.JwtAuthenticationToken
+import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.time.ZonedDateTime
@@ -52,6 +54,35 @@ class SyncController(
         )
         endDate: ZonedDateTime,
     ): SyncStatusResponse = syncFacade.syncScheduleWithCalDav(authentication.principal, startDate, endDate)
+
+    @PostMapping("/automatic/set")
+    @Operation(summary = "Turn the automatic sync on or off")
+    @ApiResponse(responseCode = "204", description = "Change successful")
+    @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
+    fun setAutomaticSync(
+        authentication: JwtAuthenticationToken,
+        @Parameter(name = "state")
+        @Parameter(
+            name = "state",
+            description = "Whether the automatic sync should be on or off",
+            schema =
+                Schema(
+                    type = "boolean",
+                    example = "true",
+                ),
+        )
+        state: Boolean,
+    ): ResponseEntity<Void> {
+        syncFacade.setAutomaticSync(authentication.principal, state)
+        return ResponseEntity.noContent().build()
+    }
+
+    @GetMapping("/automatic/status")
+    @Operation(summary = "Turn the automatic sync on or off")
+    @ApiResponse(responseCode = "200", description = "The status of automatic sync")
+    @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
+    fun getAutomaticSyncStatus(authentication: JwtAuthenticationToken): Boolean =
+        syncFacade.getAutomaticSyncStatus(authentication.principal)
 
     @GetMapping("/automatic/{userId}")
     @Operation(summary = "Sync the users calendar as SERVICE ACCOUNT")
