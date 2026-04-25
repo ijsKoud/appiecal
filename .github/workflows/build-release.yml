@@ -26,3 +26,9 @@ jobs:
     with:
       apps_dir: ${{ inputs.apps_dir }}
       apps: ${{ inputs.apps }}
+    secrets:
+      GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
+      ARGOCD_TOKEN: ${{ secrets.ARGOCD_TOKEN }}
+      ARGOCD_SERVER_URL: ${{ secrets.ARGOCD_SERVER_URL }}
+      TAILSCALE_CLIENT_ID: ${{ secrets.TAILSCALE_CLIENT_ID }}
+      TAILSCALE_CLIENT_SECRET: ${{ secrets.TAILSCALE_CLIENT_SECRET }}
