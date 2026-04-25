@@ -1,9 +1,4 @@
-name: Build and Deploy Apps
-
-permissions:
-  id-token: write
-  contents: read
-  packages: write
+name: Build, Release and Deploy Apps
 
 on:
   repository_dispatch:
@@ -21,14 +16,35 @@ on:
         required: true
 
 jobs:
-  reuse-workflow:
+  authenticate-app:
+    name: Authenticate GitHub Application
+    outputs:
+      token: ${{ steps.app-token.outputs.token }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          client-id: ${{ secrets.GITHUB_APP_CLIENT_ID }}
+          private-key: ${{ secrets.GITHUB_APP_PRIVATE_KEY }}
+  build:
+    needs: authenticate-app
     uses: ijsKoud/actions/.github/workflows/generic-kotlin-monorepo-build-release.yaml@main
     with:
       apps_dir: ${{ inputs.apps_dir }}
       apps: ${{ inputs.apps }}
+    secrets:
+      GITHUB_TOKEN: ${{ needs.authenticate-app.outputs.token }}
+      GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
+  deploy:
+    needs: build
+    uses: ijsKoud/actions/.github/workflows/generic-application-deploy.yaml@main
+    with:
+      apps: ${{ needs.build.outputs.apps }}
     secrets:
       GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
       ARGOCD_TOKEN: ${{ secrets.ARGOCD_TOKEN }}
       ARGOCD_SERVER_URL: ${{ secrets.ARGOCD_SERVER_URL }}
       TAILSCALE_CLIENT_ID: ${{ secrets.TAILSCALE_CLIENT_ID }}
       TAILSCALE_CLIENT_SECRET: ${{ secrets.TAILSCALE_CLIENT_SECRET }}
+  
