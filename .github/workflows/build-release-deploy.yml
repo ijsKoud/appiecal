@@ -34,7 +34,7 @@ jobs:
       apps_dir: ${{ inputs.apps_dir }}
       apps: ${{ inputs.apps }}
     secrets:
-      GITHUB_TOKEN: ${{ needs.authenticate-app.outputs.token }}
+      GITHUB_APP_TOKEN: ${{ needs.authenticate-app.outputs.token }}
       GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
   deploy:
     needs: build
