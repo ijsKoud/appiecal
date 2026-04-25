@@ -40,7 +40,7 @@ jobs:
     needs: build
     uses: ijsKoud/actions/.github/workflows/generic-application-deploy.yaml@main
     with:
-      apps: ${{ needs.build.outputs.app }}
+      apps: ${{ needs.build.outputs.apps }}
     secrets:
       GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
       ARGOCD_TOKEN: ${{ secrets.ARGOCD_TOKEN }}
