@@ -1,0 +1,47 @@
+name: Bump Application Versions
+
+on:
+  workflow_call:
+    inputs:
+      apps_dir:
+        description: 'Directory containing the apps'
+        type: string
+        default: 'src/apps'
+        required: false
+      apps:
+        description: 'Comma-separated list of app names to update'
+        type: string
+        required: true
+      bump_type:
+        description: 'Type of version bump (major, minor, patch)'
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      apps_dir:
+        description: 'Directory containing the apps'
+        type: string
+        default: 'src/apps'
+        required: false
+      apps:
+        description: 'Comma-separated list of app names to update'
+        type: string
+        required: true
+      bump_type:
+        description: 'Type of version bump (major, minor, patch)'
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+        required: true
+
+jobs:
+  reuse-workflow:
+    uses: ijsKoud/actions/.github/workflows/generic-kotlin-monorepo-bump-versions.yaml@main
+    with:
+      apps_dir: ${{ inputs.apps_dir }}
+      apps: ${{ inputs.apps }}
+      bump_type: ${{ inputs.bump_type }}
+    secrets:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
