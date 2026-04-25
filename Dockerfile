@@ -30,5 +30,5 @@ COPY --from=build /app/src/apps/$APP/build/libs/$APP-$VERSION.jar /app/app.jar
 
 EXPOSE 8080
 
-ENV SPRING_PROFILES_ACTIVE=prd
+ENV SPRING_PROFILES_ACTIVE=prod
 ENTRYPOINT ["java","-jar","/app/app.jar"]
