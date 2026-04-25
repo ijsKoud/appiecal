@@ -44,7 +44,7 @@ jobs:
             echo "json_app_list=$APPS_JSON" >> $GITHUB_OUTPUT
           fi
           
-          echo "$GITHUB_OUTPUT"
+          echo "$(cat $GITHUB_OUTPUT)"
 
   build:
     needs: parse-input
