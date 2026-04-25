@@ -16,27 +16,15 @@ on:
         required: true
 
 jobs:
-  authenticate-app:
-    name: Authenticate GitHub Application
-    outputs:
-      token: ${{ steps.app-token.outputs.token }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/create-github-app-token@v3
-        id: app-token
-        with:
-          client-id: ${{ secrets.APP_CLIENT_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          skip-token-revoke: true
   build:
     needs: authenticate-app
     uses: ijsKoud/actions/.github/workflows/generic-kotlin-monorepo-build-release.yaml@main
     with:
       apps_dir: ${{ inputs.apps_dir }}
       apps: ${{ inputs.apps }}
-      github_app_token: ${{ needs.authenticate-app.outputs.token }}
     secrets:
-      GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
+      APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
   deploy:
     needs: build
     uses: ijsKoud/actions/.github/workflows/generic-application-deploy.yaml@main

@@ -37,18 +37,6 @@ on:
         required: true
 
 jobs:
-  authenticate-app:
-    name: Authenticate GitHub Application
-    outputs:
-      token: ${{ steps.app-token.outputs.token }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/create-github-app-token@v3
-        id: app-token
-        with:
-          client-id: ${{ secrets.APP_CLIENT_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          skip-token-revoke: true
   bump-versions:
     needs: authenticate-app
     uses: ijsKoud/actions/.github/workflows/generic-kotlin-monorepo-bump-versions.yaml@main
@@ -56,4 +44,6 @@ jobs:
       apps_dir: ${{ inputs.apps_dir }}
       apps: ${{ inputs.apps }}
       bump_type: ${{ inputs.bump_type }}
-      github_app_token: ${{ needs.authenticate-app.outputs.token }}
+    secrets:
+      APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
