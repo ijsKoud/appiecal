@@ -43,5 +43,3 @@ jobs:
       apps_dir: ${{ inputs.apps_dir }}
       apps: ${{ inputs.apps }}
       bump_type: ${{ inputs.bump_type }}
-    secrets:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
