@@ -56,4 +56,4 @@ jobs:
       apps: ${{ inputs.apps }}
       bump_type: ${{ inputs.bump_type }}
     secrets:
-      GITHUB_TOKEN: ${{ needs.authenticate-app.outputs.token }}
+      GITHUB_APP_TOKEN: ${{ needs.authenticate-app.outputs.token }}
