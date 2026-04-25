@@ -56,5 +56,4 @@ jobs:
       apps_dir: ${{ inputs.apps_dir }}
       apps: ${{ inputs.apps }}
       bump_type: ${{ inputs.bump_type }}
-    secrets:
-      APP_TOKEN: ${{ needs.authenticate-app.outputs.token }}
+      github_app_token: ${{ needs.authenticate-app.outputs.token }}
