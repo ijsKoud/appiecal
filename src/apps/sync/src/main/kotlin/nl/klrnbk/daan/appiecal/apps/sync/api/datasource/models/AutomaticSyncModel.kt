@@ -11,10 +11,6 @@ import jakarta.persistence.Table
 @Table(name = "automatic_sync")
 data class AutomaticSyncModel(
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
-    var id: String?,
-
     @Column(name = "user_id")
     val userId: String,
 

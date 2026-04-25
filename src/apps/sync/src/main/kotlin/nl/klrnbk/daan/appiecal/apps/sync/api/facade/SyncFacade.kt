@@ -1,5 +1,6 @@
 package nl.klrnbk.daan.appiecal.apps.sync.api.facade
 
+import nl.klrnbk.daan.appiecal.apps.sync.api.service.AutomaticSyncService
 import nl.klrnbk.daan.appiecal.apps.sync.api.service.CalendarService
 import nl.klrnbk.daan.appiecal.apps.sync.api.service.ScheduleService
 import nl.klrnbk.daan.appiecal.apps.sync.api.service.StoreService
@@ -16,8 +17,16 @@ class SyncFacade(
     private val calendarService: CalendarService,
     private val openIdService: OpenIdService,
     private val storeService: StoreService,
+    private val automaticSyncService: AutomaticSyncService,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
+
+    fun setAutomaticSync(
+        userId: String,
+        state: Boolean,
+    ) = automaticSyncService.setAutomaticSync(userId, state)
+
+    fun getAutomaticSyncStatus(userId: String): Boolean = automaticSyncService.getAutomaticSyncStatus(userId)
 
     fun syncScheduleWithCalDav(
         userId: String,
