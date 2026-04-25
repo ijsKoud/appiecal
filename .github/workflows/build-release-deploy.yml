@@ -21,27 +21,18 @@ jobs:
     outputs:
       apps_dir: ${{ steps.set-vars.outputs.apps_dir }}
       apps: ${{ steps.set-vars.outputs.apps }}
-      json_app_list: ${{ steps.set-vars.outputs.json_app_list }}
     steps:
       - name: Set Variables
         id: set-vars
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "apps_dir=${{ github.event.inputs.apps_dir }}" >> $GITHUB_OUTPUT
-            
             APPS="${{ github.event.inputs.apps }}"
             echo "apps=$APPS" >> $GITHUB_OUTPUT
-          
-            APPS_JSON=$(echo "$APPS" | tr ',' '\n' | awk '{$1=$1};1' | sed '/^$/d' | jq -R . | jq -s . | tr -d '\n')
-            echo "json_app_list=$APPS_JSON" >> $GITHUB_OUTPUT
+            echo "apps_dir=${{ github.event.inputs.apps_dir }}" >> $GITHUB_OUTPUT
           else
-            echo "apps_dir=${{ github.event.client_payload.apps_dir }}" >> $GITHUB_OUTPUT
-          
             APPS="${{ github.event.client_payload.apps }}"
             echo "apps=$APPS" >> $GITHUB_OUTPUT
-          
-            APPS_JSON=$(echo "$APPS" | tr ',' '\n' | awk '{$1=$1};1' | sed '/^$/d' | jq -R . | jq -s . | tr -d '\n')
-            echo "json_app_list=$APPS_JSON" >> $GITHUB_OUTPUT
+            echo "apps_dir=${{ github.event.client_payload.apps_dir }}" >> $GITHUB_OUTPUT
           fi
           
           echo "$(cat $GITHUB_OUTPUT)"
@@ -59,7 +50,7 @@ jobs:
     needs: [parse-input, build]
     uses: ijsKoud/actions/.github/workflows/generic-application-deploy.yaml@main
     with:
-      apps: ${{ needs.parse-input.outputs.json_app_list }}
+      apps: ${{ needs.parse-input.outputs.apps }}
     secrets:
       GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
       ARGOCD_TOKEN: ${{ secrets.ARGOCD_TOKEN }}
