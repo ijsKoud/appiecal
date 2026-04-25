@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appiecal-calendar
+  namespace: default
+  annotations:
+    secrets.phase.dev/redeploy: 'true'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: appiecal-calendar
+  template:
+    metadata:
+      labels:
+        app: appiecal-calendar
+    spec:
+      containers:
+        - name: appiecal-calendar
+          image: DOCKER_IMAGE_SOURCE
+          ports:
+            - containerPort: 8080
+          env:
+            - name: IDP_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: appiecal-calendar-secrets
+                  key: IDP_ENCRYPTION_KEY
+            - name: JDBC_URL
+              valueFrom:
+                secretKeyRef:
+                  name: appiecal-calendar-secrets
+                  key: JDBC_URL
+            - name: JWKS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: appiecal-calendar-secrets
+                  key: JWKS_URL
