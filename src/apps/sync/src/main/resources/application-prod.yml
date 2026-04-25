@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: ${JDBC_URL}
+
+appiecal:
+  spring:
+    security:
+      authorization:
+        jwks:
+          uri: ${JWKS_URL}
+        m2m:
+          url: ${M2M_APPLICATION_TOKEN_URL}
+          username: ${M2M_APPLICATION_USERNAME}
+          password: ${M2M_APPLICATION_PASSWORD}
+          clientId: ${M_2M_APPLICATION_CLIENT_ID}
+          scope: profile openid email https://klrnbk.nl/projects/appiecal:use
+  sync:
+    service-urls:
+      schedule: http://appiecal-schedule
+      calendar: http://appiecal-calendar
+      store: https://www.ah.nl
