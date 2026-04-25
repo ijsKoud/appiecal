@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: ${JDBC_URL}
+
+appiecal:
+  spring:
+    security:
+      authorization:
+        jwks:
+          uri: ${JWKS_URL}
+  schedule:
+    idp:
+      url: http://appiecal-idp
