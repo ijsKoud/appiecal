@@ -46,8 +46,8 @@ spec:
                 secretKeyRef:
                   name: appiecal-sync-secrets
                   key: M2M_APPLICATION_PASSWORD
-            - name: M_2M_APPLICATION_CLIENT_ID
+            - name: M2M_APPLICATION_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   name: appiecal-sync-secrets
-                  key: M_2M_APPLICATION_CLIENT_ID
+                  key: M2M_APPLICATION_CLIENT_ID
