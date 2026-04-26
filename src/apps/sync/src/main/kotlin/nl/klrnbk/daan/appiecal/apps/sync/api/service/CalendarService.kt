@@ -6,11 +6,28 @@ import nl.klrnbk.daan.appiecal.apps.sync.helpers.getEventDescriptionFromShift
 import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule.ScheduleResponseShift
 import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.schedule.ScheduleResponseShiftActivity
 import org.springframework.stereotype.Service
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoField
 
 @Service
 class CalendarService(
     private val calendarClient: CalendarClient,
 ) {
+    fun getCurrentWeekDates(): Pair<ZonedDateTime, ZonedDateTime> {
+        val now =
+            ZonedDateTime
+                .now()
+                .withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0)
+
+        val startOfWeek = now.with(ChronoField.DAY_OF_WEEK, 1)
+        val endOfWeek = startOfWeek.plusWeeks(1)
+
+        return Pair(startOfWeek, endOfWeek)
+    }
+
     fun deleteEvents(
         authentication: String,
         userId: String,

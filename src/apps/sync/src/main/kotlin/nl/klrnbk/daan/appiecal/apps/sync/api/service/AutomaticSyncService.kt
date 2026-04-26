@@ -21,4 +21,9 @@ class AutomaticSyncService(
         val entity = automaticSyncRepository.findByIdOrNull(userId)
         return entity?.active ?: false
     }
+
+    fun getAllActiveSyncUsers(): List<String> {
+        val entities = automaticSyncRepository.findAllByActive(true)
+        return entities.map { it.userId }
+    }
 }
