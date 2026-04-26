@@ -8,6 +8,7 @@ import nl.klrnbk.daan.appiecal.apps.sync.helpers.getStoreIdsFromShifts
 import nl.klrnbk.daan.appiecal.packages.common.shared.services.schedule.models.syncing.SyncStatusResponse
 import nl.klrnbk.daan.appiecal.packages.security.idp.service.OpenIdService
 import org.slf4j.LoggerFactory
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.time.ZonedDateTime
 
@@ -27,6 +28,23 @@ class SyncFacade(
     ) = automaticSyncService.setAutomaticSync(userId, state)
 
     fun getAutomaticSyncStatus(userId: String): Boolean = automaticSyncService.getAutomaticSyncStatus(userId)
+
+    @Scheduled(cron = "0 0 11,23 * * *") // Every day 11 am and 11 pm
+    fun periodicSync() {
+        logger.info("Starting periodic sync at ${ZonedDateTime.now()}")
+        val users = automaticSyncService.getAllActiveSyncUsers()
+        val dates = calendarService.getCurrentWeekDates()
+
+        for (user in users) {
+            syncScheduleWithCalDav(
+                user,
+                dates.first,
+                dates.second,
+            )
+        }
+
+        logger.info("Ending periodic sync at ${ZonedDateTime.now()}")
+    }
 
     fun syncScheduleWithCalDav(
         userId: String,
