@@ -15,7 +15,7 @@ appiecal:
           refresh-interval: 0 0 0 * * *
           uri: ${JWKS_URL}
   idp:
-    encryption-key: ${IDP_ENCRYPTION_KEY}
+    encryption-key: KEEP_EMPTY_NOT_USED_BUT_REQUIRED
   sync:
     service-urls:
       schedule: http://schedule.appiecal.local

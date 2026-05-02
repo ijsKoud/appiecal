@@ -10,7 +10,7 @@ appiecal:
     security:
       authorization:
         jwks:
-          uri: https://auth.klrnbk.nl/application/o/local-test-application/jwks/
+          uri: https://auth.home.klrnbk.nl/application/o/appiecal/jwks/
         m2m:
           url: https://auth.klrnbk.nl/application/o/token/
           username: local-testing-application

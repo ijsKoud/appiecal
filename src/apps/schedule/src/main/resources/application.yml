@@ -18,7 +18,7 @@ appiecal:
     gql:
       url: https://api-gateway.ah.nl/
   idp:
-    encryption-key:
+    encryption-key: KEEP_EMPTY_NOT_USED_BUT_REQUIRED
 
 spring:
   profiles:
