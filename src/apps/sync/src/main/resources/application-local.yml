@@ -16,7 +16,7 @@ appiecal:
           username: local-testing-application
           password: ${M2M_APPLICATION_PASSWORD}
           clientId: lV9teIh4yUyVMOtWc2Zk3PJ3zTnvTT36qK6k9jfQ
-          scope: profile openid email https://klrnbk.nl/projects/appiecal:use
+          scope: profile openid email scope https://klrnbk.nl/projects/appiecal:use
   sync:
     service-urls:
       schedule: http://localhost.proxyman.io:8081
