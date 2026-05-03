@@ -16,7 +16,7 @@ appiecal:
           uri: ${JWKS_URL}
   schedule:
     gql:
-      url: https://api-exernal.ah.technology/
+      url: https://api-external.ah.technology/
   idp:
     encryption-key: KEEP_EMPTY_NOT_USED_BUT_REQUIRED
 
