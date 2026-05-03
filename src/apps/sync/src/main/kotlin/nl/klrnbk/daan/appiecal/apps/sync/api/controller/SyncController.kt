@@ -77,6 +77,14 @@ class SyncController(
         return ResponseEntity.noContent().build()
     }
 
+    @PostMapping("/automatic/trigger")
+    @Operation(summary = "Trigger a new automatic sync [SERVICE ACCOUNT ONLY]")
+    @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use') && @scopes.isServiceAccount(authentication)")
+    fun triggerAutomaticSync(): ResponseEntity<Void> {
+        syncFacade.periodicSync()
+        return ResponseEntity.noContent().build()
+    }
+
     @GetMapping("/automatic/status")
     @Operation(summary = "Turn the automatic sync on or off")
     @ApiResponse(responseCode = "200", description = "The status of automatic sync")
