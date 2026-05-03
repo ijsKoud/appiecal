@@ -10,13 +10,13 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface GqlApiInterface {
-    @POST("/external/ah/rtp/dex/graphql/")
+    @POST("/stp/dex-graphql-prd")
     fun getSchedule(
         @Header("Authorization") token: String,
         @Body body: GqlScheduleBody,
     ): Call<GqlScheduleResponse>
 
-    @POST("/external/ah/rtp/dex/graphql/")
+    @POST("/stp/dex-graphql-prd")
     fun getActivities(
         @Header("Authorization") token: String,
         @Body body: GqlActivityBody,
