@@ -13,7 +13,7 @@ import java.time.temporal.ChronoField
 class CalendarService(
     private val calendarClient: CalendarClient,
 ) {
-    fun getCurrentWeekDates(): Pair<ZonedDateTime, ZonedDateTime> {
+    fun getSyncDates(): Pair<ZonedDateTime, ZonedDateTime> {
         val now =
             ZonedDateTime
                 .now()
@@ -23,7 +23,7 @@ class CalendarService(
                 .withNano(0)
 
         val startOfWeek = now.with(ChronoField.DAY_OF_WEEK, 1)
-        val endOfWeek = startOfWeek.plusWeeks(1)
+        val endOfWeek = startOfWeek.plusWeeks(4)
 
         return Pair(startOfWeek, endOfWeek)
     }

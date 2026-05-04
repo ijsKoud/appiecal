@@ -29,9 +29,9 @@ class SyncFacade(
     fun getAutomaticSyncStatus(userId: String): Boolean = automaticSyncService.getAutomaticSyncStatus(userId)
 
     fun periodicSync() {
-        logger.info("Starting periodic sync at ${ZonedDateTime.now()}")
         val users = automaticSyncService.getAllActiveSyncUsers()
-        val dates = calendarService.getCurrentWeekDates()
+        val dates = calendarService.getSyncDates()
+        logger.info("Starting periodic sync at ${ZonedDateTime.now()};start=${dates.first},end=${dates.second}")
 
         for (user in users) {
             syncScheduleWithCalDav(
