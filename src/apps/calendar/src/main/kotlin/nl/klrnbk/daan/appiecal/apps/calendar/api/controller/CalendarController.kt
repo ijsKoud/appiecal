@@ -58,4 +58,20 @@ class CalendarController(
         authentication: JwtAuthenticationToken,
         @RequestParam("href", required = false) href: String?,
     ) = calendarFacade.setOrUpdateCalendarUrl(authentication.principal, href)
+
+    @GetMapping("/active")
+    @Operation(summary = "Returns the active calendar")
+    @ApiResponse(
+        responseCode = "200",
+        description = "Active calendar",
+        content = [
+            Content(
+                mediaType = "text/plain",
+                schema = Schema(implementation = String::class),
+                examples = [ExampleObject("/calendars/work-schedule")],
+            ),
+        ],
+    )
+    @PreAuthorize("@scopes.hasScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
+    fun getCalendar(authentication: JwtAuthenticationToken) = calendarFacade.getActiveCalendar(authentication.principal)
 }

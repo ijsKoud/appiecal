@@ -18,15 +18,16 @@ class CalendarFacade(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     fun getCalendarList(userId: String): List<CalendarListEntryResponse> {
-        val credentials = calendarCredentialsService.getCredentials(userId)
-        if (credentials == null) throw MissingDavCredentialsException()
-
+        val credentials = calendarCredentialsService.getCredentials(userId) ?: throw MissingDavCredentialsException()
         return caldavService.getCalendarList(
             credentials.urls.calendarHomeSet,
             credentials.authentication.scope,
             credentials.authentication.token,
         )
     }
+
+    fun getActiveCalendar(userId: String): String? =
+        calendarCredentialsService.getActiveCalendar(userId) ?: throw MissingDavCredentialsException()
 
     fun setOrUpdateCalendarUrl(
         userId: String,
