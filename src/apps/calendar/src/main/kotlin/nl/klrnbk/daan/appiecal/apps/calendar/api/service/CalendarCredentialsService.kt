@@ -57,7 +57,7 @@ class CalendarCredentialsService(
         val entity = entities.firstOrNull() ?: return null
         val url = entity.calendarUrl ?: return null
 
-        return url.toHttpUrl().pathSegments.joinToString("/")
+        return "/" + url.toHttpUrl().pathSegments.joinToString("/")
     }
 
     fun setOrUpdateCalendarUrl(
