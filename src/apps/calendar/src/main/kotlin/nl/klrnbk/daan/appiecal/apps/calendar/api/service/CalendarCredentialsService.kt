@@ -46,11 +46,17 @@ class CalendarCredentialsService(
 
     fun getCredentials(userId: String): CalendarCredentialsDetails? {
         val entities = calendarCredentialsRepository.findByUserId(userId)
-        val entity = entities.firstOrNull()
-        if (entity == null) return null
+        val entity = entities.firstOrNull() ?: return null
 
         val responseModel = CalendarCredentialsDetails.fromModel(entity, encryptionHelper)
         return responseModel
+    }
+
+    fun getActiveCalendar(userId: String): String? {
+        val entities = calendarCredentialsRepository.findByUserId(userId)
+        val entity = entities.firstOrNull() ?: return null
+
+        return entity.calendarUrl?.replace(entity.calendarHomeSetUrl, "")
     }
 
     fun setOrUpdateCalendarUrl(
