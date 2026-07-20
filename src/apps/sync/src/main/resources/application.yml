@@ -9,7 +9,7 @@ appiecal:
           description: x-authorization header
     security:
       unauthenticated-routes:
-        - /test
+        - /v1/sync/store/get-store
       authorization:
         jwks:
           refresh-interval: 0 0 0 * * *
