@@ -9,6 +9,13 @@ import org.springframework.stereotype.Service
 class ScheduleService(
     private val scheduleClient: ScheduleClient,
 ) {
+    fun fetchSyncedSchedule(
+        authorization: String,
+        userId: String,
+        startDate: String,
+        endDate: String,
+    ) = scheduleClient.getShifts(authorization, userId, startDate, endDate)
+
     fun syncSchedule(
         authorization: String,
         userId: String,
