@@ -28,6 +28,21 @@ class SyncFacade(
 
     fun getAutomaticSyncStatus(userId: String): Boolean = automaticSyncService.getAutomaticSyncStatus(userId)
 
+    fun forceCalendarSync(userId: String) {
+        val dates = calendarService.getSyncDates()
+        logger.info("Starting forced calendar sync at ${ZonedDateTime.now()};start=${dates.first},end=${dates.second}")
+
+        val token = openIdService.getM2MToken()
+        val shifts = scheduleService.fetchSyncedSchedule(token.idToken, userId, dates.first.toString(), dates.second.toString())
+
+        val storeIds = getStoreIdsFromShifts(shifts.shifts)
+        val storesInformation = storeIds.map(storeService::getStoreInformation)
+
+        shifts.shifts.forEach { calendarService.createOrUpdateEvent(token.idToken, userId, it, storesInformation) }
+
+        logger.info("Successfully force synced schedule for user $userId;${shifts.shifts.size} shifts")
+    }
+
     fun periodicSync() {
         val users = automaticSyncService.getAllActiveSyncUsers()
         val dates = calendarService.getSyncDates()

@@ -25,6 +25,12 @@ import java.time.ZonedDateTime
 class SyncController(
     private val syncFacade: SyncFacade,
 ) {
+    @PostMapping("/force-calendar-sync")
+    @Operation(summary = "Force a sync with the calendar in case something went wrong")
+    @ApiResponse(responseCode = "204", description = "Calendar has been synced")
+    @PreAuthorize("@scopes.hasAnyScope(authentication, 'https://klrnbk.nl/projects/appiecal:use')")
+    fun forceCalendarSync(authentication: JwtAuthenticationToken) = syncFacade.forceCalendarSync(authentication.principal)
+
     @GetMapping("/manual")
     @Operation(summary = "Sync the users calendar manually")
     @ApiResponse(responseCode = "200", description = "Returns the sync results")
