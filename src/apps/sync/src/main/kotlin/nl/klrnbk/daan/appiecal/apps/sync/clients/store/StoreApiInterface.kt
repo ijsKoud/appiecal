@@ -15,9 +15,9 @@ interface StoreApiInterface {
         "origin: https://ah.nl",
         "Referer: https://ah.nl/winkels",
         "x-client-name: ah-store",
-        "x-client-version: 1.16.16",
+        "x-client-version: 1.18.6",
         "x-client-platform-type: web",
-        "user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:147.0) Gecko/20100101 Firefox/147.0",
+        "user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:151.0) Gecko/20100101 Firefox/151.0",
     )
     fun getStoreInformation(
         @Body body: StoreInformationRequestBody,
